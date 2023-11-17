@@ -72,4 +72,53 @@ public class TestRepository extends GenericRepository{
         }
 
     }
+
+    public HashMap<String, String> updateData() {
+        String [] field = {
+                "name",
+                "description"
+        };
+
+        String [] value = {
+                "test product update",
+                "test test update"
+        };
+
+        String [] datatype = {
+                "varchar",
+                "varchar"
+        };
+
+        String cond = "id = ?";
+        String [] condfield = {"7"};
+        String [] condtype = {"int"};
+
+        int result = update("products", field, value, datatype, cond, condfield, condtype);
+        if(result > 0) {
+            return new HashMap<>(){{
+                put("result", "success");
+            }};
+        }else{
+            return new HashMap<>(){{
+                put("result", "failed");
+            }};
+        }
+    }
+
+    public HashMap<String, String> deleteData() {
+        String cond = "id = ?";
+        String [] val = {"7"};
+        String [] type = {"int"};
+
+        int result = delete("products", cond, val, type);
+        if(result > 0) {
+            return new HashMap<>(){{
+                put("result", "success");
+            }};
+        }else{
+            return new HashMap<>(){{
+                put("result", "failed");
+            }};
+        }
+    }
 }

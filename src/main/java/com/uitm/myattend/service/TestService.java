@@ -24,4 +24,8 @@ public class TestService {
     public HashMap insertData() {
         return test.insertData();
     }
+
+    public HashMap updateData() { return test.updateData(); }
+
+    public HashMap deleteData() { return test.deleteData(); }
 }

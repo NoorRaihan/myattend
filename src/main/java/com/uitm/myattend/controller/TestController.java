@@ -3,9 +3,7 @@ package com.uitm.myattend.controller;
 import com.uitm.myattend.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,4 +30,10 @@ public class TestController {
     public HashMap insert() {
         return test.insertData();
     }
+
+    @PutMapping("/product")
+    public HashMap update() { return test.updateData(); }
+
+    @DeleteMapping("/product")
+    public HashMap delete() { return test.deleteData(); }
 }
