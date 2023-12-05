@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class TestController {
@@ -27,13 +28,13 @@ public class TestController {
     }
 
     @PostMapping("/product")
-    public HashMap insert() {
+    public Map insert() {
         return test.insertData();
     }
 
     @PutMapping("/product")
-    public HashMap update() { return test.updateData(); }
+    public Map update() { return test.updateData(); }
 
     @DeleteMapping("/product")
-    public HashMap delete() { return test.deleteData(); }
+    public Map delete() { return test.deleteData(); }
 }
