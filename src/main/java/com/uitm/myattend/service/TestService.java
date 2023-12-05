@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class TestService {
@@ -21,11 +22,11 @@ public class TestService {
         return test.getData();
     }
 
-    public HashMap insertData() {
+    public Map insertData() {
         return test.insertData();
     }
 
-    public HashMap updateData() { return test.updateData(); }
+    public Map updateData() { return test.updateData(); }
 
-    public HashMap deleteData() { return test.deleteData(); }
+    public Map deleteData() { return test.deleteData(); }
 }

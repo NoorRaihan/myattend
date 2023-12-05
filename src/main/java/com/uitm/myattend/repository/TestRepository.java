@@ -5,15 +5,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
 
 @Repository
-public class TestRepository extends GenericRepository{
+public class TestRepository extends DBRepository {
 
     @Autowired
     private final JdbcTemplate db;
-
     @Autowired
     public TestRepository(JdbcTemplate db) {
         super(db);
@@ -34,11 +33,16 @@ public class TestRepository extends GenericRepository{
                 "test2",
                 "noorraihanabdrahim@gmail.com"};
 
-        ArrayList<HashMap<String, String>> result = select("users", field, cond, condField);
+        String []  condtype = {
+                "varchar",
+                "varchar"
+        };
+
+        ArrayList<Map<String, String>> result = select("users", field, cond, condField, condtype);
         return result;
     }
 
-    public HashMap<String, String> insertData() {
+    public Map<String, String> insertData() {
         String [] field = {
                 "name",
                 "description",
@@ -73,7 +77,7 @@ public class TestRepository extends GenericRepository{
 
     }
 
-    public HashMap<String, String> updateData() {
+    public Map<String, String> updateData() {
         String [] field = {
                 "name",
                 "description"
@@ -105,7 +109,7 @@ public class TestRepository extends GenericRepository{
         }
     }
 
-    public HashMap<String, String> deleteData() {
+    public Map<String, String> deleteData() {
         String cond = "id = ?";
         String [] val = {"7"};
         String [] type = {"int"};
