@@ -212,4 +212,18 @@ public class UserRepository {
             return false;
         }
     }
+
+    public boolean delete(int uid) {
+        try {
+            String cond = "id = ?";
+            String [] val = {Integer.toString(uid)};
+            String [] type = {"int"};
+
+            commDB.delete("ma_users", cond, val, type);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

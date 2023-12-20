@@ -29,7 +29,9 @@ public class LecturerService {
             lecturer.setQualification((String) body.get("qualification"));
             lecturer.setSalary((double) body.get("salary"));
 
-
+            if(!lecturerRepository.insert(lecturer)) {
+                throw new Exception("Failed to register lecturer");
+            }
             return true;
         }catch (Exception e) {
             e.printStackTrace();

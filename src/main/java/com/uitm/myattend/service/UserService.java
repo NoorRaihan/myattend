@@ -15,6 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +64,26 @@ public class UserService {
         }
     }
 
+    public void delete(int uid) {
+        try {
+            if(!userRepo.delete(uid)) {
+                throw new Exception("Failed to delete the user record");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String encrytPassword(String plain) {
         return passwordEncoder.encode(plain);
     }
 
+    public List<Map<String, String>> retrieveToken(String token) {
+        try {
+            return userRepo.retrieveToken(token);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }
