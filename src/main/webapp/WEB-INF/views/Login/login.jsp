@@ -5,7 +5,7 @@ uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html class="h-full bg-white" data-theme="light">
   <head>
-    <title>Log Masuk - ePPIK</title>
+    <title>Login - myAttend+</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
