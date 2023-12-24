@@ -12,20 +12,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 public class DBRepository {
 
     private final JdbcTemplate dbTemplate;
-    private ArrayList<Map<String, String>> result;
-    private ArrayList<String> columnLabel;
+    private List<Map<String, String>> result;
+    private List<String> columnLabel;
 
     public DBRepository(JdbcTemplate dbTemplate) {
         this.dbTemplate = dbTemplate;
+    }
+
+    public Connection getConnection() throws SQLException {
+        return dbTemplate.getDataSource().getConnection();
     }
 
     public void setAutoCommit(boolean commit) throws SQLException {
@@ -49,9 +50,17 @@ public class DBRepository {
                 .commit();
     }
 
+    public void rollback() throws SQLException{
+        dbTemplate
+                .getDataSource()
+                .getConnection()
+                .rollback();
+    }
+
     public void startTransaction() {
         try {
             if(getAutoCommit()) {
+                System.out.println("commit: " + getAutoCommit());
                 setAutoCommit(false);
             }
         }catch (SQLException e) {
@@ -75,11 +84,11 @@ public class DBRepository {
         }
     }
 
-    public ArrayList<Map<String, String>> getResult() {
+    public List<Map<String, String>> getResult() {
         if(!result.isEmpty()) {
             return result;
         }else{
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -87,12 +96,12 @@ public class DBRepository {
         return result.size();
     }
 
-    public ArrayList<String> getColumnLabel() {
+    public List<String> getColumnLabel() {
         return this.columnLabel;
     }
 
     public int sqlQuery(String query) {
-        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> data = new ArrayList<>();
 
         try {
 
@@ -101,7 +110,7 @@ public class DBRepository {
                     @Override
                     public HashMap<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                         HashMap<String, String> temp = null;
-                        result = new ArrayList<Map<String, String>>();
+                        result = new ArrayList<>();
 
                         setColumnLabel(rs);
 
@@ -128,16 +137,16 @@ public class DBRepository {
 
     }
 
-    public ArrayList<Map<String, String>> select(String table, String [] field) {
+    public List<Map<String, String>> select(String table, String [] field) {
         return select(table, field, null, null, null);
     }
 
-    public ArrayList<Map<String, String>> select(String table, String [] field, String cond) {
+    public List<Map<String, String>> select(String table, String [] field, String cond) {
         return select(table, field, cond, null, null);
     }
 
-    public ArrayList<Map<String, String>> select(String table, String [] field, String cond, String [] condval, String [] condtype) {
-        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    public List<Map<String, String>> select(String table, String [] field, String cond, String [] condval, String [] condtype) {
+        List<Map<String, String>> data = new ArrayList<>();
         try {
             String query = buildSelectQuery(table, field, cond);
 
