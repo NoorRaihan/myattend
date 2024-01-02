@@ -1,6 +1,6 @@
 <%@ page isELIgnored="false" language="java" contentType="text/html;
-charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
-uri="jakarta.tags.core" %>
+charset=UTF-8" pageEncoding="UTF-8" session="true" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html class="h-full bg-white" data-theme="light">

@@ -4,118 +4,253 @@ uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - myAttend+</title>
-    <link href="${contextPath}/resources/output.css" rel="stylesheet">
+    <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-</head>
-<body>
-<div class="absolute w-full bg-blue-500 dark:hidden min-h-75"></div>
-<div class="drawer lg:drawer-open">
-  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content">
-    <?php include "src/hdr.php"; ?>
-
-    <div id="tab-buttons" class="fixed w-11/12 h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 drop-shadow-xl backdrop-blur-md">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto">
-            <a href="javascript:void(0)" role="button" onclick="changeTab(event,0)" class="inline-flex flex-col items-center justify-center px-5 rounded-l-full hover:bg-gray-50">
-                <svg class="w-5 h-5 mb-1 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
-                </svg>
-                <span class="text-xs">Utama</span>
-            </a>
-            <div class="flex items-center justify-center">
-                <a role="button" data-tooltip-target="navbar-mid" href="scan.php" class="inline-flex items-center justify-center w-14 h-14 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+  </head>
+  <body class="bg-slate-200 min-h-screen">
+    <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
+    <div class="drawer xl:drawer-open">
+      <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content">
+        <%@ include file="header.jsp" %>
+        <div class="w-auto my-10">
+          <section class="mx-4" aria-labelledby="profile-overview-title">
+            <div
+              class="overflow-hidden rounded-xl bg-gradient-to-tl from-blue-200 to-white shadow-lg"
+            >
+              <div class="p-6">
+                <div class="sm:flex sm:items-center sm:justify-between">
+                  <div class="sm:flex sm:space-x-5">
+                    <div class="flex-shrink-0">
+                      <img
+                        class="mx-auto size-20 rounded-full"
+                        src="${contextPath}/resources/img/MJJ.png"
+                        alt=""
+                      />
+                    </div>
+                    <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                      <p class="text-sm font-medium text-gray-600">Welcome,</p>
+                      <p class="text-xl font-bold text-gray-900 sm:text-2xl">
+                        myAttend+ Admin
+                      </p>
+                      <p class="text-sm font-medium text-gray-600">Superuser</p>
+                    </div>
+                  </div>
+                  <div class="mt-5 flex justify-center sm:mt-0">
+                    <a
+                      href="#"
+                      class="btn btn-sm btn-info rounded-full text-white"
+                      >Edit Profile</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
+          >
+            <a href="#" class="basis-full">
+              <div
+                id="clsActive"
+                class="card bg-gradient-to-br from-green-300 to-emerald-500 shadow-lg overflow-hidden"
+              >
+                <div class="card-body min-w-full">
+                  <h1 class="card-title z-10">Active Class</h1>
+                  <div class="flex flex-row justify-between z-10">
+                    <div class="flex flex-col">
+                      <p class="text-3xl font-bold">CSC584</p>
+                      <p class="text-xl">Enterprise Programming</p>
+                      <p class="text-sm">17 Jan 2024 | 10:00 AM - 11:00 AM</p>
+                    </div>
+                    <div class="flex flex-col">
+                      <button
+                        class="btn btn-success rounded-full z-10 text-white"
+                      >
+                        Register Attendance
+                      </button>
+                    </div>
+                  </div>
+                  <div class="absolute -inset-y-16 -right-10 sm:right-20">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-72 fill-slate-200"
+                    >
+                      <path
+                        d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
+                      />
+                      <path
+                        d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
+                      />
+                      <path
+                        d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
+                      />
                     </svg>
-                </a>
-            </div>
-            <div id="navbar-mid" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                Imbas QR
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-            <a href="javascript:void(0)" role="button" onclick="changeTab(event,1)" class="inline-flex flex-col items-center justify-center px-5 rounded-r-full hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="w-5 h-5 text-gray-500 mb-1" viewBox="0 0 16 16">
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
-                </svg>
-                <span class="text-xs">Makluman</span>
+                  </div>
+                </div>
+              </div>
             </a>
+            <div
+              id="clsList"
+              class="card card-compact md:basis-2/4 basis-full bg-white shadow-lg grow transition-all"
+            >
+              <div class="card-body">
+                <h1 class="card-title">Classes List</h1>
+                <div class="-mx-4 sm:-mx-0">
+                  <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        >
+                          Course Code
+                        </th>
+                        <th
+                          scope="col"
+                          class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                        >
+                          Course Name
+                        </th>
+                        <th
+                          scope="col"
+                          class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                        >
+                          Date
+                        </th>
+                        <th
+                          scope="col"
+                          colspan="2"
+                          class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
+                        >
+                          Time
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                      <tr>
+                        <td
+                          class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                        >
+                          CSC584
+                          <dl class="font-normal lg:hidden">
+                            <dd class="mt-1 truncate text-gray-700">
+                              Enterprise Programming
+                            </dd>
+                            <dd class="mt-1 truncate text-gray-500 sm:hidden">
+                              17 Jan 2024
+                            </dd>
+                          </dl>
+                        </td>
+                        <td
+                          class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                        >
+                          Enterprise Programming
+                        </td>
+                        <td
+                          class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                        >
+                          17 Jan 2024
+                        </td>
+                        <td
+                          class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
+                        >
+                          10:00 AM
+                        </td>
+                        <td
+                          class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
+                        >
+                          11:00 AM
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td
+                          class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                        >
+                          ICT502
+                          <dl class="font-normal lg:hidden">
+                            <dd class="mt-1 truncate text-gray-700">
+                              Database Engineering
+                            </dd>
+                            <dd class="mt-1 truncate text-gray-500 sm:hidden">
+                              17 Jan 2024
+                            </dd>
+                          </dl>
+                        </td>
+                        <td
+                          class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                        >
+                          Database Engineering
+                        </td>
+                        <td
+                          class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                        >
+                          17 Jan 2024
+                        </td>
+                        <td
+                          class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
+                        >
+                          11:00 AM
+                        </td>
+                        <td
+                          class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
+                        >
+                          12:00 PM
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div
+              id="clsPerf"
+              class="card card-compact md:basis-1/4 basis-full bg-white shadow-lg grow"
+            >
+              <div class="card-body">
+                <h1 class="card-title">Attendance Perfomance</h1>
+                <div class="flex flex-wrap">
+                  <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
+                    <div
+                      class="radial-progress text-info"
+                      style="--value: 75"
+                      role="progressbar"
+                    >
+                      75%
+                    </div>
+                    <div class="flex flex-col ml-4">
+                      <p class="text-xl font-bold">CSC584</p>
+                      <p class="text-sm">Enterprise Programming</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
+                    <div
+                      class="radial-progress text-warning"
+                      style="--value: 50"
+                      role="progressbar"
+                    >
+                      50%
+                    </div>
+                    <div class="flex flex-col ml-4">
+                      <p class="text-xl font-bold">ICT502</p>
+                      <p class="text-sm">Database Engineering</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <%@ include file="drawer.jsp" %>
     </div>
-
-    <div class="w-screen lg:w-auto my-10">
-        <section class="mx-6" aria-labelledby="profile-overview-title">
-            <div class="overflow-hidden rounded-3xl bg-white shadow-md">
-                <div class="bg-gradient-to-bl from-green-400 to-white to-50% p-6">
-                    <div class="sm:flex sm:items-center sm:justify-between">
-                        <div class="sm:flex sm:space-x-5">
-                            <div class="flex-shrink-0">
-                                <img class="mx-auto h-20 w-20 rounded-full" src="<?php echo $_SESSION['pic']; ?>" alt="">
-                            </div>
-                            <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                                <p class="text-sm font-medium text-gray-600">Selamat Datang,</p>
-                                <p class="text-xl font-bold text-gray-900 sm:text-2xl"><?php echo $_SESSION['name']; ?></p>
-                                <p class="text-sm font-medium text-gray-600"><?php echo $_SESSION['pos']; ?></p>
-                            </div>
-                        </div>
-                        <div class="mt-5 flex justify-center sm:mt-0">
-                            <a href="#" class="flex items-center justify-center rounded-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Buka profail</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hidden grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-                    <div class="px-6 py-5 text-center text-sm font-medium">
-                        <span class="text-gray-600">Baki Cuti Rehat :</span>
-                        <span class="text-gray-900">12</span>
-                    </div>
-                    <div class="px-6 py-5 text-center text-sm font-medium">
-                        <span class="text-gray-600">Baki Cuti Sakit :</span>
-                        <span class="text-gray-900">4</span>
-                    </div>
-                    <div class="px-6 py-5 text-center text-sm font-medium">
-                        <span class="text-gray-600">Jumlah Aktiviti Terlibat :</span>
-                        <span class="text-gray-900">2</span>
-                    </div>
-            </div>
-        </section>
-        <div id="tab-panels">
-            <div id="utama" class="flex flex-col mx-4">
-                <h1 class="text-2xl font-bold mt-6 ml-4">PROGRAM TERDEKAT</h1>
-                <div id="evtSumm" class="container flex overflow-x-auto">
-                </div>
-                <h1 class="text-2xl font-bold mt-6 ml-4">STATISTIK SEMASA</h1>
-                <div id="statSumm" class="container flex overflow-x-auto">
-                    <div class="w-screen text-center justify-center py-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto w-12 h-12 text-gray-400">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
-                        </svg>
-                        <h3 class="mt-2 text-sm font-semibold text-gray-400">Tiada Statistik</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div id="makluman" class="flex flex-col hidden">
-                <h1 class="text-2xl text-center font-bold mt-6">MAKLUMAN</h1>
-                <div id="noti">
-                    <div class="w-auto text-center my-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto w-12 h-12 text-gray-400">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                        </svg>
-                        <h3 class="mt-2 text-sm font-semibold text-gray-400">Tiada makluman setakat ini</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
-
-  <?php include "./src/mnu.php"; ?>
-</div>
-</body>
+  </body>
 </html>
