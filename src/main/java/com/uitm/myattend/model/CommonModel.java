@@ -8,10 +8,15 @@ import org.springframework.web.context.annotation.SessionScope;
 public class CommonModel {
 
     private String token;
-    private String roleId;
-    private String roleName;
-    private String uid;
-    private String email;
+    private UserModel userModel;
+
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
 
     public String getToken() {
         return token;
@@ -21,37 +26,6 @@ public class CommonModel {
         this.token = token;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
 
 
