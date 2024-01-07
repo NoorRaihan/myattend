@@ -4,12 +4,16 @@ import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+@Service
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
@@ -28,13 +32,11 @@ public class AuthService {
         this.userService = userService;
         this.studentService = studentService;
         this.lecturerService = lecturerService;
+        this.common = common;
     }
     public boolean authenticate() {
         try {
-            if(!validateToken()) {
-                return false;
-            }
-            return true;
+            return validateToken();
         }catch (Exception e) {
             return false;
         }
@@ -69,14 +71,9 @@ public class AuthService {
             UserModel user = userService.insert(body);
             try {
                 switch(role) {
-                    case 2:
-                        lecturerService.insert(user, body);
-                        break;
-                    case 3:
-                        studentService.insert(user, body);
-                        break;
-                    default:
-                        throw new Exception("Invalid role");
+                    case 2 -> lecturerService.insert(user, body);
+                    case 3 -> studentService.insert(user, body);
+                    default -> throw new Exception("Invalid role");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -89,4 +86,44 @@ public class AuthService {
             return false;
         }
     }
+
+    public boolean login(Map<String, Object> body, HttpSession session) {
+        try {
+            String username = (String)body.get("username");
+            String rawPassword = (String)body.get("password");
+
+            if(username.isBlank()) {
+                throw new Exception("Username cannot be empty");
+            }else if(rawPassword.isBlank()) {
+                throw new Exception("Password cannot be empty");
+            }
+
+            UserModel userObj = userService.retrieveUserByEmail(username);
+
+            if(userObj == null) {
+                throw new Exception("Account does not exists");
+            }
+
+            //validate password
+            if(!passwordEncoder.matches(rawPassword, userObj.getPassword())) {
+                throw new Exception("Incorrect password");
+            }
+
+            //initiate session toDO
+            String token = userService.initToken(userObj.getId());
+            if(token == null) {
+                throw new Exception("Failed to initiate user session");
+            }
+            common.setToken(token);
+            common.setUserModel(userObj);
+            session.setAttribute("sid", token);
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("error", e.getMessage());
+            return false;
+        }
+    }
+
 }

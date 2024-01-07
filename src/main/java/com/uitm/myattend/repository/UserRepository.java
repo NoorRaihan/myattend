@@ -56,15 +56,19 @@ public class UserRepository {
         return data;
     }
 
+    public List<Map<String, String>> retrieveUserByUsername(String username) {
+        return retrieveUser(username, "", "");
+    }
+
     public List<Map<String, String>> retrieveUserById(String uid) {
-        return retrieveUser("", uid);
+        return retrieveUser("", "", uid);
     }
 
     public List<Map<String, String>> retrieveUserByEmail(String email) {
-        return retrieveUser(email, "");
+        return retrieveUser("", email, "");
     }
 
-    public List<Map<String, String>> retrieveUser(String email, String uid) {
+    public List<Map<String, String>> retrieveUser(String username, String email, String uid) {
         try {
             String [] field = {
                     "id",
@@ -82,18 +86,24 @@ public class UserRepository {
             List<String> condtype = new ArrayList<>();
 
             if(!uid.isEmpty()) {
-                cond = "id = ?";
+                cond += " id = ?";
                 condval.add(uid);
-                condtype.add("varchar");
+                condtype.add("int");
             }
 
             if(!email.isEmpty()) {
-                cond = "email = ?";
+                cond += cond.isEmpty() ? " email = ?" : " AND email = ?";
                 condval.add(email);
                 condtype.add("varchar");
             }
 
-            List<Map<String, String>> data = commDB.select("ma_users", field, cond, (String[])condval.toArray(), (String[])condtype.toArray());
+            if(!username.isEmpty()) {
+                cond += cond.isEmpty() ? " username = ?" : " AND username = ?";
+                condval.add(username);
+                condtype.add("varchar");
+            }
+
+            List<Map<String, String>> data = commDB.select("ma_users", field, cond, condval.toArray(String[]::new), condtype.toArray(String[]::new));
 
             if(data == null) {
                 throw new Exception("Failed to retrieve user");
@@ -102,31 +112,7 @@ public class UserRepository {
             return data;
         }catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public List<Map<String, String>> retrieveRole(String roleId) {
-        try {
-            String [] field = {
-                    "id",
-                    "role_name",
-            };
-
-            String cond = "id = ?";
-            String [] condval = {roleId};
-            String [] condtype = {"varchar"};
-
-            List<Map<String, String>> data = commDB.select("ma_roles", field, cond, condval, condtype);
-
-            if(data == null) {
-                throw new Exception("Failed to retrieve role");
-            }
-
-            return data;
-        }catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
     }
 
@@ -136,7 +122,9 @@ public class UserRepository {
                     "id",
                     "login_time",
                     "valid",
-                    "user_id"
+                    "user_id",
+                    "created_at",
+                    "updated_at"
             };
 
             String cond = "id = ?";
@@ -155,6 +143,84 @@ public class UserRepository {
             return new ArrayList<>();
         }
     }
+
+    public boolean insertToken(String token, int uid) {
+        try {
+            String [] field = {
+                    "id",
+                    "valid",
+                    "user_id"
+            };
+
+            String [] fieldval = {
+                    token,
+                    "1",
+                    Integer.toString(uid)
+            };
+
+            String [] fieldtype = {
+                    "varchar",
+                    "int",
+                    "int"
+            };
+
+            int result = commDB.insert("ma_tokens", field, fieldval, fieldtype);
+
+            if(result <= 0) {
+                throw new Exception("Failed to insert new token");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateToken(String token, int uid, int status) {
+        try {
+            String [] field = {
+                    "valid",
+                    "updated_at"
+            };
+
+            String cond = "";
+            List<String> condval = new ArrayList<>();
+            List<String> condtype = new ArrayList<>();
+
+            if(token != null && !token.isEmpty()) {
+                cond += " id = ?";
+                condval.add(token);
+                condtype.add("varchar");
+            }
+
+            if(uid != -1) {
+                cond += cond.isEmpty() ? " user_id = ?" : " AND user_id = ?";
+                condval.add(Integer.toString(uid));
+                condtype.add("int");
+            }
+
+            String [] fieldval = {
+                    Integer.toString(status),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
+            };
+
+            String [] fieldtype = {
+                    "int",
+                    "varchar"
+            };
+
+            int result = commDB.update("ma_tokens", field, fieldval, fieldtype, cond, condval.toArray(String[]::new), condtype.toArray(String[]::new));
+
+            if(result < 0) {
+                throw new Exception("Failed to update token");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public boolean insert(UserModel user) {
         try {

@@ -195,7 +195,7 @@ public class DBRepository {
         }catch (Exception e) {
             //writeLog("Select statement error on " + table + ": " + e.getMessage(), "ERROR");
             System.err.println("ERRORS: " + e.getMessage());
-            return null;
+            return Collections.<Map<String, String>>emptyList();
         }
         return data;
     }
