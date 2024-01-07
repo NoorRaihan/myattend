@@ -24,15 +24,18 @@ public class StudentService {
 
             student.setUser_id(user.getId());
             student.setStud_id(Integer.parseInt(studId));
-            student.setProgram(null);
-            student.setIntake("2023/2");
-            student.setSemester(2);
+            student.setProgram((String)body.get("program"));
+            student.setIntake((String)body.get("intake"));
+            student.setSemester((int)body.get("semester"));
 
-            studentRepository.insert(student);
+            if(!studentRepository.insert(student)) {
+                throw new Exception("Failed to register student information");
+            }
             return true;
         }catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
 }

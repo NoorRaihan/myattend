@@ -70,4 +70,25 @@ public class LecturerRepository {
             return false;
         }
     }
+
+    public boolean delete(int uid, int lectId) {
+        try {
+            String cond = "user_id = ? AND lect_id = ?";
+            String [] val = {
+                    Integer.toString(uid),
+                    Integer.toString(lectId)
+            };
+
+            String [] type = {
+                    "int",
+                    "int"
+            };
+
+            commDB.delete("ma_lecturers", cond, val, type);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
