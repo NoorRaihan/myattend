@@ -57,8 +57,6 @@ public class UserService {
             user.setRole_id(Integer.parseInt((String) body.get("role")));
 
             userRepo.insert(user);
-
-
             return user;
         }catch (Exception e) {
             e.printStackTrace();

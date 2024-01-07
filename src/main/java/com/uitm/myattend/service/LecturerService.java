@@ -30,7 +30,7 @@ public class LecturerService {
             lecturer.setSalary((double) body.get("salary"));
 
             if(!lecturerRepository.insert(lecturer)) {
-                throw new Exception("Failed to register lecturer");
+                throw new Exception("Failed to register lecturer information");
             }
             return true;
         }catch (Exception e) {

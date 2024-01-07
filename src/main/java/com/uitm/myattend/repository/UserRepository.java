@@ -183,18 +183,18 @@ public class UserRepository {
                     "updated_at"
             };
 
-            String cond = "";
+            String cond = "valid = 1";
             List<String> condval = new ArrayList<>();
             List<String> condtype = new ArrayList<>();
 
             if(token != null && !token.isEmpty()) {
-                cond += " id = ?";
+                cond += " AND id = ?";
                 condval.add(token);
                 condtype.add("varchar");
             }
 
             if(uid != -1) {
-                cond += cond.isEmpty() ? " user_id = ?" : " AND user_id = ?";
+                cond += " AND user_id = ?";
                 condval.add(Integer.toString(uid));
                 condtype.add("int");
             }
@@ -286,6 +286,59 @@ public class UserRepository {
             String [] type = {"int"};
 
             commDB.delete("ma_users", cond, val, type);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean update(UserModel userModel ,int uid) {
+        try {
+            String [] field = {
+                    "email",
+                    "username",
+                    "full_name",
+                    "password",
+                    "gender",
+                    "birth_date",
+                    "profile_pic",
+                    "role_id",
+                    "updated_at"
+            };
+
+            String [] fieldval = {
+                    userModel.getEmail(),
+                    userModel.getUsername(),
+                    userModel.getFullname(),
+                    userModel.getPassword(),
+                    userModel.getGender(),
+                    userModel.getBirth_date(),
+                    userModel.getProfile_pic(),
+                    Integer.toString(userModel.getRole_id()),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
+            };
+
+            String [] fieldType = {
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "int",
+                    "varchar",
+            };
+
+            String cond = "id = ?";
+            String [] condval = {Integer.toString(uid)};
+            String [] condtype = {"int"};
+
+            int row = commDB.update("ma_users", field, fieldval, fieldType, cond, condval, condtype);
+            if(row <= 0) {
+                throw new Exception("Failed to update user " + uid);
+            }
             return true;
         }catch (Exception e) {
             e.printStackTrace();

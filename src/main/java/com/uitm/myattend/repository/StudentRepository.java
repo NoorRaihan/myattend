@@ -55,4 +55,25 @@ public class StudentRepository {
             return false;
         }
     }
+
+    public boolean delete(int uid, int studId) {
+        try {
+            String cond = "user_id = ? AND stud_id = ?";
+            String [] val = {
+                    Integer.toString(uid),
+                    Integer.toString(studId)
+            };
+
+            String [] type = {
+                    "int",
+                    "int"
+            };
+
+            commDB.delete("ma_students", cond, val, type);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
