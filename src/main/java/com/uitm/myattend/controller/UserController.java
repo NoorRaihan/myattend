@@ -33,8 +33,8 @@ public class UserController {
 
     @GetMapping("/")
     public String index() {
-        System.out.println(userService.retrieveAll());
-        return "User/index";
+        //System.out.println(userService.retrieveAll());
+        return "Manage/users";
     }
 
     @GetMapping("/create")
