@@ -39,13 +39,13 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %>
                   <label
                     for="username"
                     class="block text-sm font-medium leading-6 text-gray-900"
-                    >Username</label
+                    >E-Mail</label
                   >
                   <div class="mt-2">
                     <input
                       id="username"
                       name="username"
-                      type="text"
+                      type="email"
                       autocomplete="true"
                       required
                       class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
