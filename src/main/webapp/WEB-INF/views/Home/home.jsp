@@ -16,7 +16,9 @@ uri="jakarta.tags.core" %>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
-        <%@ include file="header.jsp" %>
+        <jsp:include page="header.jsp">
+          <jsp:param name="title" value="Home" />
+        </jsp:include>
         <div class="w-auto my-10">
           <section class="mx-4" aria-labelledby="profile-overview-title">
             <div

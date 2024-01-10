@@ -7,10 +7,10 @@ uri="jakarta.tags.core" %>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Management - myAttend+</title>
+    <title>Student Management - myAttend+</title>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="${contextPath}/resources/user.js"></script>
+    <script src="${contextPath}/resources/student.js"></script>
   </head>
   <body class="bg-slate-200 min-h-screen">
     <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
@@ -20,9 +20,9 @@ uri="jakarta.tags.core" %>
         <jsp:include page="../Home/header.jsp">
           <jsp:param
             name="menu"
-            value="<li>Admin Menu</li><li>User Management</li>"
+            value="<li>Admin Menu</li><li>Student Management</li>"
           />
-          <jsp:param name="title" value="User Management" />
+          <jsp:param name="title" value="Student Management" />
         </jsp:include>
         <div class="w-auto my-10">
           <div
@@ -31,7 +31,7 @@ uri="jakarta.tags.core" %>
             <div class="basis-3/5 grow">
               <div class="card card-compact bg-base-100 shadow-xl">
                 <div class="card-body">
-                  <h2 class="card-title">Users</h2>
+                  <h2 class="card-title">Students</h2>
                   <div class="-mx-4 sm:-mx-0">
                     <table class="min-w-full divide-y divide-gray-300">
                       <thead>
@@ -52,26 +52,24 @@ uri="jakarta.tags.core" %>
                             scope="col"
                             class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                           >
-                            Gender
+                            Programme
                           </th>
                           <th
                             scope="col"
                             class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                           >
-                            Birthdate
+                            Intake
                           </th>
                           <th
                             scope="col"
                             class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                           >
-                            Email
+                            Semester
                           </th>
                           <th
                             scope="col"
                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Role
-                          </th>
+                          ></th>
                           <th
                             scope="col"
                             class="relative py-3.5 pl-3 pr-4 sm:pr-0"
@@ -91,7 +89,7 @@ uri="jakarta.tags.core" %>
                                 0000000001
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                admin@myattend.com
+                                CDCS230
                               </dd>
                             </dl>
                           </td>
@@ -103,21 +101,19 @@ uri="jakarta.tags.core" %>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            male
+                            CDCS230
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            1/4/1991
+                            2023/4
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
-                            admin@myattend.com
+                            3
                           </td>
-                          <td class="px-3 py-4 text-sm text-gray-500">
-                            Member
-                          </td>
+                          <td class="px-3 py-4 text-sm text-gray-500"></td>
                           <td
                             class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
                           >
@@ -146,7 +142,7 @@ uri="jakarta.tags.core" %>
                               >
                                 <li>
                                   <a
-                                    onclick="editUser.showModal()"
+                                    onclick="editStud.showModal()"
                                     data-id="1"
                                     class="edit"
                                     >Edit</a
@@ -154,7 +150,7 @@ uri="jakarta.tags.core" %>
                                 </li>
                                 <li>
                                   <a
-                                    onclick="deleteUser.showModal()"
+                                    onclick="deleteStud.showModal()"
                                     class="text-red-600"
                                     data-id="1"
                                     class="delete"
@@ -175,21 +171,11 @@ uri="jakarta.tags.core" %>
             </div>
             <div class="basis-1/5 grow">
               <div class="card card-compact bg-base-100 shadow-xl">
-                <div
-                  class="card-body flex md:flex-col justify-between flex-row"
-                >
-                  <div class="stat place-items-center basis-1/4 sm:basis-full">
-                    <div class="stat-title">Total Users</div>
+                <div class="card-body">
+                  <div class="stat place-items-center">
+                    <div class="stat-title">Total Students</div>
                     <div class="stat-value text-blue-500">100</div>
-                    <div class="stat-desc">users of myAttend+</div>
-                  </div>
-                  <div class="flex justify-center">
-                    <button
-                      class="btn btn-primary rounded-full my-auto"
-                      onclick="newUser.showModal(); userAdd.reset();"
-                    >
-                      Add New User
-                    </button>
+                    <div class="stat-desc">myAttend+</div>
                   </div>
                 </div>
               </div>
@@ -206,113 +192,9 @@ uri="jakarta.tags.core" %>
       <%@ include file="../Home/drawer.jsp" %>
     </div>
 
-    <dialog id="newUser" class="modal">
+    <dialog id="editStud" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Add New User</h3>
-        <form id="userAdd" action="#" method="post">
-          <div class="flex flex-wrap gap-3">
-            <label class="form-control basis-full">
-              <div class="label">
-                <span class="label-text">Full Name</span>
-              </div>
-              <input
-                type="text"
-                name="fullname"
-                class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Username</span>
-              </div>
-              <input
-                type="text"
-                name="username"
-                class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Password</span>
-              </div>
-              <input
-                type="password"
-                name="password"
-                class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Gender</span>
-              </div>
-              <select
-                name="gender"
-                id="gender"
-                class="select select-sm select-bordered"
-              >
-                <option disabled selected>Pick one</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </label>
-            <label class="form-control basis-2/4 grow">
-              <div class="label">
-                <span class="label-text">Birthdate</span>
-              </div>
-              <input
-                type="date"
-                name="birthdate"
-                class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-2/4 grow">
-              <div class="label">
-                <span class="label-text">Email</span>
-              </div>
-              <input
-                type="email"
-                name="email"
-                class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Role</span>
-              </div>
-              <select
-                name="role"
-                id="role"
-                class="select select-sm select-bordered"
-              >
-                <option disabled selected>Pick one</option>
-                <option value="1">Admin</option>
-                <option value="2">Lecturer</option>
-                <option value="3">Student</option>
-              </select>
-            </label>
-            <label class="form-control basis-full grow">
-              <div class="label">
-                <span class="label-text">Profile Picture</span>
-              </div>
-              <input
-                type="file"
-                name="dpImage"
-                class="file-input file-input-sm file-input-bordered file-input-primary"
-              />
-            </label>
-          </div>
-          <div class="modal-action">
-            <button type="submit" class="btn btn-sm btn-primary">Save</button>
-          </div>
-        </form>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
-    <dialog id="editUser" class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">Edit User</h3>
+        <h3 class="font-bold text-lg">Edit Student</h3>
         <form action="#" method="post">
           <input type="hidden" name="id" id="id" value="1" />
           <div class="flex flex-wrap gap-3">
@@ -327,75 +209,37 @@ uri="jakarta.tags.core" %>
                 class="input input-sm input-bordered"
               />
             </label>
-            <label class="form-control basis-1/4 grow">
+            <label class="form-control basis-2/4 grow">
               <div class="label">
-                <span class="label-text">Username</span>
+                <span class="label-text">Programme</span>
               </div>
               <input
                 type="text"
-                name="username"
-                id="username"
+                name="program"
+                id="program"
                 class="input input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
-                <span class="label-text">Gender</span>
-              </div>
-              <select
-                name="gender"
-                id="gender"
-                class="select select-sm select-bordered"
-              >
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </label>
-            <label class="form-control basis-2/4 grow">
-              <div class="label">
-                <span class="label-text">Birthdate</span>
+                <span class="label-text">Intake</span>
               </div>
               <input
-                type="date"
-                name="birthdate"
-                id="birthdate"
+                type="text"
+                name="intake"
+                id="intake"
                 class="input input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-2/4 grow">
               <div class="label">
-                <span class="label-text">Email</span>
+                <span class="label-text">Semester</span>
               </div>
               <input
-                type="email"
-                name="email"
-                id="email"
+                type="number"
+                name="semester"
+                id="semester"
                 class="input input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Role</span>
-              </div>
-              <select
-                name="role"
-                id="role"
-                class="select select-sm select-bordered"
-              >
-                <option value="1">Admin</option>
-                <option value="2">Lecturer</option>
-                <option value="3">Student</option>
-              </select>
-            </label>
-            <label class="form-control basis-full grow">
-              <div class="label">
-                <span class="label-text">Profile Picture</span>
-              </div>
-              <input
-                type="file"
-                name="dpImage"
-                id="dpImage"
-                class="file-input file-input-sm file-input-bordered file-input-primary"
               />
             </label>
           </div>
@@ -408,10 +252,10 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
-    <dialog id="deleteUser" class="modal">
+    <dialog id="deleteStud" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Delete User</h3>
-        <p class="py-4">Do you really want to delete this user ?</p>
+        <h3 class="font-bold text-lg">Delete Student</h3>
+        <p class="py-4">Do you really want to delete this student ?</p>
         <form action="" method="post">
           <input type="hidden" name="id" id="id" value="1" />
           <div class="modal-action">

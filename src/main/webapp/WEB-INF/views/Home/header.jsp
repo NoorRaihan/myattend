@@ -21,10 +21,11 @@
     <div class="mx-2 text-white lg:mx-6">
       <div class="text-sm breadcrumbs">
         <ul>
-          <li><a>Home</a></li>
+          <li><a href="/">Home</a></li>
+          ${param.menu}
         </ul>
       </div>
-      <h3 class="text-xl font-bold -mt-2">Home</h3>
+      <h3 class="text-xl font-bold -mt-2">${param.title}</h3>
     </div>
   </div>
   <div class="navbar-end mr-4">
