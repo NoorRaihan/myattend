@@ -1,11 +1,13 @@
 package com.uitm.myattend.service;
 
+import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.RoleModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.UserRepository;
 import com.uitm.myattend.utility.FieldUtility;
 
 import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,8 +37,21 @@ public class UserService {
         this.roleService = roleService;
     }
 
-    public List<Map<String, String>> retrieveAll() {
-        return userRepo.retrieveAllUser();
+    public List<UserModel> retrieveAll(HttpSession session) {
+        try {
+            List<Map<String, String>> userList = userRepo.retrieveAllUser();
+
+            List<UserModel> users = new ArrayList<>();
+            for(Map<String, String> user : userList) {
+                users.add((UserModel)MapperUtility.mapModel(UserModel.class, user));
+            }
+            return users;
+        }catch (Exception e) {
+            session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+
     }
 
 
@@ -64,13 +79,27 @@ public class UserService {
         }
     }
 
-    public void delete(int uid) {
+    public boolean delete(Map<String, Object> body) {
+        return delete(body, -1);
+    }
+
+    public boolean delete(int uid) {
+        return delete(null, uid);
+    }
+
+    public boolean delete(Map<String, Object> body, int uid) {
         try {
+            if(body != null && uid != -1) {
+                uid = Integer.parseInt((String) body.get("uid"));
+            }
+
             if(!userRepo.delete(uid)) {
                 throw new Exception("Failed to delete the user record");
             }
+            return true;
         }catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -105,7 +134,6 @@ public class UserService {
             if(username != null) {
                 userList = userRepo.retrieveUserByUsername(username);
             }else if(email != null) {
-                System.out.println("executed!");
                 userList = userRepo.retrieveUserByEmail(email);
             }else if(uid != -1) {
                 userList = userRepo.retrieveUserById(Integer.toString(uid));
@@ -115,18 +143,13 @@ public class UserService {
                 throw new Exception("User retrieve error occured! UserList size: " + userList.size());
             }
 
-            UserModel userObj = new UserModel();
-            Map<String, String> userMap = userList.get(0);
-            userObj.setId(Integer.parseInt(userMap.get("id")));
-            userObj.setEmail(userMap.get("email"));
-            userObj.setPassword(userMap.get("password"));
-            userObj.setFullname(userMap.get("full_name"));
-            userObj.setGender(userMap.get("gender"));
-            userObj.setBirth_date(userMap.get("birth_date"));
-            userObj.setProfile_pic(userMap.get("profile_pic"));
-            userObj.setRole_id(Integer.parseInt(userMap.get("role_id")));
 
-            RoleModel roleObj = roleService.retrieve(userObj.getRole_id());
+            Map<String, String> userMap = userList.get(0);
+
+            RoleModel roleObj = roleService.retrieve(Integer.parseInt(userMap.get("role_id")));
+            userMap.put("ROLE_ID", roleObj.getId());
+            userMap.put("ROLE_NAME", roleObj.getRole_name());
+            UserModel userObj = (UserModel) MapperUtility.mapModel(UserModel.class, userMap);
 
             if(roleObj == null) {
                 throw new Exception("Failed to retrieve role object");

@@ -1,14 +1,18 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    usrDetails(id);
+    console.log("test")
+
   });
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
     $("#id").val(id);
+    console.log("test2");
+    $("#uid").val(id);
   });
 });
+
 function usrDetails(id) {
   $.ajax({
     method: "POST",

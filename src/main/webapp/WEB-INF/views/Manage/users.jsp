@@ -81,42 +81,43 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="user" items="${users}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            myAttend+ Admin
+                            ${user.getFullname()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                0000000001
+                                ${user.getUsername()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                admin@myattend.com
+                                ${user.getEmail()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            0000000001
+                            ${user.getUsername()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            male
+                            ${user.getGender()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            1/4/1991
+                            ${user.getFormatBirthDate()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
-                            admin@myattend.com
+                            ${user.getEmail()}
                           </td>
                           <td class="px-3 py-4 text-sm text-gray-500">
-                            Member
+                            ${user.getRole().getRole_name()}
                           </td>
                           <td
                             class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
@@ -147,7 +148,7 @@ uri="jakarta.tags.core" %>
                                 <li>
                                   <a
                                     onclick="editUser.showModal()"
-                                    data-id="1"
+                                    data-id=""
                                     class="edit"
                                     >Edit</a
                                   >
@@ -156,7 +157,7 @@ uri="jakarta.tags.core" %>
                                   <a
                                     onclick="deleteUser.showModal()"
                                     class="text-red-600"
-                                    data-id="1"
+                                    data-id="${user.getId()}"
                                     class="delete"
                                     >Delete</a
                                   >
@@ -165,7 +166,7 @@ uri="jakarta.tags.core" %>
                             </div>
                           </td>
                         </tr>
-
+                        </c:forEach>
                         <!-- More people... -->
                       </tbody>
                     </table>
@@ -180,7 +181,7 @@ uri="jakarta.tags.core" %>
                 >
                   <div class="stat place-items-center basis-1/4 sm:basis-full">
                     <div class="stat-title">Total Users</div>
-                    <div class="stat-value text-blue-500">100</div>
+                    <div class="stat-value text-blue-500">${totalUser}</div>
                     <div class="stat-desc">users of myAttend+</div>
                   </div>
                   <div class="flex justify-center">
@@ -209,7 +210,7 @@ uri="jakarta.tags.core" %>
     <dialog id="newUser" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New User</h3>
-        <form id="userAdd" action="#" method="post">
+        <form id="userAdd" action="/user/create" method="post">
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -273,6 +274,7 @@ uri="jakarta.tags.core" %>
                 type="email"
                 name="email"
                 class="input input-sm input-bordered"
+              />
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -412,8 +414,8 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete User</h3>
         <p class="py-4">Do you really want to delete this user ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+        <form action="/user/delete" method="post">
+          <input type="hidden" name="uid" id="uid" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
