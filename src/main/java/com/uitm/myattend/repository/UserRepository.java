@@ -18,10 +18,9 @@ public class UserRepository {
     public List<Map<String, String>> retrieveAllUser() {
         List<Map<String, String>> data = new ArrayList<>();
         try {
-            String sql = "select a.*, b.role_name, c.id, c.login_time, c.valid " +
+            String sql = "select a.*, b.role_name " +
                     "from ma_users a " +
-                    "inner join ma_roles b on a.role_id = b.id " +
-                    "inner join ma_tokens c on c.user_id = a.id";
+                    "inner join ma_roles b on a.role_id = b.id";
 
             int result = commDB.sqlQuery(sql);
             if(result < 0) {
@@ -72,6 +71,7 @@ public class UserRepository {
         try {
             String [] field = {
                     "id",
+                    "username",
                     "email",
                     "password",
                     "full_name",

@@ -1,17 +1,18 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    usrDetails(id);
+    usrDetails(id)
   });
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#id").val(id);
+    $("#uid").val(id);
   });
 });
+
 function usrDetails(id) {
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: "/user/detail",
     data: { uid: id },
     dataType: "json",
@@ -25,11 +26,17 @@ function usrDetails(id) {
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
         $("#gender").val(response.data.gender);
-        $("#birthdate").val(response.data.birth_date);
+        $("#birthdate").val(response.data.formatBirthDate);
         $("#email").val(response.data.email);
         $("#role").val(response.data.role_id);
         $("#dpImage").val(response.data.profile_pic);
       }
+      $("#id").val(response.data.id);
+      $("#fullname").val(response.data.fullname);
+      $("#gender").val(response.data.gender);
+      $("#birthdate").val(response.data.birth_date);
+      $("#email").val(response.data.email);
+      $("#role").val(response.data.role_id);
     },
     error: function (response) {
       let msg = "(" + response.respCode + ") " + response.respMessage;

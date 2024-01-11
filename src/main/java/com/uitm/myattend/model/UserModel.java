@@ -1,7 +1,10 @@
 package com.uitm.myattend.model;
 
+import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.text.ParseException;
 
 @Component
 @SessionScope
@@ -95,5 +98,9 @@ public class UserModel {
 
     public void setRole_id(int role_id) {
         this.role_id = role_id;
+    }
+
+    public String getFormatBirthDate() throws ParseException {
+        return FieldUtility.getFormatted(this.birth_date, "yyyy-MM-dd h:m:s", "mm/dd/yyyy");
     }
 }
