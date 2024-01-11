@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    usrDetails(id);
+    studDetails(id);
   });
 
   $(document).on("click", ".delete", function () {
@@ -12,7 +12,7 @@ $(document).ready(function () {
 function usrDetails(id) {
   $.ajax({
     method: "POST",
-    url: "/user/detail",
+    url: "#",
     data: { uid: id },
     dataType: "json",
     success: function (response) {
@@ -24,11 +24,9 @@ function usrDetails(id) {
         $("#id").val(response.data.id);
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
-        $("#gender").val(response.data.gender);
-        $("#birthdate").val(response.data.birth_date);
-        $("#email").val(response.data.email);
-        $("#role").val(response.data.role_id);
-        $("#dpImage").val(response.data.profile_pic);
+        $("#program").val(response.data.program);
+        $("#intake").val(response.data.intake);
+        $("#semseter").val(response.data.semester);
       }
     },
     error: function (response) {

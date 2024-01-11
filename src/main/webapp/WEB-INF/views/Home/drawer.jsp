@@ -49,7 +49,7 @@
             <li><a href="/user/">User Management</a></li>
             <li><a href="#">Course Management</a></li>
             <li><a href="#">Lecturer Management</a></li>
-            <li><a href="#">Student Management</a></li>
+            <li><a href="/studMan">Student Management</a></li>
           </ul>
         </details>
       </li>

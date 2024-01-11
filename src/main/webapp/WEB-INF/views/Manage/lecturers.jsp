@@ -20,9 +20,9 @@ uri="jakarta.tags.core" %>
         <jsp:include page="../Home/header.jsp">
           <jsp:param
             name="menu"
-            value="<li>Admin Menu</li><li>User Management</li>"
+            value="<li>Admin Menu</li><li>Lecturer Management</li>"
           />
-          <jsp:param name="title" value="User Management" />
+          <jsp:param name="title" value="Lecturer Management" />
         </jsp:include>
         <div class="w-auto my-10">
           <div
@@ -251,8 +251,8 @@ uri="jakarta.tags.core" %>
                 class="select select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </label>
             <label class="form-control basis-2/4 grow">
@@ -334,7 +334,6 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 name="username"
-                id="username"
                 class="input input-sm input-bordered"
               />
             </label>
@@ -347,8 +346,9 @@ uri="jakarta.tags.core" %>
                 id="gender"
                 class="select select-sm select-bordered"
               >
-                <option value="M">Male</option>
-                <option value="F">Female</option>
+                <option disabled selected>Pick one</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </label>
             <label class="form-control basis-2/4 grow">
@@ -382,6 +382,7 @@ uri="jakarta.tags.core" %>
                 id="role"
                 class="select select-sm select-bordered"
               >
+                <option disabled selected>Pick one</option>
                 <option value="1">Admin</option>
                 <option value="2">Lecturer</option>
                 <option value="3">Student</option>
@@ -394,7 +395,6 @@ uri="jakarta.tags.core" %>
               <input
                 type="file"
                 name="dpImage"
-                id="dpImage"
                 class="file-input file-input-sm file-input-bordered file-input-primary"
               />
             </label>
@@ -415,9 +415,7 @@ uri="jakarta.tags.core" %>
         <form action="" method="post">
           <input type="hidden" name="id" id="id" value="1" />
           <div class="modal-action">
-            <button type="submit" class="btn btn-sm btn-error text-white">
-              Yes
-            </button>
+            <button type="submit" class="btn btn-sm btn-error">Yes</button>
           </div>
         </form>
       </div>
