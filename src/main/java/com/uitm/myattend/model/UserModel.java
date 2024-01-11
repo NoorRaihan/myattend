@@ -101,6 +101,6 @@ public class UserModel {
     }
 
     public String getFormatBirthDate() throws ParseException {
-        return FieldUtility.getFormatted(this.birth_date, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+        return FieldUtility.getFormatted(this.birth_date, "yyyy-MM-dd h:m:s", "mm/dd/yyyy");
     }
 }
