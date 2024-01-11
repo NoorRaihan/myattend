@@ -148,7 +148,7 @@ uri="jakarta.tags.core" %>
                                 <li>
                                   <a
                                     onclick="editUser.showModal()"
-                                    data-id=""
+                                    data-id="${user.getId()}"
                                     class="edit"
                                     >Edit</a
                                   >

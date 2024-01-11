@@ -2,7 +2,7 @@ $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
     console.log("test")
-
+    usrDetails(id)
   });
 
   $(document).on("click", ".delete", function () {
@@ -16,6 +16,7 @@ $(document).ready(function () {
 function usrDetails(id) {
   $.ajax({
     method: "POST",
+    method: "GET",
     url: "/user/detail",
     data: { uid: id },
     dataType: "json",
@@ -34,6 +35,15 @@ function usrDetails(id) {
         $("#role").val(response.data.role_id);
         $("#dpImage").val(response.data.profile_pic);
       }
+=======
+        console.log(response);
+      $("#id").val(response.data.id);
+      $("#fullname").val(response.data.fullname);
+      $("#gender").val(response.data.gender);
+      $("#birthdate").val(response.data.birth_date);
+      $("#email").val(response.data.email);
+      $("#role").val(response.data.role_id);
+>>>>>>> 1952f53 (add fix on ajax)
     },
     error: function (response) {
       let msg = "(" + response.respCode + ") " + response.respMessage;

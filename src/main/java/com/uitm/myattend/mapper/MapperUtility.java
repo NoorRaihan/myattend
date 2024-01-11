@@ -19,8 +19,6 @@ public class MapperUtility {
         TreeMap<String, String> tempMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         tempMap.putAll(data);
 
-        System.out.println(className);
-        System.out.println(data);
         switch(className.toUpperCase()) {
             case "USERMODEL" -> obj = userMapper(tempMap);
             default -> throw new Exception("Invalid class");
@@ -42,7 +40,7 @@ public class MapperUtility {
         userObj.setProfile_pic(data.get("PROFILE_PIC"));
         userObj.setRole_id(Integer.parseInt(data.get("ROLE_ID")));
 
-        Map<String, String> roleMap = new HashMap<>();
+        TreeMap<String, String> roleMap = new TreeMap<>();
         roleMap.put("ID", data.get("ROLE_ID"));
         roleMap.put("ROLE_NAME", data.get("ROLE_NAME"));
         RoleModel role = roleMapper(roleMap);
@@ -50,7 +48,7 @@ public class MapperUtility {
         return userObj;
     }
 
-    private static RoleModel roleMapper(Map<String, String> data) {
+    private static RoleModel roleMapper(TreeMap<String, String> data) {
         RoleModel roleObj = new RoleModel();
         roleObj.setId(data.get("ID"));
         roleObj.setRole_name(data.get("ROLE_NAME"));
