@@ -46,7 +46,7 @@
           </summary>
           <ul>
             <li><a href="#">Role Management</a></li>
-            <li><a href="/user/">User Management</a></li>
+            <li><a href="/user">User Management</a></li>
             <li><a href="#">Course Management</a></li>
             <li><a href="#">Lecturer Management</a></li>
             <li><a href="/studMan">Student Management</a></li>
