@@ -79,39 +79,40 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="student" items="${students}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            myAttend+ Admin
+                            ${student.getUser().getFullname()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                0000000001
+                                ${student.getUser().getUsername()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                CDCS230
+                                ${student.getProgram()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            0000000001
+                            ${student.getUser().getUsername()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            CDCS230
+                            ${student.getProgram()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            2023/4
+                            ${student.getIntake()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
-                            3
+                            ${student.getSemester()}
                           </td>
                           <td class="px-3 py-4 text-sm text-gray-500"></td>
                           <td
@@ -143,7 +144,7 @@ uri="jakarta.tags.core" %>
                                 <li>
                                   <a
                                     onclick="editStud.showModal()"
-                                    data-id="1"
+                                    data-id="${student.getUser().getId()}"
                                     class="edit"
                                     >Edit</a
                                   >
@@ -152,7 +153,7 @@ uri="jakarta.tags.core" %>
                                   <a
                                     onclick="deleteStud.showModal()"
                                     class="text-red-600"
-                                    data-id="1"
+                                    data-id="${student.getUser().getId()}"
                                     class="delete"
                                     >Delete</a
                                   >
@@ -161,7 +162,7 @@ uri="jakarta.tags.core" %>
                             </div>
                           </td>
                         </tr>
-
+                        </c:forEach>
                         <!-- More people... -->
                       </tbody>
                     </table>
@@ -174,7 +175,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <div class="stat place-items-center">
                     <div class="stat-title">Total Students</div>
-                    <div class="stat-value text-blue-500">100</div>
+                    <div class="stat-value text-blue-500">${totalStudent}</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                 </div>
