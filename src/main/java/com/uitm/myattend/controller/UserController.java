@@ -89,4 +89,9 @@ public class UserController {
         }
         return respMap;
     }
+
+    @PostMapping("/update")
+    public void update(Map<String, Object> body) {
+
+    }
 }
