@@ -24,7 +24,7 @@ public class HomeController {
     public String home(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         System.out.println("Home SID:" + session.getAttribute("sid"));
 
-        if(!authService.authenticate()) {
+        if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
         }
         return "Home/home";
