@@ -355,6 +355,7 @@ public class DBRepository {
                             case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(values[i]));
                             case "INT" -> ps.setInt(i+1, Integer.parseInt(values[i]));
                             case "TIMESTAMP" -> ps.setTimestamp(i+1, Timestamp.valueOf(values[i]));
+                            case "DATE" -> ps.setDate(i+1, java.sql.Date.valueOf(values[i]));
                             default -> throw new Exception("Invalid datatype on value " + values[i] + " with datatype :" + datatype[i]);
                         }
 

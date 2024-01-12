@@ -41,8 +41,8 @@ public class StudentRepository {
                     "varchar",
                     "varchar",
                     "int",
-                    "varchar",
-                    "varchar"
+                    "timestamp",
+                    "timestamp"
             };
 
             int row = commDB.insert("ma_students", field, fieldVal, fieldType);
