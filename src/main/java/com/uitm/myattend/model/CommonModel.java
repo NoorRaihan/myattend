@@ -10,11 +10,11 @@ public class CommonModel {
     private String token;
     private UserModel userModel;
 
-    public UserModel getUserModel() {
+    public UserModel getUser() {
         return userModel;
     }
 
-    public void setUserModel(UserModel userModel) {
+    public void setUser(UserModel userModel) {
         this.userModel = userModel;
     }
 
