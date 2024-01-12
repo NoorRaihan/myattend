@@ -1,6 +1,7 @@
 package com.uitm.myattend.utility;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ public class FieldUtility {
 
     public static String getCurrentTimestamp() throws ParseException {
         Date curr = new Date();
-        return format(curr, "yyyyMMddHHmmssSSS");
+        return new Timestamp(curr.getTime()).toString();
     }
 
     public static String getFormatted(String date, String inFormat, String outFormat) throws ParseException {
@@ -29,7 +30,7 @@ public class FieldUtility {
     }
 
     public static String timestamp2Oracle(String timestamp) throws ParseException {
-        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "dd-MMM-yy hh.mm.ss.SSS a");
+        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-mm-dd hh:mm:ss");
     }
 
     public static String date2Oracle(String date) throws ParseException {
