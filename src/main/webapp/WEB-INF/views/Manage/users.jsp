@@ -26,7 +26,7 @@ uri="jakarta.tags.core" %>
         </jsp:include>
         <div class="w-auto my-10">
           <div
-            class="flex flex-wrap-reverse mx-4 gap-5 items-start transition-all"
+            class="flex flex-wrap-reverse mx-4 gap-5 items-baseline transition-all"
           >
             <div class="basis-3/5 grow">
               <div class="card card-compact bg-base-100 shadow-xl">
@@ -275,7 +275,6 @@ uri="jakarta.tags.core" %>
                 name="email"
                 class="input input-sm input-bordered"
               />
-              />
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
@@ -373,7 +372,7 @@ uri="jakarta.tags.core" %>
                 name="email"
                 id="email"
                 class="input input-sm input-bordered"
-              />
+              >
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">

@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    usrDetails(id)
+    usrDetails(id);
   });
 
   $(document).on("click", ".delete", function () {
@@ -25,18 +25,18 @@ function usrDetails(id) {
         $("#id").val(response.data.id);
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
-        $("#gender").val(response.data.gender);
+        $("#gender").val(response.data.gender).trigger("change");
         $("#birthdate").val(response.data.formatBirthDate);
         $("#email").val(response.data.email);
-        $("#role").val(response.data.role_id);
+        $("#role").val(response.data.role_id).trigger("change");
         $("#dpImage").val(response.data.profile_pic);
       }
       $("#id").val(response.data.id);
       $("#fullname").val(response.data.fullname);
-      $("#gender").val(response.data.gender);
+      $("#gender").val(response.data.gender).trigger("change");
       $("#birthdate").val(response.data.birth_date);
       $("#email").val(response.data.email);
-      $("#role").val(response.data.role_id);
+      $("#role").val(response.data.role_id).trigger("change");
     },
     error: function (response) {
       let msg = "(" + response.respCode + ") " + response.respMessage;
