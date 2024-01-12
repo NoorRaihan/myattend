@@ -20,13 +20,13 @@ uri="jakarta.tags.core" %>
         <jsp:include page="../Home/header.jsp">
           <jsp:param
             name="menu"
-            value="<li>Admin Menu</li><li>Student Management</li>"
+            value="<li class='sm:hidden'>Admin Menu</li><li>Student Management</li>"
           />
           <jsp:param name="title" value="Student Management" />
         </jsp:include>
         <div class="w-auto my-10">
           <div
-            class="flex flex-wrap-reverse mx-4 gap-5 items-start transition-all"
+            class="flex flex-wrap-reverse mx-4 gap-5 items-baseline transition-all"
           >
             <div class="basis-3/5 grow">
               <div class="card card-compact bg-base-100 shadow-xl">
@@ -46,7 +46,7 @@ uri="jakarta.tags.core" %>
                             scope="col"
                             class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                           >
-                            Username
+                            Student ID
                           </th>
                           <th
                             scope="col"
@@ -86,7 +86,7 @@ uri="jakarta.tags.core" %>
                             myAttend+ Admin
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                0000000001
+                                20234001
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
                                 CDCS230
@@ -96,7 +96,7 @@ uri="jakarta.tags.core" %>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            0000000001
+                            20234001
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
@@ -113,52 +113,50 @@ uri="jakarta.tags.core" %>
                           >
                             3
                           </td>
-                          <td class="px-3 py-4 text-sm text-gray-500"></td>
                           <td
-                            class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+                            class="px-3 py-4 text-right text-sm text-gray-500"
                           >
-                            <div class="dropdown dropdown-left dropdown-hover">
-                              <div
-                                tabindex="0"
-                                role="button"
-                                class="btn btn-ghost btn-xs"
+                            <button
+                              onclick="editStud.showModal()"
+                              data-id="1"
+                              class="btn btn-ghost btn-xs edit"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                class="size-5 fill-green-700"
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="size-6"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                              <ul
-                                tabindex="0"
-                                class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-fit"
+                                <path
+                                  d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"
+                                />
+                                <path
+                                  d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"
+                                />
+                              </svg>
+                            </button>
+                          </td>
+                          <td
+                            class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
+                          >
+                            <button
+                              onclick="deleteStud.showModal()"
+                              data-id="1"
+                              class="btn btn-ghost btn-xs delete"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                class="size-5 fill-red-700"
                               >
-                                <li>
-                                  <a
-                                    onclick="editStud.showModal()"
-                                    data-id="1"
-                                    class="edit"
-                                    >Edit</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    onclick="deleteStud.showModal()"
-                                    class="text-red-600"
-                                    data-id="1"
-                                    class="delete"
-                                    >Delete</a
-                                  >
-                                </li>
-                              </ul>
-                            </div>
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                            </button>
                           </td>
                         </tr>
 
@@ -187,6 +185,18 @@ uri="jakarta.tags.core" %>
             <span id="alertMsg">Error</span>
           </div>
         </div>
+        <div id="succ" class="toast toast-top toast-end z-50 hidden">
+          <div class="alert alert-success">
+            <span id="succMsg">Success</span>
+          </div>
+        </div>
+        <script>
+          let succ = "${succ}";
+          if (succ != "") {
+            $("#succMsg").html(succ);
+            $("#succ").show().delay(3000).fadeOut();
+          }
+        </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>

@@ -1,6 +1,6 @@
 <%@ page isELIgnored="false" language="java" contentType="text/html;
-charset=UTF-8" pageEncoding="UTF-8" session="true" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
+uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html class="h-full bg-white" data-theme="light">
@@ -9,6 +9,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   </head>
   <body class="h-full">
     <div class="flex min-h-full">
@@ -70,9 +71,6 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %>
                     />
                   </div>
                 </div>
-                <span class="mt-2 text-sm leading-3 text-red-500"
-                  >${error}</span
-                >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center">
                     <input
@@ -110,14 +108,26 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %>
             </div>
           </div>
         </div>
+        <div id="alert" class="toast toast-top toast-start z-50 hidden">
+          <div class="alert alert-error text-white">
+            <span id="alertMsg">Error</span>
+          </div>
+        </div>
       </div>
       <div class="relative hidden w-0 flex-1 lg:block">
         <img
           class="absolute inset-0 h-full w-full object-cover"
-          src="https://media.thevibes.com/images/uploads/covers/_large/uitm_bernama_pic_18062021.PNG"
-          alt="UiTM"
+          src="https://miro.medium.com/v2/resize:fit:2000/0*EpckQb9WE2b6kWWI"
+          alt="banner"
         />
       </div>
     </div>
   </body>
+  <script>
+    let alert = "${error}";
+    if (alert != "") {
+      $("#alertMsg").html(alert);
+      $("#alert").show().delay(3000).fadeOut();
+    }
+  </script>
 </html>

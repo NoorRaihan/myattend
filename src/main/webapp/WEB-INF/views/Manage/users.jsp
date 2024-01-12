@@ -20,7 +20,7 @@ uri="jakarta.tags.core" %>
         <jsp:include page="../Home/header.jsp">
           <jsp:param
             name="menu"
-            value="<li>Admin Menu</li><li>User Management</li>"
+            value='<li class="sm:hidden">Admin Menu</li><li>User Management</li>'
           />
           <jsp:param name="title" value="User Management" />
         </jsp:include>
@@ -81,91 +81,95 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
-                      <c:forEach var="user" items="${users}">
-                        <tr>
-                          <td
-                            class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
-                          >
-                            ${user.getFullname()}
-                            <dl class="font-normal lg:hidden">
-                              <dd class="mt-1 truncate text-gray-700">
-                                ${user.getUsername()}
-                              </dd>
-                              <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                ${user.getEmail()}
-                              </dd>
-                            </dl>
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${user.getUsername()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${user.getGender()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${user.getFormatBirthDate()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                          >
-                            ${user.getEmail()}
-                          </td>
-                          <td class="px-3 py-4 text-sm text-gray-500">
-                            ${user.getRole().getRole_name()}
-                          </td>
-                          <td
-                            class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
-                          >
-                            <div class="dropdown dropdown-left dropdown-hover">
-                              <div
-                                tabindex="0"
-                                role="button"
-                                class="btn btn-ghost btn-xs"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="size-6"
+                        <c:forEach var="user" items="${users}">
+                          <tr>
+                            <td
+                              class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                            >
+                              ${user.getFullname()}
+                              <dl class="font-normal lg:hidden">
+                                <dd class="mt-1 truncate text-gray-700">
+                                  ${user.getUsername()}
+                                </dd>
+                                <dd
+                                  class="mt-1 truncate text-gray-500 sm:hidden"
                                 >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                              <ul
-                                tabindex="0"
-                                class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-fit"
+                                  ${user.getEmail()}
+                                </dd>
+                              </dl>
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${user.getUsername()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${user.getGender()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${user.getFormatBirthDate()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            >
+                              ${user.getEmail()}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-500">
+                              ${user.getRole().getRole_name()}
+                            </td>
+                            <td
+                              class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+                            >
+                              <div
+                                class="dropdown dropdown-left dropdown-hover"
                               >
-                                <li>
-                                  <a
-                                    onclick="editUser.showModal()"
-                                    data-id="${user.getId()}"
-                                    class="edit"
-                                    >Edit</a
+                                <div
+                                  tabindex="0"
+                                  role="button"
+                                  class="btn btn-ghost btn-xs"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="size-6"
                                   >
-                                </li>
-                                <li>
-                                  <a
-                                    onclick="deleteUser.showModal()"
-                                    class="text-red-600"
-                                    data-id="${user.getId()}"
-                                    class="delete"
-                                    >Delete</a
-                                  >
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                <ul
+                                  tabindex="0"
+                                  class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-fit"
+                                >
+                                  <li>
+                                    <a
+                                      onclick="editUser.showModal()"
+                                      data-id="${user.getId()}"
+                                      class="edit"
+                                      >Edit</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      onclick="deleteUser.showModal()"
+                                      class="text-red-600"
+                                      data-id="${user.getId()}"
+                                      class="delete"
+                                      >Delete</a
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
                         </c:forEach>
                         <!-- More people... -->
                       </tbody>
@@ -202,6 +206,18 @@ uri="jakarta.tags.core" %>
             <span id="alertMsg">Error</span>
           </div>
         </div>
+        <div id="succ" class="toast toast-top toast-end z-50 hidden">
+          <div class="alert alert-success">
+            <span id="succMsg">Success</span>
+          </div>
+        </div>
+        <script>
+          let succ = "${succ}";
+          if (succ != "") {
+            $("#succMsg").html(succ);
+            $("#succ").show().delay(3000).fadeOut();
+          }
+        </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>
@@ -372,7 +388,7 @@ uri="jakarta.tags.core" %>
                 name="email"
                 id="email"
                 class="input input-sm input-bordered"
-              >
+              />
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">

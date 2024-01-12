@@ -37,9 +37,11 @@ uri="jakarta.tags.core" %>
                     <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                       <p class="text-sm font-medium text-gray-600">Welcome,</p>
                       <p class="text-xl font-bold text-gray-900 sm:text-2xl">
-                        myAttend+ Admin
+                        ${sessionScope.common.getUser().getFullname()}
                       </p>
-                      <p class="text-sm font-medium text-gray-600">Superuser</p>
+                      <p class="text-sm font-medium capitalize text-gray-600">
+                        ${sessionScope.common.getUser().getRole().getRole_name()}
+                      </p>
                     </div>
                   </div>
                   <div class="mt-5 flex justify-center sm:mt-0">
