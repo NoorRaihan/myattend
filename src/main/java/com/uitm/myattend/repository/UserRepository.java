@@ -261,11 +261,11 @@ public class UserRepository {
                     "varchar",
                     "varchar",
                     "varchar",
-                    "varchar",
+                    "date",
                     "varchar",
                     "int",
-                    "varchar",
-                    "varchar"
+                    "timestamp",
+                    "timestamp"
             };
 
             int row = commDB.insert("ma_users", field, fieldVal, fieldType);
@@ -325,10 +325,10 @@ public class UserRepository {
                     "varchar",
                     "varchar",
                     "varchar",
-                    "varchar",
+                    "date",
                     "varchar",
                     "int",
-                    "varchar",
+                    "timestamp",
             };
 
             String cond = "id = ?";

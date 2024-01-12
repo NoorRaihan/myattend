@@ -43,11 +43,11 @@ public class LecturerRepository {
                     "int",
                     "int",
                     "int",
-                    "varchar",
+                    "date",
                     "varchar",
                     "decimal",
-                    "varchar",
-                    "varchar"
+                    "timestamp",
+                    "timestamp"
             };
 
             if(lecturer.getSupervisor_id() != -1) {
