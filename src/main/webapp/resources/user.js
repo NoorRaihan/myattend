@@ -26,7 +26,7 @@ function usrDetails(id) {
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
         $("#gender").val(response.data.gender).trigger("change");
-        $("#birthdate").val(response.data.formatBirthDate);
+        $("#birthdate").val(response.data.formBirthDate);
         $("#email").val(response.data.email);
         $("#role").val(response.data.role_id).trigger("change");
         $("#dpImage").val(response.data.profile_pic);
