@@ -34,9 +34,14 @@ public class AuthService {
         this.lecturerService = lecturerService;
         this.common = common;
     }
-    public boolean authenticate() {
+    public boolean authenticate(HttpSession session) {
         try {
-            return validateToken();
+            if(!validateToken()) {
+                return false;
+            }
+            session.setAttribute("sid", common.getToken());
+            session.setAttribute("common", common);
+            return true;
         }catch (Exception e) {
             return false;
         }
@@ -49,8 +54,14 @@ public class AuthService {
             }
 
             List<Map<String, String>> tokenData = userService.retrieveToken(common.getToken());
-            return tokenData != null && !tokenData.isEmpty() && Integer.parseInt(tokenData.get(0).get("valid")) != 0;
-
+            if(tokenData != null && !tokenData.isEmpty() && Integer.parseInt(tokenData.get(0).get("valid")) != 0) {
+                if(common.getUser() == null) {
+                    UserModel userObj = userService.retrieveUserById(Integer.parseInt(tokenData.get(0).get("user_id")));
+                    common.setUser(userObj);
+                }
+                return true;
+            }
+            return false;
         }catch (Exception e) {
             return false;
         }
@@ -115,8 +126,9 @@ public class AuthService {
                 throw new Exception("Failed to initiate user session");
             }
             common.setToken(token);
-            common.setUserModel(userObj);
+            common.setUser(userObj);
             session.setAttribute("sid", token);
+            session.setAttribute("common", common);
 
             return true;
         }catch (Exception e) {
