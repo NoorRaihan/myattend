@@ -16,8 +16,9 @@ public class FieldUtility {
 
     public static String getCurrentTimestamp() throws ParseException {
         Date curr = new Date();
-        return new Timestamp(curr.getTime()).toString();
+        return getFormatted(new Timestamp(curr.getTime()).toString(), "yyyy-MM-dd hh:mm:ss.SSS", "yyyyMMddHHmmssSSS");
     }
+
 
     public static String getFormatted(String date, String inFormat, String outFormat) throws ParseException {
         Date newDate = new SimpleDateFormat(inFormat).parse(date);
@@ -30,11 +31,11 @@ public class FieldUtility {
     }
 
     public static String timestamp2Oracle(String timestamp) throws ParseException {
-        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-mm-dd hh:mm:ss");
+        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-MM-dd hh:mm:ss.SSS");
     }
 
     public static String date2Oracle(String date) throws ParseException {
-        return getFormatted(date, "yyyyMMdd", "dd-MMM-yyyy");
+        return getFormatted(date, "yyyyMMdd", "yyyy-MM-dd");
     }
 
     public static String generateUUID() {

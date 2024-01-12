@@ -11,6 +11,7 @@ public class MyattendApplication {
 
 	public static void main(String[] args) throws ParseException {
 		SpringApplication.run(MyattendApplication.class, args);
+		System.out.println(FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()));
 	}
 
 }
