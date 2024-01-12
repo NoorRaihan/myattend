@@ -8,10 +8,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 @Repository
@@ -354,17 +351,11 @@ public class DBRepository {
                 if(values != null && values.length > 0) {
                     for(int i=0; i<fields.length; i++) {
                         switch (datatype[i].toUpperCase()) {
-                            case "VARCHAR":
-                                ps.setString(i+1, values[i]);
-                                break;
-                            case "DECIMAL":
-                                ps.setDouble(i+1, Double.parseDouble(values[i]));
-                                break;
-                            case "INT":
-                                ps.setInt(i+1, Integer.parseInt(values[i]));
-                                break;
-                            default:
-                                throw new Exception("Invalid datatype on value " + values[i] + " with datatype :" + datatype[i]);
+                            case "VARCHAR" -> ps.setString(i+1, values[i]);
+                            case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(values[i]));
+                            case "INT" -> ps.setInt(i+1, Integer.parseInt(values[i]));
+                            case "TIMESTAMP" -> ps.setTimestamp(i+1, Timestamp.valueOf(values[i]));
+                            default -> throw new Exception("Invalid datatype on value " + values[i] + " with datatype :" + datatype[i]);
                         }
 
                     }

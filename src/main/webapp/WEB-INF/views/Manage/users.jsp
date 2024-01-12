@@ -314,7 +314,7 @@ uri="jakarta.tags.core" %>
     <dialog id="editUser" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit User</h3>
-        <form action="#" method="post">
+        <form action="/user/update" method="post">
           <input type="hidden" name="id" id="id" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">

@@ -206,7 +206,7 @@ public class UserRepository {
 
             String [] fieldtype = {
                     "int",
-                    "varchar"
+                    "timestamp"
             };
 
             int result = commDB.update("ma_tokens", field, fieldval, fieldtype, cond, condval.toArray(String[]::new), condtype.toArray(String[]::new));
