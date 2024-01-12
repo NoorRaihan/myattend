@@ -4,9 +4,7 @@ import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class LecturerRepository {
@@ -15,6 +13,40 @@ public class LecturerRepository {
 
     public LecturerRepository(DBRepository commDB) {
         this.commDB = commDB;
+    }
+
+    public List<Map<String, String>> retrieve() {
+        try {
+            String sql = "SELECT a.* FROM ma_lecturers a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 2";
+
+            int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveDetail(int uid) {
+        try {
+            String sql = "SELECT a.* FROM ma_lecturers a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 2";
+
+            int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     public boolean insert(LecturerModel lecturer) {

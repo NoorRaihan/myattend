@@ -4,6 +4,10 @@ import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public class StudentRepository {
 
@@ -11,6 +15,48 @@ public class StudentRepository {
 
     public StudentRepository(DBRepository commDB) {
         this.commDB = commDB;
+    }
+
+    public List<Map<String, String>> retrieve() {
+        try {
+            String sql = "SELECT b.*, a.* FROM ma_students a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 3";
+
+            int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveDetail(int uid) {
+        try {
+            String sql = "SELECT b.*, a.* FROM ma_students a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 3 and b.id = ?";
+
+            String [] condVal = {
+                    Integer.toString(uid)
+            };
+
+            String [] condType = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     public boolean insert(StudentModel student) {
