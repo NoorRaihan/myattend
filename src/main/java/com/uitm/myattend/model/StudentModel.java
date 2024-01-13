@@ -1,5 +1,6 @@
 package com.uitm.myattend.model;
 
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -7,6 +8,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class StudentModel {
 
+    private UserModel user;
     private int user_id;
     private int stud_id;
     private String program;
@@ -51,5 +53,13 @@ public class StudentModel {
 
     public void setSemester(int semester) {
         this.semester = semester;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 }

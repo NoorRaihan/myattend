@@ -98,16 +98,20 @@ public class DBRepository {
     }
 
     public int sqlQuery(String query) {
-        List<Map<String, String>> data = new ArrayList<>();
+        return sqlQuery(query, null, null);
+    }
+
+    public int sqlQuery(String query, String [] condval, String [] condtype) {
+        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
         try {
 
             if(query.split(" ")[0].equalsIgnoreCase("select")) {
-                dbTemplate.query(query, new ResultSetExtractor<HashMap<String, String>>() {
+                dbTemplate.query(query, prepareSQLStatement(null, null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
                     public HashMap<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                         HashMap<String, String> temp = null;
-                        result = new ArrayList<>();
+                        result = new ArrayList<Map<String, String>>();
 
                         setColumnLabel(rs);
 
@@ -128,7 +132,6 @@ public class DBRepository {
             return 1;
         }catch (Exception e) {
             e.printStackTrace();
-            System.err.println("ERROR: " + e.getMessage());
             return -1;
         }
 

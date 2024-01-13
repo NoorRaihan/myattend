@@ -9,10 +9,10 @@ $(document).ready(function () {
     $("#id").val(id);
   });
 });
-function usrDetails(id) {
+function studDetails(id) {
   $.ajax({
-    method: "POST",
-    url: "#",
+    method: "GET",
+    url: "/student/detail",
     data: { uid: id },
     dataType: "json",
     success: function (response) {
@@ -22,8 +22,8 @@ function usrDetails(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         $("#id").val(response.data.id);
-        $("#fullname").val(response.data.fullname);
-        $("#username").val(response.data.username);
+        $("#fullname").val(response.data.user.fullname);
+        $("#username").val(response.data.user.username);
         $("#program").val(response.data.program);
         $("#intake").val(response.data.intake);
         $("#semseter").val(response.data.semester);
