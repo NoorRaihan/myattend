@@ -1,19 +1,18 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    usrDetails(id);
+    studDetails(id);
   });
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#uid").val(id);
+    $("#id").val(id);
   });
 });
-
 function usrDetails(id) {
   $.ajax({
-    method: "GET",
-    url: "/user/detail",
+    method: "POST",
+    url: "#",
     data: { uid: id },
     dataType: "json",
     success: function (response) {
@@ -24,18 +23,9 @@ function usrDetails(id) {
       } else {
         $("#id").val(response.data.id);
         $("#fullname").val(response.data.fullname);
-        $("#username").val(response.data.username);
-        $("#gender option[value='" + response.data.gender + "']").prop(
-          "selected",
-          true
-        );
-        $("#birthdate").val(response.data.formBirthDate);
-        $("#email").val(response.data.email);
-        $("#role option[value='" + response.data.role_id + "']").prop(
-          "selected",
-          true
-        );
-        $("#dpImage").val(response.data.profile_pic);
+        $("#startDate").val(response.data.start_date);
+        $("#qualify").val(response.data.qualification);
+        $("#salary").val(response.data.salary);
       }
     },
     error: function (response) {
