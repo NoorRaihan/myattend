@@ -162,23 +162,6 @@ uri="jakarta.tags.core" %>
                                 />
                               </svg>
                             </button>
-                                <li>
-                                  <a
-                                    onclick="editStud.showModal()"
-                                    data-id="${student.getUser().getId()}"
-                                    class="edit"
-                                    >Edit</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    onclick="deleteStud.showModal()"
-                                    class="text-red-600"
-                                    data-id="${student.getUser().getId()}"
-                                    class="delete"
-                                    >Delete</a
-                                  >
-                                </li>
                               </ul>
                             </div>
                           </td>

@@ -30,4 +30,10 @@ public class HomeController {
         return "Home/home";
     }
 
+    @GetMapping("/qrscan")
+    public String qrscan(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+
+        return "Home/qrscan";
+    }
+
 }

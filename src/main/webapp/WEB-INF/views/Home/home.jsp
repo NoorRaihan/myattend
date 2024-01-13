@@ -58,7 +58,7 @@ uri="jakarta.tags.core" %>
           <div
             class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
-            <a href="#" class="basis-full">
+            <a href="/qrscan" class="basis-full">
               <div
                 id="clsActive"
                 class="card bg-gradient-to-br from-green-300 to-emerald-500 shadow-lg overflow-hidden"
