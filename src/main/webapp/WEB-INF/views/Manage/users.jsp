@@ -160,9 +160,8 @@ uri="jakarta.tags.core" %>
                                   <li>
                                     <a
                                       onclick="deleteUser.showModal()"
-                                      class="text-red-600"
+                                      class="text-red-600 delete"
                                       data-id="${user.getId()}"
-                                      class="delete"
                                       >Delete</a
                                     >
                                   </li>
@@ -430,7 +429,7 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Delete User</h3>
         <p class="py-4">Do you really want to delete this user ?</p>
         <form action="/user/delete" method="post">
-          <input type="hidden" name="uid" id="deleteId" value="1" />
+          <input type="hidden" name="uid" id="uid" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes

@@ -1,3 +1,13 @@
+$.fn.extend({
+  showModal: function () {
+    return this.each(function () {
+      if (this.tagName === "DIALOG") {
+        this.showModal();
+      }
+    });
+  },
+});
+
 Html5Qrcode.getCameras()
   .then((devices) => {
     /**
@@ -16,7 +26,7 @@ Html5Qrcode.getCameras()
     $("#alert").show().delay(5000).fadeOut();
   });
 
-const html5QrCode = new Html5Qrcode("reader");
+const html5QrCode = new Html5Qrcode("qrscan");
 const qrCodeSuccessCallback = (decodedText, decodedResult) => {
   /* handle success */
   html5QrCode.stop();

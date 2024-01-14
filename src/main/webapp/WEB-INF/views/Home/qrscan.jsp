@@ -11,7 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script
-      src="https://unpkg.com/html5-qrcode"
+      src="${contextPath}/resources/html5-qrcode.min.js"
       type="text/javascript"
     ></script>
     <script src="${contextPath}/resources/lecturer.js"></script>
@@ -33,7 +33,7 @@ uri="jakarta.tags.core" %>
               <div class="card card-compact bg-base-100 shadow-xl">
                 <div class="card-body items-center text-center">
                   <h2 class="card-title">Attendance</h2>
-                  <div id="reader" class="container mx-6 w-auto"></div>
+                  <div id="qrscan" class="container mx-6 w-full"></div>
                   <input
                     type="hidden"
                     class="id"
