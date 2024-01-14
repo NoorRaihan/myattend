@@ -191,20 +191,25 @@ public class StudentRepository {
         }
     }
 
-    public boolean delete(int uid, int studId) {
+    public boolean delete(Integer uid, Integer studId) {
         try {
-            String cond = "user_id = ? AND stud_id = ?";
-            String [] val = {
-                    Integer.toString(uid),
-                    Integer.toString(studId)
-            };
+            String cond = "";
+            List<String> condVal = new ArrayList<>();
+            List<String> condType = new ArrayList<>();
 
-            String [] type = {
-                    "int",
-                    "int"
-            };
+            if(uid != null) {
+                cond += "user_id = ?";
+                condVal.add(Integer.toString(uid));
+                condType.add("int");
+            }
 
-            commDB.delete("ma_students", cond, val, type);
+            if(studId != null) {
+                cond += cond.isEmpty() ? "stud_id = ?" : " AND stud_id = ?";
+                condVal.add(Integer.toString(studId));
+                condType.add("int");
+            }
+
+            commDB.delete("ma_students", cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
             return true;
         }catch (Exception e) {
             e.printStackTrace();

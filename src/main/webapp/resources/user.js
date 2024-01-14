@@ -6,7 +6,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#uid").val(id);
+    $("#deleteId").val(id);
   });
 });
 
@@ -22,7 +22,7 @@ function usrDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#id").val(response.data.id);
+        $("#editId").val(response.data.id);
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
         $("#gender option[value='" + response.data.gender + "']").prop(

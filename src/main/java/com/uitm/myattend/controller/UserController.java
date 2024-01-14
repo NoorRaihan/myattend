@@ -91,7 +91,26 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public void update(Map<String, Object> body) {
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!userService.update(body)) {
+                throw new Exception("Failed to update user data");
+            }else {
+                session.setAttribute("success", "User data updated successfully");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/user");
+    }
 
+    @PostMapping("/delete")
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

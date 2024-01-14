@@ -78,4 +78,19 @@ public class StudController {
         }
         response.sendRedirect("/student");
     }
+
+    @PostMapping("/delete")
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+
+            if(studentService.delete(body)) {
+                throw new Exception("Failed to delete student data");
+            }else {
+                session.setAttribute("success", "Student data deleted successfully");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/student");
+    }
 }
