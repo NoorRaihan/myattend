@@ -6,6 +6,7 @@ import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.StudentRepository;
 import com.uitm.myattend.utility.FieldUtility;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,19 +54,20 @@ public class StudentService {
         }
     }
 
-    public boolean insert(UserModel user, Map<String, Object> body) {
+    public boolean insert(Map<String, Object> body) {
         try {
             StudentModel student = new StudentModel();
-            String studId = FieldUtility.getCurrentDate().substring(0,4) + FieldUtility.generateUUID().substring(0,6);
+            String curYear = FieldUtility.getCurrentDate().substring(0,4);
+            String studId = curYear + FieldUtility.generateUUID().substring(0,6);
 
-            student.setUser_id(user.getId());
+            student.setUser_id(Integer.parseInt((String)body.get("uid")));
             student.setStud_id(Integer.parseInt(studId));
             student.setProgram((String)body.get("program"));
             student.setIntake((String)body.get("intake"));
-            student.setSemester((int)body.get("semester"));
+            student.setSemester(Integer.parseInt((String) body.get("semester")));
 
             if(!studentRepository.insert(student)) {
-                throw new Exception("Failed to register student information");
+                throw new Exception("Failed to insert student information");
             }
             return true;
         }catch (Exception e) {
@@ -74,4 +76,54 @@ public class StudentService {
         }
     }
 
+    public boolean update(Map<String, Object> body) {
+        try {
+            StudentModel student = new StudentModel();
+
+            student.setUser_id(Integer.parseInt((String)body.get("uid")));
+            student.setStud_id(Integer.parseInt((String)body.get("stud_id")));
+            student.setProgram((String)body.get("program"));
+            student.setIntake((String)body.get("intake"));
+            student.setSemester((int)body.get("semester"));
+
+            if(!studentRepository.update(student)) {
+                throw new Exception("Failed to update student information");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean editStudent(Map<String, Object> body) {
+        try {
+            int uid = Integer.parseInt((String) body.get("uid"));
+            List<Map<String, String>> studentList = studentRepository.retrieveRaw(uid, null);
+
+            if(studentList == null) {
+                throw new Exception("Retrieve data error on student!");
+            }
+
+            if(studentList.size() > 1 ) {
+                throw new Exception("Data error multiple rows on student!");
+            }
+
+            boolean flag = false;
+            if(studentList.size() == 0) {
+                flag = insert(body);
+            }else {
+                flag = update(body);
+            }
+
+            if(!flag) {
+                throw new Exception("Failed to process student data");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

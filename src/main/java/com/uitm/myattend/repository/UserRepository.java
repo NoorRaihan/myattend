@@ -293,7 +293,7 @@ public class UserRepository {
         }
     }
 
-    public boolean update(UserModel userModel ,int uid) {
+    public boolean update(UserModel userModel) {
         try {
             String [] field = {
                     "email",
@@ -331,13 +331,40 @@ public class UserRepository {
                     "timestamp",
             };
 
+            List<String> fieldList = null;
+            List<String> fieldValList = null;
+            List<String> fieldTypeList = null;
+            if((userModel.getProfile_pic() != null && !userModel.getProfile_pic().isEmpty() ||
+                    (userModel.getPassword() != null && !userModel.getPassword().isEmpty()))) {
+
+                fieldList = new ArrayList<>(Arrays.stream(field).toList());
+                fieldValList = new ArrayList<>(Arrays.stream(fieldval).toList());
+                fieldTypeList = new ArrayList<>(Arrays.stream(fieldType).toList());
+
+                if(userModel.getProfile_pic() != null && !userModel.getProfile_pic().isEmpty()) {
+                    fieldList.add("profile_pic");
+                    fieldValList.add(userModel.getProfile_pic());
+                    fieldTypeList.add("varchar");
+                }
+
+                if(userModel.getPassword() != null && !userModel.getPassword().isEmpty()) {
+                    fieldList.add("password");
+                    fieldValList.add(userModel.getPassword());
+                    fieldTypeList.add("varchar");
+                }
+
+                field = fieldList.toArray(String[]::new);
+                fieldval = fieldValList.toArray(String[]::new);
+                fieldType = fieldTypeList.toArray(String[]::new);
+            }
+
             String cond = "id = ?";
-            String [] condval = {Integer.toString(uid)};
+            String [] condval = {Integer.toString(userModel.getId())};
             String [] condtype = {"int"};
 
             int row = commDB.update("ma_users", field, fieldval, fieldType, cond, condval, condtype);
             if(row <= 0) {
-                throw new Exception("Failed to update user " + uid);
+                throw new Exception("Failed to update user " + userModel.getId());
             }
             return true;
         }catch (Exception e) {

@@ -6,14 +6,12 @@ import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,4 +63,19 @@ public class StudController {
         return respMap;
     }
 
+    @PostMapping("/update")
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            //will do validation
+
+            if(!studentService.editStudent(body)) {
+                throw new Exception("Failed to update student data");
+            }else {
+                session.setAttribute("success", "Student data successfully updated");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/student");
+    }
 }
