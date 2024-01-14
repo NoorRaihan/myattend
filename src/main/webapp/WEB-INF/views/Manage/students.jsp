@@ -198,7 +198,7 @@ uri="jakarta.tags.core" %>
           </div>
         </div>
         <script>
-          let succ = "${succ}";
+          let succ = "${sessionScope.success}";
           if (succ != "") {
             $("#succMsg").html(succ);
             $("#succ").show().delay(3000).fadeOut();
@@ -286,5 +286,6 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+    ${sessionScope.}
   </body>
 </html>
