@@ -285,7 +285,12 @@ public class UserRepository {
             String [] val = {Integer.toString(uid)};
             String [] type = {"int"};
 
-            commDB.delete("ma_users", cond, val, type);
+            int result = commDB.delete("ma_users", cond, val, type);
+
+            if(result < 1) {
+                throw new Exception("Data does not existed to be deleted");
+            }
+
             return true;
         }catch (Exception e) {
             e.printStackTrace();
