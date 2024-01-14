@@ -198,6 +198,11 @@ uri="jakarta.tags.core" %>
           </div>
         </div>
         <script>
+          let error = "${sessionScope.error}";
+          if (error != "") {
+            $("#alertMsg").html(error);
+            $("#alert").show().delay(3000).fadeOut();
+          }
           let succ = "${sessionScope.success}";
           if (succ != "") {
             $("#succMsg").html(succ);
@@ -224,6 +229,17 @@ uri="jakarta.tags.core" %>
                 name="fullname"
                 id="fullname"
                 class="input input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Student ID</span>
+              </div>
+              <input
+                type="text"
+                name="stud_id"
+                id="stud_id"
+                class="input input-sm disabled"
               />
             </label>
             <label class="form-control basis-2/4 grow">

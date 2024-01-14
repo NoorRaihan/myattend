@@ -23,8 +23,8 @@ function studDetails(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         $("#id").val(response.data.user.id);
+        $("#stud_id").val(response.data.stud_id);
         $("#fullname").val(response.data.user.fullname);
-        $("#username").val(response.data.user.username);
         $("#program").val(response.data.program);
         $("#intake").val(response.data.intake);
         $("#semester").val(response.data.semester);
