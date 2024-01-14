@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -27,17 +28,28 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void authLogin(@RequestParam Map<String, Object> body, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public void authLogin(@RequestParam Map<String, Object> body, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         try {
-            if(authService.login(body, session)) {
-                response.sendRedirect(request.getContextPath() + "/");
-            }else{
-                System.out.println(session.getAttribute("error"));
-                response.sendRedirect(request.getContextPath() + "/login");
+            if(!authService.login(body, session)) {
+                throw new Exception("Failed to log in a user");
             }
         }catch (Exception e) {
-            System.out.println("error");
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/login");
         }
+        response.sendRedirect(request.getContextPath() + "/");
+    }
 
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!authService.logout(session)) {
+                throw new Exception("Failed to logout from user session");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/");
+        }
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }

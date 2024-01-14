@@ -18,21 +18,18 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
-    private final StudentService studentService;
-    private final LecturerService lecturerService;
     private CommonModel common;
+    private final UserRepository userRepository;
 
     @Autowired
     public AuthService(PasswordEncoder passwordEncoder,
                        UserService userService,
-                       StudentService studentService,
-                       LecturerService lecturerService,
-                       CommonModel common) {
+                       CommonModel common,
+                       UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-        this.studentService = studentService;
-        this.lecturerService = lecturerService;
         this.common = common;
+        this.userRepository = userRepository;
     }
     public boolean authenticate(HttpSession session) {
         try {
@@ -134,6 +131,26 @@ public class AuthService {
         }catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean logout(HttpSession session) {
+        try {
+            if(session != null) {
+                CommonModel common = (CommonModel) session.getAttribute("common");
+                int uid = common.getUser().getId();
+                String token = common.getToken();
+
+                if(!userRepository.updateToken(token, uid, 0)) {
+                    throw new Exception("Failed to invalidate session token");
+                }
+                session.invalidate();
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

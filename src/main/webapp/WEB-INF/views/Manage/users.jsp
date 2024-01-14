@@ -160,9 +160,8 @@ uri="jakarta.tags.core" %>
                                   <li>
                                     <a
                                       onclick="deleteUser.showModal()"
-                                      class="text-red-600"
+                                      class="text-red-600 delete"
                                       data-id="${user.getId()}"
-                                      class="delete"
                                       >Delete</a
                                     >
                                   </li>
