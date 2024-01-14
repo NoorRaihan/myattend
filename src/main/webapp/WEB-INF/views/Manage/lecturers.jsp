@@ -190,6 +190,13 @@ uri="jakarta.tags.core" %>
             <span id="succMsg">Success</span>
           </div>
         </div>
+        <script>
+          let succ = "${sessionScope.success}";
+          if (succ != "") {
+            $("#succMsg").html(succ);
+            $("#succ").show().delay(3000).fadeOut();
+          }
+        </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>
@@ -272,5 +279,6 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+    <c:remove var="success" scope="session" />
   </body>
 </html>
