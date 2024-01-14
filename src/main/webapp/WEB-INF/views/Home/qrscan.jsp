@@ -33,10 +33,7 @@ uri="jakarta.tags.core" %>
               <div class="card card-compact bg-base-100 shadow-xl">
                 <div class="card-body items-center text-center">
                   <h2 class="card-title">Attendance</h2>
-                  <div
-                    id="qrscan"
-                    class="container mx-6 w-full rounded-xl"
-                  ></div>
+                  <div id="qrscan" class="container mx-6 w-full"></div>
                   <input
                     type="hidden"
                     class="id"
