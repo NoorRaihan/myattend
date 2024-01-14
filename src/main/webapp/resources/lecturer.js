@@ -22,6 +22,7 @@ function usrDetails(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         $("#id").val(response.data.id);
+        $("#lect_id").val(response.data.lect_id);
         $("#fullname").val(response.data.fullname);
         $("#startDate").val(response.data.start_date);
         $("#qualify").val(response.data.qualification);

@@ -190,6 +190,18 @@ uri="jakarta.tags.core" %>
             <span id="succMsg">Success</span>
           </div>
         </div>
+        <script>
+          let error = "${sessionScope.error}";
+          if (error != "") {
+            $("#alertMsg").html(error);
+            $("#alert").show().delay(3000).fadeOut();
+          }
+          let succ = "${sessionScope.success}";
+          if (succ != "") {
+            $("#succMsg").html(succ);
+            $("#succ").show().delay(3000).fadeOut();
+          }
+        </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>
@@ -210,6 +222,17 @@ uri="jakarta.tags.core" %>
                 name="fullname"
                 id="fullname"
                 class="input input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Lecturer ID</span>
+              </div>
+              <input
+                type="text"
+                name="lect_id"
+                id="lect_id"
+                class="input input-sm disabled"
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -272,5 +295,6 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+    <c:remove var="success" scope="session" />
   </body>
 </html>
