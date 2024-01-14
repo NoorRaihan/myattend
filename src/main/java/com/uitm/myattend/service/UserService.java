@@ -184,4 +184,38 @@ public class UserService {
             return null;
         }
     }
+
+    public boolean update(Map<String, Object> body) {
+        try {
+            UserModel user = new UserModel();
+            String bday = FieldUtility.getFormatted((String) body.get("birthdate"), "yyyy-MM-dd", "yyyyMMdd");
+
+            user.setId(Integer.parseInt((String) body.get("uid")));
+            user.setEmail((String) body.get("email"));
+            user.setUsername((String) body.get("username"));
+            user.setFullname((String) body.get("fullname"));
+
+            String pass = (String) body.get("password");
+            if(!pass.isEmpty()) {
+                user.setPassword(encrytPassword(pass));
+            }
+
+            user.setGender((String) body.get("gender"));
+            user.setBirth_date(bday);
+
+            String dpImage = (String) body.get("dpImage");
+            if(!dpImage.isEmpty()) {
+                user.setProfile_pic(dpImage);
+            }
+            user.setRole_id(Integer.parseInt((String) body.get("role")));
+
+            if(!userRepo.update(user)) {
+                throw new Exception("Failed to update user info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

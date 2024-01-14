@@ -21,7 +21,7 @@ function studDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#id").val(response.data.id);
+        $("#id").val(response.data.user.id);
         $("#fullname").val(response.data.user.fullname);
         $("#username").val(response.data.user.username);
         $("#program").val(response.data.program);

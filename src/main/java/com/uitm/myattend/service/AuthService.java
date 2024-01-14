@@ -67,36 +67,36 @@ public class AuthService {
         }
     }
 
-    public boolean register(Map<String, Object> body) {
-        try {
-            //will enhance to retrieve all roles and do dynamic checking
-            if(body.get("role") == null || "".equals(body.get("role"))) {
-                throw new Exception("Role can't be empty");
-            }
-            int role = (int)body.get("role");
-
-            if(role != 1 && role != 2 && role !=3 && role != 4) {
-                throw new Exception("Invalid role");
-            }
-
-            UserModel user = userService.insert(body);
-            try {
-                switch(role) {
-                    case 2 -> lecturerService.insert(user, body);
-                    case 3 -> studentService.insert(user, body);
-                    default -> throw new Exception("Invalid role");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                userService.delete(user.getId());
-                throw new Exception("Failed to register the role");
-            }
-            return true;
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean register(Map<String, Object> body) {
+//        try {
+//            //will enhance to retrieve all roles and do dynamic checking
+//            if(body.get("role") == null || "".equals(body.get("role"))) {
+//                throw new Exception("Role can't be empty");
+//            }
+//            int role = (int)body.get("role");
+//
+//            if(role != 1 && role != 2 && role !=3 && role != 4) {
+//                throw new Exception("Invalid role");
+//            }
+//
+//            UserModel user = userService.insert(body);
+//            try {
+//                switch(role) {
+//                    case 2 -> lecturerService.insert(user, body);
+//                    case 3 -> studentService.insert(user, body);
+//                    default -> throw new Exception("Invalid role");
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                userService.delete(user.getId());
+//                throw new Exception("Failed to register the role");
+//            }
+//            return true;
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public boolean login(Map<String, Object> body, HttpSession session) {
         try {

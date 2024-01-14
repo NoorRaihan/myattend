@@ -88,7 +88,7 @@ uri="jakarta.tags.core" %>
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
 
-                                ${student.getUser().getUsername()}
+                                ${student.getStud_id()}
 
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
@@ -100,7 +100,7 @@ uri="jakarta.tags.core" %>
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
 
-                            ${student.getUser().getUsername()}
+                            ${student.getStud_id()}
 
                           </td>
                           <td
@@ -212,8 +212,8 @@ uri="jakarta.tags.core" %>
     <dialog id="editStud" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Student</h3>
-        <form action="#" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+        <form action="/student/update" method="post">
+          <input type="hidden" name="uid" id="id" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
