@@ -286,6 +286,6 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
-    ${sessionScope.}
+    <c:remove var="success" scope="session" />
   </body>
 </html>
