@@ -6,8 +6,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    console.log(id)
-    $("#deleteId").val(id);
+    $("#uid").val(id);
   });
 });
 
