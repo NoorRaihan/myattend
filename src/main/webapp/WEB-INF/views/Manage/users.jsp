@@ -331,7 +331,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit User</h3>
         <form action="/user/update" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+          <input type="hidden" name="uid" id="editId" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -430,7 +430,7 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Delete User</h3>
         <p class="py-4">Do you really want to delete this user ?</p>
         <form action="/user/delete" method="post">
-          <input type="hidden" name="uid" id="uid" value="1" />
+          <input type="hidden" name="uid" id="deleteId" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes

@@ -89,7 +89,7 @@ public class UserService {
 
     public boolean delete(Map<String, Object> body, int uid) {
         try {
-            if(body != null && uid != -1) {
+            if(body != null && uid == -1) {
                 uid = Integer.parseInt((String) body.get("uid"));
             }
 
@@ -196,7 +196,7 @@ public class UserService {
             user.setFullname((String) body.get("fullname"));
 
             String pass = (String) body.get("password");
-            if(!pass.isEmpty()) {
+            if(pass != null && !pass.isEmpty()) {
                 user.setPassword(encrytPassword(pass));
             }
 
@@ -204,7 +204,7 @@ public class UserService {
             user.setBirth_date(bday);
 
             String dpImage = (String) body.get("dpImage");
-            if(!dpImage.isEmpty()) {
+            if(dpImage != null && !dpImage.isEmpty()) {
                 user.setProfile_pic(dpImage);
             }
             user.setRole_id(Integer.parseInt((String) body.get("role")));
