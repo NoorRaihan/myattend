@@ -84,7 +84,7 @@ public class StudentService {
             student.setStud_id(Integer.parseInt((String)body.get("stud_id")));
             student.setProgram((String)body.get("program"));
             student.setIntake((String)body.get("intake"));
-            student.setSemester((int)body.get("semester"));
+            student.setSemester(Integer.parseInt((String)body.get("semester")));
 
             if(!studentRepository.update(student)) {
                 throw new Exception("Failed to update student information");

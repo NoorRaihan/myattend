@@ -85,6 +85,7 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="lecturer" items="${lecturers}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
@@ -170,7 +171,7 @@ uri="jakarta.tags.core" %>
                             </button>
                           </td>
                         </tr>
-
+                        </c:forEach>
                         <!-- More people... -->
                       </tbody>
                     </table>
@@ -183,7 +184,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <div class="stat place-items-center">
                     <div class="stat-title">Total Lecturers</div>
-                    <div class="stat-value text-blue-500">100</div>
+                    <div class="stat-value text-blue-500">${totalLecturer}</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                 </div>
