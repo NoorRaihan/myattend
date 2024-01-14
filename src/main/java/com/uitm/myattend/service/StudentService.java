@@ -126,4 +126,19 @@ public class StudentService {
             return false;
         }
     }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            int uid = Integer.parseInt((String) body.get("uid"));
+
+            if(studentRepository.delete(uid, null)) {
+                throw new Exception("Failed to delete student info");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

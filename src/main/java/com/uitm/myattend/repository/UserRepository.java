@@ -299,10 +299,8 @@ public class UserRepository {
                     "email",
                     "username",
                     "full_name",
-                    "password",
                     "gender",
                     "birth_date",
-                    "profile_pic",
                     "role_id",
                     "updated_at"
             };
@@ -311,10 +309,8 @@ public class UserRepository {
                     userModel.getEmail(),
                     userModel.getUsername(),
                     userModel.getFullname(),
-                    userModel.getPassword(),
                     userModel.getGender(),
-                    userModel.getBirth_date(),
-                    userModel.getProfile_pic(),
+                    FieldUtility.date2Oracle(userModel.getBirth_date()),
                     Integer.toString(userModel.getRole_id()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
@@ -324,9 +320,7 @@ public class UserRepository {
                     "varchar",
                     "varchar",
                     "varchar",
-                    "varchar",
                     "date",
-                    "varchar",
                     "int",
                     "timestamp",
             };
@@ -357,6 +351,8 @@ public class UserRepository {
                 fieldval = fieldValList.toArray(String[]::new);
                 fieldType = fieldTypeList.toArray(String[]::new);
             }
+
+            System.out.println(Arrays.toString(fieldval));
 
             String cond = "id = ?";
             String [] condval = {Integer.toString(userModel.getId())};

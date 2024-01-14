@@ -123,7 +123,7 @@ uri="jakarta.tags.core" %>
                           >
                             <button
                               onclick="editStud.showModal()"
-                              data-id="1"
+                              data-id="${student.getUser().getId()}"
                               class="btn btn-ghost btn-xs edit"
                             >
                               <svg
@@ -146,7 +146,7 @@ uri="jakarta.tags.core" %>
                           >
                             <button
                               onclick="deleteStud.showModal()"
-                              data-id="1"
+                              data-id="${student.getUser().getId()}"
                               class="btn btn-ghost btn-xs delete"
                             >
                               <svg
@@ -273,8 +273,8 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Student</h3>
         <p class="py-4">Do you really want to delete this student ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+        <form action="/student/delete" method="post">
+          <input type="hidden" name="uid" id="deleteId" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes

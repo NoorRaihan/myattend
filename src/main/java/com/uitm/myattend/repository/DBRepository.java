@@ -392,6 +392,7 @@ public class DBRepository {
                 throw new SQLException(e);
             } catch (Exception e) {
                 System.err.println("Prepare statement error: " + e.getMessage());
+                e.printStackTrace();
                 throw new RuntimeException();
             }
         };

@@ -6,7 +6,8 @@ $(document).ready(function () {
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#id").val(id);
+    console.log(id);
+    $("#deleteId").val(id);
   });
 });
 function studDetails(id) {
@@ -26,7 +27,7 @@ function studDetails(id) {
         $("#username").val(response.data.user.username);
         $("#program").val(response.data.program);
         $("#intake").val(response.data.intake);
-        $("#semseter").val(response.data.semester);
+        $("#semester").val(response.data.semester);
       }
     },
     error: function (response) {
