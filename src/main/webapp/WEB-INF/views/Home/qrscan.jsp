@@ -33,6 +33,7 @@ uri="jakarta.tags.core" %>
               <div class="card card-compact bg-base-100 shadow-xl">
                 <div class="card-body items-center text-center">
                   <h2 class="card-title">Attendance</h2>
+                  <p class="text-sm mb-6">Scan your lecturer's provided QR code to record your class attendance</p>
                   <div id="qrscan" class="container mx-6 w-full"></div>
                   <input
                     type="hidden"
