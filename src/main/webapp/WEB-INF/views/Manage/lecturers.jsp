@@ -85,51 +85,52 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="lecturer" items="${lecturers}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            myAttend+ Admin
+                            ${lecturer.getUser().getFullname()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                20234001
+                                ${lecturer.getLect_id()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                01/01/2024
+                                ${lecturer.getStart_date()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            20234001
+                            ${lecturer.getLect_id()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            01/01/2024
+                            ${lecturer.getStart_date()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            Master in myAttend+ (Hons.)
+                            ${lecturer.getQualification()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
-                            30,000
+                            ${lecturer.getSalary()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
-                            20234003
+                            ${lecturer.getLect_id()}
                           </td>
                           <td
                             class="px-3 py-4 text-right text-sm text-gray-500"
                           >
                             <button
                               onclick="editLect.showModal()"
-                              data-id="1"
+                              data-id="${lecturer.getUser().getId()}"
                               class="btn btn-ghost btn-xs edit"
                             >
                               <svg
@@ -152,7 +153,7 @@ uri="jakarta.tags.core" %>
                           >
                             <button
                               onclick="deleteLect.showModal()"
-                              data-id="1"
+                              data-id="${lecturer.getUser().getId()}"
                               class="btn btn-ghost btn-xs delete"
                             >
                               <svg
@@ -170,7 +171,7 @@ uri="jakarta.tags.core" %>
                             </button>
                           </td>
                         </tr>
-
+                        </c:forEach>
                         <!-- More people... -->
                       </tbody>
                     </table>
@@ -183,7 +184,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <div class="stat place-items-center">
                     <div class="stat-title">Total Lecturers</div>
-                    <div class="stat-value text-blue-500">100</div>
+                    <div class="stat-value text-blue-500">${totalLecturer}</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                 </div>

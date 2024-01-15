@@ -7,6 +7,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class LecturerModel {
 
+    private UserModel user;
     private int user_id;
     private int lect_id;
     private int supervisor_id = -1;
@@ -60,5 +61,13 @@ public class LecturerModel {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 }

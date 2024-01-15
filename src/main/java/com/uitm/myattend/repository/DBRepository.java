@@ -372,17 +372,10 @@ public class DBRepository {
                         int y = i-counter;
 
                         switch (condtype[y].toUpperCase()) {
-                            case "VARCHAR":
-                                ps.setString(i+1, condval[y]);
-                                break;
-                            case "DECIMAL":
-                                ps.setDouble(i+1, Double.parseDouble(condval[y]));
-                                break;
-                            case "INT":
-                                ps.setInt(i+1, Integer.parseInt(condval[y]));
-                                break;
-                            default:
-                                throw new Exception("Invalid datatype on value " + condval[y] + " with datatype :" + condval[y]);
+                            case "VARCHAR" -> ps.setString(i+1, condval[y]);
+                            case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(condval[y]));
+                            case "INT" -> ps.setInt(i+1, Integer.parseInt(condval[y]));
+                            default -> throw new Exception("Invalid datatype on value " + condval[y] + " with datatype :" + condval[y]);
                         }
                     }
                 }

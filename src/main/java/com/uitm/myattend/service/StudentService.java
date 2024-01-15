@@ -84,7 +84,7 @@ public class StudentService {
             student.setStud_id(Integer.parseInt((String)body.get("stud_id")));
             student.setProgram((String)body.get("program"));
             student.setIntake((String)body.get("intake"));
-            student.setSemester((int)body.get("semester"));
+            student.setSemester(Integer.parseInt((String)body.get("semester")));
 
             if(!studentRepository.update(student)) {
                 throw new Exception("Failed to update student information");
@@ -110,7 +110,7 @@ public class StudentService {
             }
 
             boolean flag = false;
-            if(studentList.size() == 0) {
+            if(studentList.isEmpty()) {
                 flag = insert(body);
             }else {
                 flag = update(body);

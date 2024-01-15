@@ -6,13 +6,14 @@ $(document).ready(function () {
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#id").val(id);
+    $("#uid").val(id);
   });
 });
-function usrDetails(id) {
+
+function studDetails(id) {
   $.ajax({
-    method: "POST",
-    url: "#",
+    method: "GET",
+    url: "/lecturer/detail",
     data: { uid: id },
     dataType: "json",
     success: function (response) {
@@ -21,9 +22,9 @@ function usrDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#id").val(response.data.id);
+        $("#id").val(response.data.user.id);
         $("#lect_id").val(response.data.lect_id);
-        $("#fullname").val(response.data.fullname);
+        $("#fullname").val(response.data.user.fullname);
         $("#startDate").val(response.data.start_date);
         $("#qualify").val(response.data.qualification);
         $("#salary").val(response.data.salary);

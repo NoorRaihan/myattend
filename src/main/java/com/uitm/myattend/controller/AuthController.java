@@ -49,6 +49,7 @@ public class AuthController {
         }catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/");
+            return;
         }
         response.sendRedirect(request.getContextPath() + "/login");
     }

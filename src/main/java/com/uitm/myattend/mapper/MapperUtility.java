@@ -67,6 +67,10 @@ public class MapperUtility {
         lectObj.setStart_date(data.get("START_DATE"));
         lectObj.setQualification(data.get("QUALIFICATION"));
         lectObj.setSalary(Double.parseDouble(data.get("SALARY") == null ? "0.00" : data.get("SALARY")));
+
+        UserModel userObj = userMapper(data);
+        lectObj.setUser(userObj);
+
         return lectObj;
     }
 
