@@ -17,7 +17,7 @@ public class LecturerRepository {
 
     public List<Map<String, String>> retrieve() {
         try {
-            String sql = "SELECT a.* FROM ma_lecturers a " +
+            String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +
                     "RIGHT JOIN ma_users b ON a.user_id = b.id " +
                     "WHERE b.role_id = 2";
 
@@ -34,7 +34,7 @@ public class LecturerRepository {
 
     public List<Map<String, String>> retrieveDetail(int uid) {
         try {
-            String sql = "SELECT a.* FROM ma_lecturers a " +
+            String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +
                     "RIGHT JOIN ma_users b ON a.user_id = b.id " +
                     "WHERE b.role_id = 2";
 
@@ -54,7 +54,7 @@ public class LecturerRepository {
             String [] field = {
                     "user_id",
                     "lect_id",
-                    "suervisor_id",
+                    "supervisor_id",
                     "start_date",
                     "qualification",
                     "salary",
@@ -88,8 +88,8 @@ public class LecturerRepository {
                 tempVal.add(Integer.toString(lecturer.getSupervisor_id()));
                 tempType.add("int");
 
-                fieldVal = (String[]) tempVal.toArray();
-                fieldType = (String[]) tempType.toArray();
+                fieldVal = tempVal.toArray(String[]::new);
+                fieldType = tempType.toArray(String[]::new);
             }
 
             int row = commDB.insert("ma_lecturers", field, fieldVal, fieldType);
@@ -130,6 +130,100 @@ public class LecturerRepository {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean update(LecturerModel lecturer) {
+        try {
+            String [] field = {
+                    "user_id",
+                    "lect_id",
+                    "supervisor_id",
+                    "start_date",
+                    "qualification",
+                    "salary",
+            };
+
+            String [] fieldVal = {
+                    Integer.toString(lecturer.getUser_id()),
+                    Integer.toString(lecturer.getLect_id()),
+                    lecturer.getStart_date(),
+                    lecturer.getQualification(),
+                    Double.toString(lecturer.getSalary())
+            };
+
+            String [] fieldType = {
+                    "int",
+                    "int",
+                    "int",
+                    "date",
+                    "varchar",
+                    "decimal",
+            };
+
+            if(lecturer.getSupervisor_id() != -1) {
+                List<String> tempVal = new ArrayList<>(Arrays.asList(fieldVal));
+                List<String> tempType = new ArrayList<>(Arrays.asList(fieldType));
+                tempVal.add(Integer.toString(lecturer.getSupervisor_id()));
+                tempType.add("int");
+
+                fieldVal = tempVal.toArray(String[]::new);
+                fieldType = tempType.toArray(String[]::new);
+            }
+
+            String cond = "user_id = ? AND lect_id = ?";
+
+            String [] condVal = {
+                    Integer.toString(lecturer.getUser_id()),
+                    Integer.toString(lecturer.getLect_id()),
+            };
+
+            String [] condType = {
+                    "int",
+                    "int"
+            };
+
+            int row = commDB.update("ma_lecturers", field, fieldVal, fieldType, cond, condVal, condType);
+            if(row <= 0) {
+                throw new Exception("Failed to insert into ma_lecturers");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Map<String, String>> retrieveRaw(Integer uid, Integer lectId) {
+        try {
+            String [] field = {
+                    "user_id",
+                    "lect_id",
+                    "supervisor_id",
+                    "start_date",
+                    "qualification",
+                    "salary"
+            };
+
+            String cond = "";
+            List<String> condVal = new ArrayList<>();
+            List<String> condType = new ArrayList<>();
+            if(uid != null) {
+                cond += "user_id = ?";
+                condVal.add(Integer.toString(uid));
+                condType.add("int");
+            }
+
+            if(lectId != null) {
+                cond += cond.isEmpty() ? "lect_id = ?" : " AND lect_id = ?";
+                condVal.add(Integer.toString(lectId));
+                condType.add("int");
+            }
+
+            return commDB.select("ma_students", field, cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

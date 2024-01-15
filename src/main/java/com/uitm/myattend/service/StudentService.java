@@ -110,7 +110,7 @@ public class StudentService {
             }
 
             boolean flag = false;
-            if(studentList.size() == 0) {
+            if(studentList.isEmpty()) {
                 flag = insert(body);
             }else {
                 flag = update(body);
