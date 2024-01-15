@@ -1,19 +1,20 @@
 $(document).ready(function () {
   $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    studDetails(id);
+    usrDetails(id);
   });
 
   $(document).on("click", ".delete", function () {
     var id = $(this).data("id");
-    $("#id").val(id);
+    $("#c_id").val(id);
   });
 });
+
 function usrDetails(id) {
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: "#",
-    data: { uid: id },
+    data: { cid: id },
     dataType: "json",
     success: function (response) {
       if (response.respStatus == "error") {
@@ -21,13 +22,17 @@ function usrDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#id").val(response.data.id);
-        $("#lect_id").val(response.data.lect_id);
-        $("#fullname").val(response.data.fullname);
-        $("#startDate").val(response.data.start_date);
-        $("#qualify").val(response.data.qualification);
-        $("#salary").val(response.data.salary);
-        $("#sv").val(response.data.supervisor_id);
+        $("#c_code").val(response.data.id);
+        $("#c_name").val(response.data.course_name);
+        $("#c_lect option[value='" + response.data.user_id + "']").prop(
+          "selected",
+          true
+        );
+        $("#c_credit").val(response.data.credit_hour);
+        $("#c_color option[value='" + response.data.color + "']").prop(
+          "selected",
+          true
+        );
       }
     },
     error: function (response) {

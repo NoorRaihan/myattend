@@ -68,6 +68,12 @@ uri="jakarta.tags.core" %>
                           </th>
                           <th
                             scope="col"
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                          >
+                            Supervisor
+                          </th>
+                          <th
+                            scope="col"
                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                           ></th>
                           <th
@@ -112,6 +118,11 @@ uri="jakarta.tags.core" %>
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
                             30,000
+                          </td>
+                          <td
+                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                          >
+                            20234003
                           </td>
                           <td
                             class="px-3 py-4 text-right text-sm text-gray-500"
@@ -230,9 +241,9 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="lect_id"
                 id="lect_id"
-                class="input input-sm disabled"
+                class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                disabled
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -257,7 +268,7 @@ uri="jakarta.tags.core" %>
                 class="input input-sm input-bordered"
               />
             </label>
-            <label class="form-control basis-2/4 grow">
+            <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Salary</span>
               </div>
@@ -265,6 +276,17 @@ uri="jakarta.tags.core" %>
                 type="number"
                 name="salary"
                 id="salary"
+                class="input input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Supervisor</span>
+              </div>
+              <input
+                type="text"
+                name="sv"
+                id="sv"
                 class="input input-sm input-bordered"
               />
             </label>
@@ -281,7 +303,9 @@ uri="jakarta.tags.core" %>
     <dialog id="deleteLect" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Lecturer</h3>
-        <p class="py-4">Do you really want to delete this lecturer ?</p>
+        <p class="py-4">
+          Do you really want to delete this lecturer's information ?
+        </p>
         <form action="" method="post">
           <input type="hidden" name="id" id="id" value="1" />
           <div class="modal-action">

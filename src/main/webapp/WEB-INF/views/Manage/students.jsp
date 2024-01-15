@@ -237,9 +237,9 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="stud_id"
                 id="stud_id"
-                class="input input-sm disabled"
+                class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                disabled
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -288,7 +288,7 @@ uri="jakarta.tags.core" %>
     <dialog id="deleteStud" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Student</h3>
-        <p class="py-4">Do you really want to delete this student ?</p>
+        <p class="py-4">Do you really want to delete this student's information ?</p>
         <form action="/student/delete" method="post">
           <input type="hidden" name="uid" id="deleteId" value="1" />
           <div class="modal-action">
