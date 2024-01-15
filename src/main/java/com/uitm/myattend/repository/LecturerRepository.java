@@ -103,20 +103,29 @@ public class LecturerRepository {
         }
     }
 
-    public boolean delete(int uid, int lectId) {
+    public boolean delete(Integer uid, Integer lectId) {
         try {
-            String cond = "user_id = ? AND lect_id = ?";
-            String [] val = {
-                    Integer.toString(uid),
-                    Integer.toString(lectId)
-            };
 
-            String [] type = {
-                    "int",
-                    "int"
-            };
+            String cond = "";
+            List<String> condVal = new ArrayList<>();
+            List<String> condType = new ArrayList<>();
+            if(uid != null) {
+                cond += "user_id = ?";
+                condVal.add(Integer.toString(uid));
+                condType.add("int");
+            }
 
-            commDB.delete("ma_lecturers", cond, val, type);
+            if(lectId != null) {
+                cond += cond.isEmpty() ? "stud_id = ?" : " AND stud_id = ?";
+                condVal.add(Integer.toString(lectId));
+                condType.add("int");
+            }
+
+            int result = commDB.delete("ma_lecturers", cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+            if(result <= 0) {
+                throw new Exception("Failed to execute delete query for lecturer");
+            }
+
             return true;
         }catch (Exception e) {
             e.printStackTrace();

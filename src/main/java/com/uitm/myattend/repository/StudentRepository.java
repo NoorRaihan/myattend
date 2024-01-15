@@ -209,7 +209,11 @@ public class StudentRepository {
                 condType.add("int");
             }
 
-            commDB.delete("ma_students", cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+            int result = commDB.delete("ma_students", cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+            if(result <= 0) {
+                throw new Exception("Failed to execute delete query for student");
+            }
+
             return true;
         }catch (Exception e) {
             e.printStackTrace();
