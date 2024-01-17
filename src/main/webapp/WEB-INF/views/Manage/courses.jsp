@@ -342,12 +342,16 @@ uri="jakarta.tags.core" %>
               <div class="label">
                 <span class="label-text">Assigned Lecturer</span>
               </div>
-              <input
-                type="text"
+              <select
                 name="c_lect"
-                id="c_lect"
-                class="input input-sm input-bordered"
-              />
+                id="c_lectedt"
+                class="select select-sm select-bordered"
+              >
+                <option disabled selected>Pick one</option>
+                <option value="20234001">Lecturer 1</option>
+                <option value="20234002">Lecturer 2</option>
+                <option value="20234003">Lecturer 3</option>
+              </select>
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
@@ -366,7 +370,7 @@ uri="jakarta.tags.core" %>
               </div>
               <select
                 name="c_color"
-                id="c_color"
+                id="c_coloredt"
                 class="select select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>

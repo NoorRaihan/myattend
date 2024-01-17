@@ -24,12 +24,12 @@ function usrDetails(id) {
       } else {
         $("#c_code").val(response.data.id);
         $("#c_name").val(response.data.course_name);
-        $("#c_lect option[value='" + response.data.user_id + "']").prop(
+        $("#c_lectedt option[value='" + response.data.user_id + "']").prop(
           "selected",
           true
         );
         $("#c_credit").val(response.data.credit_hour);
-        $("#c_color option[value='" + response.data.color + "']").prop(
+        $("#c_coloredt option[value='" + response.data.color + "']").prop(
           "selected",
           true
         );
