@@ -10,6 +10,7 @@ uri="jakarta.tags.core" %>
     <title>Record Attendance - myAttend+</title>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
     <script
       src="${contextPath}/resources/html5-qrcode.min.js"
       type="text/javascript"

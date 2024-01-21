@@ -10,6 +10,7 @@ uri="jakarta.tags.core" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
   </head>
   <body class="h-full">
     <div class="flex min-h-full">

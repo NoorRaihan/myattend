@@ -49,23 +49,40 @@
         class="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow-xl bg-neutral rounded-box w-fit"
       >
         <li>
-          <input
-            type="radio"
+          <button
             name="theme-dropdown"
+            data-set-theme="blue"
+            data-act-class="ACTIVECLASS"
             class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Default"
             value="blue"
-            checked
-          />
+          >
+            Default
+          </button>
         </li>
         <li>
-          <input
-            type="radio"
+          <button
             name="theme-dropdown"
+            data-set-theme="pink"
+            data-act-class="ACTIVECLASS"
             class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Pink"
             value="pink"
-          />
+          >
+            Pink
+          </button>
+        </li>
+        <li>
+          <button
+            name="theme-dropdown"
+            data-set-theme="green"
+            data-act-class="ACTIVECLASS"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Green"
+            value="green"
+          >
+            Green
+          </button>
         </li>
       </ul>
     </div>
