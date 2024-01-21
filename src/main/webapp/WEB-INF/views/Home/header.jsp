@@ -84,6 +84,18 @@
             Green
           </button>
         </li>
+        <li>
+          <button
+            name="theme-dropdown"
+            data-set-theme="uitm"
+            data-act-class="ACTIVECLASS"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="UiTM"
+            value="uitm"
+          >
+            UiTM
+          </button>
+        </li>
       </ul>
     </div>
     <form action="/logout" method="post">
