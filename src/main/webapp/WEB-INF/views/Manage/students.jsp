@@ -3,7 +3,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html data-theme="light">
+<html data-theme="blue">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,8 +12,8 @@ uri="jakarta.tags.core" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="${contextPath}/resources/student.js"></script>
   </head>
-  <body class="bg-slate-200 min-h-screen">
-    <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
+  <body class="bg-neutral min-h-screen">
+    <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
@@ -179,7 +179,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <div class="stat place-items-center">
                     <div class="stat-title">Total Students</div>
-                    <div class="stat-value text-blue-500">${totalStudent}</div>
+                    <div class="stat-value text-primary">${totalStudent}</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="fullname"
                 id="fullname"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -250,7 +250,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="program"
                 id="program"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -261,7 +261,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="intake"
                 id="intake"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -272,7 +272,7 @@ uri="jakarta.tags.core" %>
                 type="number"
                 name="semester"
                 id="semester"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
           </div>

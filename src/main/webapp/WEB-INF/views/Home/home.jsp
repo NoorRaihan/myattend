@@ -3,7 +3,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html data-theme="light">
+<html data-theme="blue">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,8 +11,8 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   </head>
-  <body class="bg-slate-200 min-h-screen">
-    <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
+  <body class="bg-neutral min-h-screen">
+    <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
@@ -22,7 +22,7 @@ uri="jakarta.tags.core" %>
         <div class="w-auto my-10">
           <section class="mx-4" aria-labelledby="profile-overview-title">
             <div
-              class="overflow-hidden rounded-xl bg-gradient-to-tl from-blue-200 to-white shadow-lg"
+              class="overflow-hidden rounded-xl bg-gradient-to-tl from-secondary to-white shadow-lg"
             >
               <div class="p-6">
                 <div class="sm:flex sm:items-center sm:justify-between">
@@ -47,7 +47,7 @@ uri="jakarta.tags.core" %>
                   <div class="mt-5 flex justify-center sm:mt-0">
                     <a
                       href="#"
-                      class="btn btn-sm btn-info rounded-full text-white"
+                      class="btn btn-sm btn-primary rounded-full text-white"
                       >Edit Profile</a
                     >
                   </div>
