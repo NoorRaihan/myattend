@@ -25,15 +25,50 @@
           ${param.menu}
         </ul>
       </div>
-      <h3 class="text-xl font-bold -mt-2">${param.title}</h3>
+      <h3 class="text-xl font-bold">${param.title}</h3>
     </div>
   </div>
   <div class="navbar-end mr-4">
-    <input
-      type="checkbox"
-      value="pink"
-      class="toggle toggle-accent theme-controller"
-    />
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost text-white">
+        Theme
+        <svg
+          width="12px"
+          height="12px"
+          class="h-2 w-2 fill-current opacity-60 inline-block"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 2048 2048"
+        >
+          <path
+            d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
+          ></path>
+        </svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow-xl bg-neutral rounded-box w-fit"
+      >
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Default"
+            value="blue"
+            checked
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Pink"
+            value="pink"
+          />
+        </li>
+      </ul>
+    </div>
     <form action="/logout" method="post">
       <button type="submit" class="btn btn-sm rounded-md btn-ghost text-white">
         <svg

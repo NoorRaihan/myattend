@@ -26,7 +26,7 @@ uri="jakarta.tags.core" %>
         </jsp:include>
         <div class="w-auto my-10">
           <div
-            class="flex flex-wrap-reverse mx-4 gap-5 items-baseline transition-all"
+            class="flex flex-wrap-reverse mx-4 gap-5 items-end transition-all"
           >
             <div class="basis-3/5 grow">
               <div class="card card-compact bg-base-100 shadow-xl">
