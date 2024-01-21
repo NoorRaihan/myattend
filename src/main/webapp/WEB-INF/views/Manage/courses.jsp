@@ -3,7 +3,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html data-theme="light">
+<html data-theme="blue">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,8 +12,8 @@ uri="jakarta.tags.core" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="${contextPath}/resources/course.js"></script>
   </head>
-  <body class="bg-slate-200 min-h-screen">
-    <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
+  <body class="bg-neutral min-h-screen">
+    <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
@@ -69,7 +69,9 @@ uri="jakarta.tags.core" %>
                           <th
                             scope="col"
                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          ></th>
+                          >
+                            Status
+                          </th>
                           <th
                             scope="col"
                             class="relative py-3.5 pl-3 pr-4 sm:pr-0"
@@ -120,11 +122,30 @@ uri="jakarta.tags.core" %>
                           <td
                             class="px-3 py-4 text-right text-sm text-gray-500"
                           >
-                            <input
-                              type="checkbox"
-                              class="toggle toggle-primary"
-                              checked
-                            />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="size-8 fill-blue-500"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                            <!--<svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="size-8 fill-gray-500"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>-->
                           </td>
                           <td
                             class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
@@ -162,12 +183,20 @@ uri="jakarta.tags.core" %>
                                 </li>
                                 <li>
                                   <a
-                                    onclick="deleteCourse.showModal()"
-                                    class="text-red-600 delete"
+                                    onclick="disableCourse.showModal()"
+                                    class="text-red-600 disable"
                                     data-id="1"
-                                    >Delete</a
+                                    >Disable</a
                                   >
                                 </li>
+                                <!--<li>
+                                  <a
+                                    onclick="enableCourse.showModal()"
+                                    class="text-green-600 enable"
+                                    data-id="1"
+                                    >Enable</a
+                                  >
+                                </li>-->
                               </ul>
                             </div>
                           </td>
@@ -186,7 +215,7 @@ uri="jakarta.tags.core" %>
                 >
                   <div class="stat place-items-center basis-1/4 sm:basis-full">
                     <div class="stat-title">Total Courses</div>
-                    <div class="stat-value text-blue-500">100</div>
+                    <div class="stat-value text-primary">100</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                   <div class="flex justify-center">
@@ -241,7 +270,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 name="c_name"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -251,7 +280,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 name="c_code"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -261,7 +290,7 @@ uri="jakarta.tags.core" %>
               <select
                 name="c_lect"
                 id="c_lect"
-                class="select select-sm select-bordered"
+                class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
                 <option value="20234001">Lecturer 1</option>
@@ -276,7 +305,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="number"
                 name="c_credit"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -286,7 +315,7 @@ uri="jakarta.tags.core" %>
               <select
                 name="c_color"
                 id="c_color"
-                class="select select-sm select-bordered"
+                class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
                 <option value="GREEN1">Green</option>
@@ -324,7 +353,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="c_name"
                 id="c_name"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -335,7 +364,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="c_code"
                 id="c_code"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -345,7 +374,7 @@ uri="jakarta.tags.core" %>
               <select
                 name="c_lect"
                 id="c_lectedt"
-                class="select select-sm select-bordered"
+                class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
                 <option value="20234001">Lecturer 1</option>
@@ -361,7 +390,7 @@ uri="jakarta.tags.core" %>
                 type="number"
                 name="c_credit"
                 id="c_credit"
-                class="input input-sm input-bordered"
+                class="input input-primary input-sm input-bordered"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -371,7 +400,7 @@ uri="jakarta.tags.core" %>
               <select
                 name="c_color"
                 id="c_coloredt"
-                class="select select-sm select-bordered"
+                class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
                 <option value="GREEN1">Green</option>
@@ -396,14 +425,31 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
-    <dialog id="deleteCourse" class="modal">
+    <dialog id="disableCourse" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Delete Course</h3>
-        <p class="py-4">Do you really want to delete this course ?</p>
+        <h3 class="font-bold text-lg">Disable Course</h3>
+        <p class="py-4">Do you really want to disable this course ?</p>
         <form action="#" method="post">
           <input type="hidden" name="c_id" id="c_id" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+    <dialog id="enableCourse" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Enable Course</h3>
+        <p class="py-4">Do you really want to enable this course ?</p>
+        <form action="#" method="post">
+          <input type="hidden" name="c_id" id="c_id" value="1" />
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-success text-white">
               Yes
             </button>
           </div>

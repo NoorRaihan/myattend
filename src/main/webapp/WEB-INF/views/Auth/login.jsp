@@ -3,7 +3,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html class="h-full bg-white" data-theme="light">
+<html class="h-full bg-white" data-theme="blue">
   <head>
     <title>Login - myAttend+</title>
     <meta charset="UTF-8" />
@@ -49,7 +49,7 @@ uri="jakarta.tags.core" %>
                       type="email"
                       autocomplete="true"
                       required
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
+                      class="input input-primary input-sm w-full"
                     />
                   </div>
                 </div>
@@ -67,7 +67,7 @@ uri="jakarta.tags.core" %>
                       type="password"
                       autocomplete="current-password"
                       required
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>"
+                      class="input input-primary input-sm w-full"
                     />
                   </div>
                 </div>
@@ -77,7 +77,7 @@ uri="jakarta.tags.core" %>
                       id="remember_me"
                       name="remember_me"
                       type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      class="checkbox checkbox-primary"
                     />
                     <label
                       for="remember_me"
@@ -89,7 +89,7 @@ uri="jakarta.tags.core" %>
                   <div class="text-sm leading-6">
                     <a
                       href="/resetPass"
-                      class="font-semibold text-indigo-600 hover:text-indigo-500"
+                      class="font-semibold text-primary"
                       >Forgot password ?</a
                     >
                   </div>
@@ -99,7 +99,7 @@ uri="jakarta.tags.core" %>
                   <button
                     type="submit"
                     value="Login"
-                    class="flex w-full justify-center rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    class="btn btn-wide btn-primary rounded-full w-full"
                   >
                     Login
                   </button>

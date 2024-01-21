@@ -1,4 +1,4 @@
-<div class="navbar bg-gradient-to-b from-blue-500 from-30% sticky top-0 z-20">
+<div class="navbar bg-gradient-to-b from-primary from-30% sticky top-0 z-20">
   <div class="navbar-start">
     <label
       for="my-drawer"
@@ -29,6 +29,11 @@
     </div>
   </div>
   <div class="navbar-end mr-4">
+    <input
+      type="checkbox"
+      value="pink"
+      class="toggle toggle-accent theme-controller"
+    />
     <form action="/logout" method="post">
       <button type="submit" class="btn btn-sm rounded-md btn-ghost text-white">
         <svg

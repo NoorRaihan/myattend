@@ -3,7 +3,7 @@ charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html data-theme="light">
+<html data-theme="blue">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,8 +16,8 @@ uri="jakarta.tags.core" %>
     ></script>
     <script src="${contextPath}/resources/lecturer.js"></script>
   </head>
-  <body class="bg-slate-200 min-h-screen">
-    <div class="fixed inset-x-0 w-full bg-blue-500 min-h-52 z-0"></div>
+  <body class="bg-natural min-h-screen">
+    <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">

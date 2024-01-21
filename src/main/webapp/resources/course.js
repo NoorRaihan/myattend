@@ -4,7 +4,11 @@ $(document).ready(function () {
     usrDetails(id);
   });
 
-  $(document).on("click", ".delete", function () {
+  $(document).on("click", ".disable", function () {
+    var id = $(this).data("id");
+    $("#c_id").val(id);
+  });
+  $(document).on("click", ".enable", function () {
     var id = $(this).data("id");
     $("#c_id").val(id);
   });
