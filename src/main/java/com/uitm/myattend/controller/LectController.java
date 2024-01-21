@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,5 +59,30 @@ public class LectController {
             respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
         }
         return respMap;
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!lecturerService.editLecturer(body)) {
+                throw new Exception("Failed to update lecturer data");
+            }else {
+                session.setAttribute("success", "Lecturer data successfully updated");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/lecturer");
+    }
+
+    @PostMapping
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+        try {
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("error", e.getMessage());
+        }
     }
 }

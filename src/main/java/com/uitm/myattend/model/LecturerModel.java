@@ -1,7 +1,11 @@
 package com.uitm.myattend.model;
 
+import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 @Component
 @SessionScope
@@ -59,6 +63,11 @@ public class LecturerModel {
         return salary;
     }
 
+    public String getSalaryDecimal() {
+        DecimalFormat decFormat = new DecimalFormat("0.00");
+        return decFormat.format(this.salary);
+    }
+
     public void setSalary(double salary) {
         this.salary = salary;
     }
@@ -69,5 +78,13 @@ public class LecturerModel {
 
     public void setUser(UserModel user) {
         this.user = user;
+    }
+
+    public String getFormatStartDate() throws ParseException {
+        return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormStartDate() throws ParseException {
+        return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 }

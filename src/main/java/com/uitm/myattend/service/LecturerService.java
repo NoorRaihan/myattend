@@ -58,13 +58,13 @@ public class LecturerService {
     public boolean insert(Map<String, Object> body) {
         try {
             LecturerModel lecturer = new LecturerModel();
-            String lectId = "L" + FieldUtility.generateUUID().substring(0,6) + FieldUtility.getCurrentDate().substring(0,4);
+            String lectId = "11" + FieldUtility.generateUUID().substring(0,8);
 
             lecturer.setUser_id(Integer.parseInt((String)body.get("uid")));
             lecturer.setLect_id(Integer.parseInt(lectId));
-            lecturer.setSupervisor_id(Integer.parseInt((String)body.get("supervisor")));
-            lecturer.setStart_date(FieldUtility.getFormatted((String) body.get("start-date"), "yyyy-MM-dd", "yyyyMMdd"));
-            lecturer.setQualification((String) body.get("qualification"));
+            lecturer.setSupervisor_id(body.get("sv").toString().isEmpty() || body.get("sv") == null ?  -1 : Integer.parseInt((String)body.get("sv")));
+            lecturer.setStart_date(FieldUtility.getFormatted((String) body.get("startDate"), "yyyy-MM-dd", "yyyyMMdd"));
+            lecturer.setQualification((String) body.get("qualify"));
             lecturer.setSalary(Double.parseDouble((String)body.get("salary")));
 
             if(!lecturerRepository.insert(lecturer)) {
@@ -83,9 +83,9 @@ public class LecturerService {
 
             lecturer.setUser_id(Integer.parseInt((String)body.get("uid")));
             lecturer.setLect_id(Integer.parseInt((String)body.get("lect_id")));
-            lecturer.setSupervisor_id(Integer.parseInt((String)body.get("supervisor")));
-            lecturer.setStart_date(FieldUtility.getFormatted((String) body.get("start-date"), "yyyy-MM-dd", "yyyyMMdd"));
-            lecturer.setQualification((String) body.get("qualification"));
+            lecturer.setSupervisor_id(body.get("sv") == null || body.get("sv").toString().isEmpty() ?  -1 : Integer.parseInt((String)body.get("sv")));
+            lecturer.setStart_date(FieldUtility.getFormatted((String) body.get("startDate"), "yyyy-MM-dd", "yyyyMMdd"));
+            lecturer.setQualification((String) body.get("qualify"));
             lecturer.setSalary(Double.parseDouble((String)body.get("salary")));
 
             if(!lecturerRepository.update(lecturer)) {
@@ -104,11 +104,11 @@ public class LecturerService {
             List<Map<String, String>> lecturerList = lecturerRepository.retrieveRaw(uid, null);
 
             if(lecturerList == null) {
-                throw new Exception("Retrieve data error on student!");
+                throw new Exception("Retrieve data error on lecturer!");
             }
 
             if(lecturerList.size() > 1 ) {
-                throw new Exception("Data error multiple rows on student!");
+                throw new Exception("Data error multiple rows on lecturer!");
             }
 
             boolean flag = false;
@@ -119,7 +119,22 @@ public class LecturerService {
             }
 
             if(!flag) {
-                throw new Exception("Failed to process student data");
+                throw new Exception("Failed to process lecturer data");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            int uid = Integer.parseInt((String) body.get("uid"));
+
+            if(lecturerRepository.delete(uid, null)) {
+                throw new Exception("Failed to delete lecturer info");
             }
 
             return true;

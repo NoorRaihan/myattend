@@ -1,9 +1,6 @@
 package com.uitm.myattend.mapper;
 
-import com.uitm.myattend.model.LecturerModel;
-import com.uitm.myattend.model.RoleModel;
-import com.uitm.myattend.model.StudentModel;
-import com.uitm.myattend.model.UserModel;
+import com.uitm.myattend.model.*;
 import org.antlr.v4.runtime.tree.Tree;
 
 import java.time.temporal.Temporal;
@@ -25,6 +22,7 @@ public class MapperUtility {
             case "USERMODEL" -> obj = userMapper(tempMap);
             case "LECTURERMODEL" -> obj = lecturerMapper(tempMap);
             case "STUDENTMODEL" -> obj = studentMapper(tempMap);
+            case "COURSEMODEL" -> obj = courseModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -85,5 +83,19 @@ public class MapperUtility {
         UserModel userObj = userMapper(data);
         studObj.setUser(userObj);
         return studObj;
+    }
+
+    private static CourseModel courseModel(TreeMap<String, String> data) {
+        CourseModel courseObj = new CourseModel();
+
+        courseObj.setId(data.get("ID"));
+        courseObj.setCourse_code(data.get("COURSE_CODE"));
+        courseObj.setCourse_name(data.get("COURSE_NAME"));
+        courseObj.setColor(data.get("COLOR"));
+        courseObj.setCredit_hour(Double.parseDouble(data.get("SALARY") == null ? "0.00" : data.get("CREDIT_HOUR")));
+
+        UserModel userObj = userMapper(data);
+        courseObj.setUser(userObj);
+        return courseObj;
     }
 }

@@ -36,6 +36,7 @@ public class AuthController {
         }catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
         response.sendRedirect(request.getContextPath() + "/");
     }
@@ -52,5 +53,10 @@ public class AuthController {
             return;
         }
         response.sendRedirect(request.getContextPath() + "/login");
+    }
+
+    @GetMapping("/error2")
+    public String error() {
+        return "Error/error403";
     }
 }

@@ -54,7 +54,6 @@ public class LecturerRepository {
             String [] field = {
                     "user_id",
                     "lect_id",
-                    "supervisor_id",
                     "start_date",
                     "qualification",
                     "salary",
@@ -65,14 +64,14 @@ public class LecturerRepository {
             String [] fieldVal = {
                     Integer.toString(lecturer.getUser_id()),
                     Integer.toString(lecturer.getLect_id()),
-                    lecturer.getStart_date(),
+                    FieldUtility.date2Oracle(lecturer.getStart_date()),
                     lecturer.getQualification(),
+                    Double.toString(lecturer.getSalary()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
             String [] fieldType = {
-                    "int",
                     "int",
                     "int",
                     "date",
@@ -116,7 +115,7 @@ public class LecturerRepository {
             }
 
             if(lectId != null) {
-                cond += cond.isEmpty() ? "stud_id = ?" : " AND stud_id = ?";
+                cond += cond.isEmpty() ? "lect_id = ?" : " AND lect_id = ?";
                 condVal.add(Integer.toString(lectId));
                 condType.add("int");
             }
@@ -136,29 +135,24 @@ public class LecturerRepository {
     public boolean update(LecturerModel lecturer) {
         try {
             String [] field = {
-                    "user_id",
-                    "lect_id",
-                    "supervisor_id",
                     "start_date",
                     "qualification",
                     "salary",
+                    "updated_at"
             };
 
             String [] fieldVal = {
-                    Integer.toString(lecturer.getUser_id()),
-                    Integer.toString(lecturer.getLect_id()),
-                    lecturer.getStart_date(),
+                    FieldUtility.date2Oracle(lecturer.getStart_date()),
                     lecturer.getQualification(),
-                    Double.toString(lecturer.getSalary())
+                    Double.toString(lecturer.getSalary()),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
             String [] fieldType = {
-                    "int",
-                    "int",
-                    "int",
                     "date",
                     "varchar",
                     "decimal",
+                    "timestamp"
             };
 
             if(lecturer.getSupervisor_id() != -1) {
@@ -220,7 +214,7 @@ public class LecturerRepository {
                 condType.add("int");
             }
 
-            return commDB.select("ma_students", field, cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+            return commDB.select("ma_lecturers", field, cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
         }catch (Exception e) {
             e.printStackTrace();
             return null;
