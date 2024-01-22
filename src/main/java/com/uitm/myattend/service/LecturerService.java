@@ -1,9 +1,11 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
+import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.LecturerRepository;
+import com.uitm.myattend.repository.UserRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,36 @@ import java.util.List;
 public class LecturerService {
 
     private final LecturerRepository lecturerRepository;
+    private final UserService userService;
 
-    public LecturerService(LecturerRepository lecturerRepository) {
+    public LecturerService(LecturerRepository lecturerRepository, UserService userService) {
         this.lecturerRepository = lecturerRepository;
+        this.userService = userService;
     }
 
     public List<LecturerModel> retrieveAll() {
         try {
             List<Map<String, String>> lectList = lecturerRepository.retrieve();
+
+            List<LecturerModel> lectModelList = new ArrayList<>();
+            for(Map<String, String> lect : lectList) {
+                LecturerModel lectModel = (LecturerModel) MapperUtility.mapModel(LecturerModel.class, lect);
+                if(lectModel.getSupervisor_id() > 0) {
+                    UserModel svModel = userService.retrieveUserById(Integer.parseInt(lect.get("SUPERVISOR_ID")));
+                    lectModel.setSupervisor(svModel);
+                }
+                lectModelList.add(lectModel);
+            }
+            return lectModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<LecturerModel> retrieveAvailableConfirm() {
+        try {
+            List<Map<String, String>> lectList = lecturerRepository.retrieveConfirmAvailable();
 
             List<LecturerModel> lectModelList = new ArrayList<>();
             for(Map<String, String> lect : lectList) {
@@ -46,9 +70,7 @@ public class LecturerService {
             }
 
             Map<String, String> lect = lectList.get(0);
-            LecturerModel lectObj = (LecturerModel) MapperUtility.mapModel(LecturerModel.class, lect);
-
-            return lectObj;
+            return (LecturerModel) MapperUtility.mapModel(CourseModel.class, lect);
         }catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -80,7 +102,7 @@ public class LecturerService {
     public boolean update(Map<String, Object> body) {
         try {
             LecturerModel lecturer = new LecturerModel();
-
+            System.out.println("SV " + body.get("sv").toString().isEmpty());
             lecturer.setUser_id(Integer.parseInt((String)body.get("uid")));
             lecturer.setLect_id(Integer.parseInt((String)body.get("lect_id")));
             lecturer.setSupervisor_id(body.get("sv") == null || body.get("sv").toString().isEmpty() ?  -1 : Integer.parseInt((String)body.get("sv")));

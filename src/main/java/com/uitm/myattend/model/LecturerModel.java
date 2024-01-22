@@ -12,6 +12,7 @@ import java.text.ParseException;
 public class LecturerModel {
 
     private UserModel user;
+    private UserModel supervisor;
     private int user_id;
     private int lect_id;
     private int supervisor_id = -1;
@@ -80,11 +81,28 @@ public class LecturerModel {
         this.user = user;
     }
 
+    public UserModel getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(UserModel supervisor) {
+        this.supervisor = supervisor;
+    }
+
+
     public String getFormatStartDate() throws ParseException {
-        return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+        if(this.start_date.equals("0000-00-00 00:00:00")) {
+            return "";
+        }else{
+            return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+        }
     }
 
     public String getFormStartDate() throws ParseException {
-        return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        if(this.start_date.equals("0000-00-00 00:00:00")) {
+            return "";
+        }else {
+            return FieldUtility.getFormatted(this.start_date, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        }
     }
 }

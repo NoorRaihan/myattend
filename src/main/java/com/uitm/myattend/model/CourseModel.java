@@ -1,5 +1,7 @@
 package com.uitm.myattend.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -7,6 +9,8 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class CourseModel {
 
+    @Autowired
+    private Environment env;
     private UserModel user;
     private int user_id;
     private String id;
@@ -14,6 +18,16 @@ public class CourseModel {
     private String course_name;
     private double credit_hour;
     private String color;
+    private String deleted;
+    private String colorConfig;
+
+    public String getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
+    }
 
     public UserModel getUser() {
         return user;
@@ -69,5 +83,13 @@ public class CourseModel {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setColorConfig(String colorConfig){
+        this.colorConfig = colorConfig;
+    }
+
+    public String getColorConfig() {
+        return colorConfig;
     }
 }

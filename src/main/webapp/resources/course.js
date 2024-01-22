@@ -17,8 +17,8 @@ $(document).ready(function () {
 function usrDetails(id) {
   $.ajax({
     method: "GET",
-    url: "#",
-    data: { cid: id },
+    url: "/course/detail",
+    data: { id: id },
     dataType: "json",
     success: function (response) {
       if (response.respStatus == "error") {
@@ -26,7 +26,8 @@ function usrDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#c_code").val(response.data.id);
+        $("#c_id").val(response.data.id);
+        $("#c_code").val(response.data.course_code);
         $("#c_name").val(response.data.course_name);
         $("#c_lectedt option[value='" + response.data.user_id + "']").prop(
           "selected",

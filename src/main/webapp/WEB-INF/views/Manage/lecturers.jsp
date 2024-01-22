@@ -126,7 +126,7 @@ uri="jakarta.tags.core" %>
                             <td
                               class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                             >
-                              ${lecturer.getSupervisor_id()}
+                              ${lecturer.getSupervisor().getFullname()}
                             </td>
                             <td
                               class="px-3 py-4 text-right text-sm text-gray-500"
@@ -295,7 +295,7 @@ uri="jakarta.tags.core" %>
               >
                 <option value="">None</option>
                 <c:forEach var="lecturer" items="${lecturers}">
-                  <option value="${lecturer.getLect_id()}">
+                  <option value="${lecturer.getUser().getId()}">
                     ${lecturer.getUser().getFullname()}
                   </option>
                 </c:forEach>

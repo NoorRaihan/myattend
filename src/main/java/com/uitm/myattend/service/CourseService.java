@@ -2,6 +2,7 @@ package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.CourseModel;
+import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.CourseRepository;
 import com.uitm.myattend.utility.FieldUtility;
@@ -29,7 +30,9 @@ public class CourseService {
 
             List<CourseModel> courseModelList = new ArrayList<>();
             for(Map<String, String> course : courseList) {
-                courseModelList.add((CourseModel) MapperUtility.mapModel(CourseModel.class, course));
+                CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+                courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
+                courseModelList.add(courseObj);
             }
             return courseModelList;
         }catch (Exception e) {
@@ -43,18 +46,81 @@ public class CourseService {
             CourseModel course = new CourseModel();
 
             course.setId(UUID.randomUUID().toString());
-            course.setCourse_code((String) body.get("course-code"));
-            course.setCourse_name((String) body.get("course-name"));
+            course.setCourse_code((String) body.get("c_code"));
+            course.setCourse_name((String) body.get("c_name"));
 
-            String colorId = (String) body.get("color");
-            colorId = env.getProperty(colorId);
+            String colorId = (String) body.get("c_color");
+
+            if(env.getProperty("color." + colorId.toUpperCase()) == null) {
+                throw new Exception("Failed to retrieve color properties");
+            }
             course.setColor(colorId);
 
-            course.setCredit_hour(Double.parseDouble((String) body.get("credit-hour")));
-            course.setUser_id(Integer.parseInt((String) body.get("uid")));
+            course.setCredit_hour(Double.parseDouble((String) body.get("c_credit")));
+            course.setUser_id(Integer.parseInt((String) body.get("c_lect")));
 
             if(!courseRepository.insert(course)) {
                 throw new Exception("Failed to register a course");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public CourseModel retrieveDetail(Map<String, Object> body) {
+        try {
+            List<Map<String, String>> courseList = courseRepository.retrieveDetail((String) body.get("id"));
+
+            if(courseList.size() != 1) {
+                throw new Exception("Course data retrieve error occured! CourseList size: " + courseList.size());
+            }
+
+            Map<String, String> course = courseList.get(0);
+            return (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean update(Map<String, Object> body) {
+        try {
+            CourseModel course = new CourseModel();
+
+            course.setId((String) body.get("id"));
+            course.setCourse_code((String) body.get("c_code"));
+            course.setCourse_name((String) body.get("c_name"));
+
+            String colorId = (String) body.get("c_color");
+
+            if(env.getProperty("color." + colorId.toUpperCase()) == null) {
+                throw new Exception("Failed to retrieve color properties");
+            }
+            course.setColor(colorId);
+
+            course.setCredit_hour(Double.parseDouble((String) body.get("c_credit")));
+            course.setUser_id(Integer.parseInt((String) body.get("c_lect")));
+
+            if(!courseRepository.update(course)) {
+                throw new Exception("Failed to update course information");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            String id = (String) body.get("id");
+
+            if(courseRepository.delete(id)) {
+                throw new Exception("Failed to delete course info");
             }
 
             return true;

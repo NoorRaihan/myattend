@@ -32,13 +32,39 @@ public class LecturerRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveDetail(int uid) {
+    public List<Map<String, String>> retrieveConfirmAvailable() {
         try {
             String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +
-                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
-                    "WHERE b.role_id = 2";
+                    "INNER JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 2 AND a.user_id NOT IN (SELECT DISTINCT(user_id) FROM ma_courses)";
 
             int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveDetail(int uid) {
+        try {
+            String sql = "SELECT b.*, a.*, c.*  FROM ma_lecturers a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    //"LEFT JOIN ma_users c on a.supervisor_id = c.id " +
+                    "WHERE b.role_id = 2 AND b.id = ?";
+
+            String [] condval = {
+                    Integer.toString(uid)
+            };
+
+            String [] condtype = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condval, condtype);
             if(result == -1) {
                 throw new Exception("Failed to execute query statement");
             }
@@ -156,11 +182,14 @@ public class LecturerRepository {
             };
 
             if(lecturer.getSupervisor_id() != -1) {
+                List<String> tempField = new ArrayList<>(Arrays.asList(field));
                 List<String> tempVal = new ArrayList<>(Arrays.asList(fieldVal));
                 List<String> tempType = new ArrayList<>(Arrays.asList(fieldType));
+                tempField.add("supervisor_id");
                 tempVal.add(Integer.toString(lecturer.getSupervisor_id()));
                 tempType.add("int");
 
+                field = tempField.toArray(String[]::new);
                 fieldVal = tempVal.toArray(String[]::new);
                 fieldType = tempType.toArray(String[]::new);
             }
@@ -179,7 +208,7 @@ public class LecturerRepository {
 
             int row = commDB.update("ma_lecturers", field, fieldVal, fieldType, cond, condVal, condType);
             if(row <= 0) {
-                throw new Exception("Failed to insert into ma_lecturers");
+                throw new Exception("Failed to update into ma_lecturers");
             }
             return true;
         }catch (Exception e) {

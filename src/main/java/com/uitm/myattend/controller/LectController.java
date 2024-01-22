@@ -58,6 +58,7 @@ public class LectController {
             respMap.put("respStatus", "error");
             respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
         }
+        System.out.println(respMap);
         return respMap;
     }
 
