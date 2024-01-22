@@ -1,13 +1,10 @@
 package com.uitm.myattend.mapper;
 
-import com.uitm.myattend.model.LecturerModel;
-import com.uitm.myattend.model.RoleModel;
-import com.uitm.myattend.model.StudentModel;
-import com.uitm.myattend.model.UserModel;
-import org.antlr.v4.runtime.tree.Tree;
+import com.uitm.myattend.model.*;
+import com.uitm.myattend.utility.FieldUtility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
-import java.time.temporal.Temporal;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -25,6 +22,7 @@ public class MapperUtility {
             case "USERMODEL" -> obj = userMapper(tempMap);
             case "LECTURERMODEL" -> obj = lecturerMapper(tempMap);
             case "STUDENTMODEL" -> obj = studentMapper(tempMap);
+            case "COURSEMODEL" -> obj = courseModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -63,9 +61,9 @@ public class MapperUtility {
         LecturerModel lectObj = new LecturerModel();
         lectObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
         lectObj.setLect_id(Integer.parseInt(data.get("LECT_ID") == null ? "-1" : data.get("LECT_ID")));
-        lectObj.setSupervisor_id(Integer.parseInt(data.get("SUPERVISOR_ID") == null ? "-1" : data.get("SUPERVISOR_ID")));
-        lectObj.setStart_date(data.get("START_DATE"));
-        lectObj.setQualification(data.get("QUALIFICATION"));
+        lectObj.setSupervisor_id(Integer.parseInt(data.get("SUPERVISOR_ID") == null || data.get("SUPERVISOR_ID").isEmpty() ? "-1" : data.get("SUPERVISOR_ID")));
+        lectObj.setStart_date(FieldUtility.checkNullDate(data.get("START_DATE")));
+        lectObj.setQualification(FieldUtility.checkNull(data.get("QUALIFICATION")));
         lectObj.setSalary(Double.parseDouble(data.get("SALARY") == null ? "0.00" : data.get("SALARY")));
 
         UserModel userObj = userMapper(data);
@@ -79,11 +77,32 @@ public class MapperUtility {
         studObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
         studObj.setStud_id(Integer.parseInt(data.get("STUD_ID") == null ? "-1" : data.get("STUD_ID")));
         studObj.setSemester(Integer.parseInt(data.get("SEMESTER") == null ? "-1" : data.get("SEMESTER")));
-        studObj.setProgram(data.get("PROGRAM"));
-        studObj.setIntake(data.get("INTAKE"));
+        studObj.setProgram(FieldUtility.checkNull(data.get("PROGRAM")));
+        studObj.setIntake(FieldUtility.checkNull(data.get("INTAKE")));
 
         UserModel userObj = userMapper(data);
         studObj.setUser(userObj);
         return studObj;
+    }
+
+    private static CourseModel courseModel(TreeMap<String, String> data) {
+        CourseModel courseObj = new CourseModel();
+
+        if(data.containsKey("COURSE_ID")) {
+            courseObj.setId(data.get("COURSE_ID"));
+        }else{
+            courseObj.setId(data.get("ID"));
+        }
+
+        courseObj.setCourse_code(data.get("COURSE_CODE"));
+        courseObj.setCourse_name(data.get("COURSE_NAME"));
+        courseObj.setColor(data.get("COLOR"));
+
+        courseObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
+        courseObj.setCredit_hour(Double.parseDouble(data.get("CREDIT_HOUR") == null ? "0.00" : data.get("CREDIT_HOUR")));
+        courseObj.setDeleted(FieldUtility.checkNullDate(data.get("DELETED_AT")));
+        UserModel userObj = userMapper(data);
+        courseObj.setUser(userObj);
+        return courseObj;
     }
 }

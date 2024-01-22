@@ -32,13 +32,39 @@ public class LecturerRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveDetail(int uid) {
+    public List<Map<String, String>> retrieveConfirmAvailable() {
         try {
             String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +
-                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
-                    "WHERE b.role_id = 2";
+                    "INNER JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 2 AND a.user_id NOT IN (SELECT DISTINCT(user_id) FROM ma_courses)";
 
             int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveDetail(int uid) {
+        try {
+            String sql = "SELECT b.*, a.*, c.*  FROM ma_lecturers a " +
+                    "RIGHT JOIN ma_users b ON a.user_id = b.id " +
+                    //"LEFT JOIN ma_users c on a.supervisor_id = c.id " +
+                    "WHERE b.role_id = 2 AND b.id = ?";
+
+            String [] condval = {
+                    Integer.toString(uid)
+            };
+
+            String [] condtype = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condval, condtype);
             if(result == -1) {
                 throw new Exception("Failed to execute query statement");
             }
@@ -54,7 +80,6 @@ public class LecturerRepository {
             String [] field = {
                     "user_id",
                     "lect_id",
-                    "supervisor_id",
                     "start_date",
                     "qualification",
                     "salary",
@@ -65,14 +90,14 @@ public class LecturerRepository {
             String [] fieldVal = {
                     Integer.toString(lecturer.getUser_id()),
                     Integer.toString(lecturer.getLect_id()),
-                    lecturer.getStart_date(),
+                    FieldUtility.date2Oracle(lecturer.getStart_date()),
                     lecturer.getQualification(),
+                    Double.toString(lecturer.getSalary()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
             String [] fieldType = {
-                    "int",
                     "int",
                     "int",
                     "date",
@@ -116,7 +141,7 @@ public class LecturerRepository {
             }
 
             if(lectId != null) {
-                cond += cond.isEmpty() ? "stud_id = ?" : " AND stud_id = ?";
+                cond += cond.isEmpty() ? "lect_id = ?" : " AND lect_id = ?";
                 condVal.add(Integer.toString(lectId));
                 condType.add("int");
             }
@@ -136,37 +161,35 @@ public class LecturerRepository {
     public boolean update(LecturerModel lecturer) {
         try {
             String [] field = {
-                    "user_id",
-                    "lect_id",
-                    "supervisor_id",
                     "start_date",
                     "qualification",
                     "salary",
+                    "updated_at"
             };
 
             String [] fieldVal = {
-                    Integer.toString(lecturer.getUser_id()),
-                    Integer.toString(lecturer.getLect_id()),
-                    lecturer.getStart_date(),
+                    FieldUtility.date2Oracle(lecturer.getStart_date()),
                     lecturer.getQualification(),
-                    Double.toString(lecturer.getSalary())
+                    Double.toString(lecturer.getSalary()),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
             String [] fieldType = {
-                    "int",
-                    "int",
-                    "int",
                     "date",
                     "varchar",
                     "decimal",
+                    "timestamp"
             };
 
             if(lecturer.getSupervisor_id() != -1) {
+                List<String> tempField = new ArrayList<>(Arrays.asList(field));
                 List<String> tempVal = new ArrayList<>(Arrays.asList(fieldVal));
                 List<String> tempType = new ArrayList<>(Arrays.asList(fieldType));
+                tempField.add("supervisor_id");
                 tempVal.add(Integer.toString(lecturer.getSupervisor_id()));
                 tempType.add("int");
 
+                field = tempField.toArray(String[]::new);
                 fieldVal = tempVal.toArray(String[]::new);
                 fieldType = tempType.toArray(String[]::new);
             }
@@ -185,7 +208,7 @@ public class LecturerRepository {
 
             int row = commDB.update("ma_lecturers", field, fieldVal, fieldType, cond, condVal, condType);
             if(row <= 0) {
-                throw new Exception("Failed to insert into ma_lecturers");
+                throw new Exception("Failed to update into ma_lecturers");
             }
             return true;
         }catch (Exception e) {
@@ -220,7 +243,7 @@ public class LecturerRepository {
                 condType.add("int");
             }
 
-            return commDB.select("ma_students", field, cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
+            return commDB.select("ma_lecturers", field, cond, condVal.toArray(String[]::new), condType.toArray(String[]::new));
         }catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -25,7 +25,7 @@ function studDetails(id) {
         $("#id").val(response.data.user.id);
         $("#lect_id").val(response.data.lect_id);
         $("#fullname").val(response.data.user.fullname);
-        $("#startDate").val(response.data.start_date);
+        $("#startDate").val(response.data.formStartDate);
         $("#qualify").val(response.data.qualification);
         $("#salary").val(response.data.salary);
         $("#sv").val(response.data.supervisor_id);

@@ -53,11 +53,11 @@ public class UserController {
             if(user != null) {
                 session.setAttribute("message", "New user successfully added");
             }else{
-                session.setAttribute("message", "Failed to add a new user");
+                session.setAttribute("error", "Failed to add a new user");
             }
             response.sendRedirect("/user");
         }catch (Exception e) {
-            session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
             response.sendRedirect("/user");
         }
     }

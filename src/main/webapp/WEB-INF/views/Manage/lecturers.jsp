@@ -121,12 +121,12 @@ uri="jakarta.tags.core" %>
                             <td
                               class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                             >
-                              ${lecturer.getSalary()}
+                              ${lecturer.getSalaryDecimal()}
                             </td>
                             <td
                               class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                             >
-                              ${lecturer.getLect_id()}
+                              ${lecturer.getSupervisor().getFullname()}
                             </td>
                             <td
                               class="px-3 py-4 text-right text-sm text-gray-500"
@@ -225,8 +225,8 @@ uri="jakarta.tags.core" %>
     <dialog id="editLect" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Lecturer</h3>
-        <form action="#" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+        <form action="/lecturer/update" method="post">
+          <input type="hidden" name="uid" id="id" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -246,8 +246,9 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 id="lect_id"
+                name="lect_id"
                 class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                disabled
+                readonly
               />
             </label>
             <label class="form-control basis-2/4 grow">
@@ -294,7 +295,7 @@ uri="jakarta.tags.core" %>
               >
                 <option value="">None</option>
                 <c:forEach var="lecturer" items="${lecturers}">
-                  <option value="${lecturer.getLect_id()}">
+                  <option value="${lecturer.getUser().getId()}">
                     ${lecturer.getUser().getFullname()}
                   </option>
                 </c:forEach>

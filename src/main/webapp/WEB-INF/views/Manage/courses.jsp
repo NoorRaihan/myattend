@@ -82,41 +82,42 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="course" items="${courses}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            Enterprise Programming
+                            ${course.getCourse_name()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                CSC584
+                                ${course.getCourse_code()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                3
+                                ${course.getCredit_hour()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            CSC584
+                            ${course.getCourse_code()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            Lecturer 1
+                            ${course.getUser().getFullname()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            3
+                            ${course.getCredit_hour()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                           >
                             <div class="avatar placeholder">
                               <div
-                                class="bg-gradient-to-br from-green-300 to-emerald-500 rounded-full w-6"
+                                class="${course.getColorConfig()} rounded-full w-6"
                               ></div>
                             </div>
                           </td>
@@ -177,7 +178,7 @@ uri="jakarta.tags.core" %>
                                 <li>
                                   <a
                                     onclick="editCourse.showModal()"
-                                    data-id="1"
+                                    data-id="${course.getId()}"
                                     class="edit"
                                     >Edit</a
                                   >
@@ -186,7 +187,7 @@ uri="jakarta.tags.core" %>
                                   <a
                                     onclick="disableCourse.showModal()"
                                     class="text-red-600 disable"
-                                    data-id="1"
+                                    data-id="${course.getId()}"
                                     >Disable</a
                                   >
                                 </li>
@@ -194,7 +195,7 @@ uri="jakarta.tags.core" %>
                                   <a
                                     onclick="enableCourse.showModal()"
                                     class="text-green-600 enable"
-                                    data-id="1"
+                                    data-id="${course.getId()}"
                                     >Enable</a
                                   >
                                 </li>-->
@@ -203,6 +204,7 @@ uri="jakarta.tags.core" %>
                           </td>
                         </tr>
                         <!-- More people... -->
+                        </c:forEach>
                       </tbody>
                     </table>
                   </div>
@@ -216,7 +218,7 @@ uri="jakarta.tags.core" %>
                 >
                   <div class="stat place-items-center basis-1/4 sm:basis-full">
                     <div class="stat-title">Total Courses</div>
-                    <div class="stat-value text-primary">100</div>
+                    <div class="stat-value text-primary">${totalCourse}</div>
                     <div class="stat-desc">myAttend+</div>
                   </div>
                   <div class="flex justify-center">
@@ -262,7 +264,7 @@ uri="jakarta.tags.core" %>
     <dialog id="newCourse" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New Course</h3>
-        <form id="courseAdd" action="#" method="post">
+        <form id="courseAdd" action="/course/create" method="post">
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -294,9 +296,9 @@ uri="jakarta.tags.core" %>
                 class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
-                <option value="20234001">Lecturer 1</option>
-                <option value="20234002">Lecturer 2</option>
-                <option value="20234003">Lecturer 3</option>
+                <c:forEach var="lecturer" items="${lecturers}">
+                    <option value="${lecturer.getUser().getId()}">${lecturer.getUser().getFullname()}</option>
+                </c:forEach>
               </select>
             </label>
             <label class="form-control basis-1/4 grow">
@@ -344,7 +346,8 @@ uri="jakarta.tags.core" %>
     <dialog id="editCourse" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Course</h3>
-        <form id="courseAdd" action="#" method="post">
+        <form id="courseAdd" action="/course/update" method="post">
+          <input type="hidden" name="id" id="c_id" value="1"/>
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -378,9 +381,9 @@ uri="jakarta.tags.core" %>
                 class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
-                <option value="20234001">Lecturer 1</option>
-                <option value="20234002">Lecturer 2</option>
-                <option value="20234003">Lecturer 3</option>
+                <c:forEach var="lecturer" items="${lecturersAll}">
+                    <option value="${lecturer.getUser().getId()}">${lecturer.getUser().getFullname()}</option>
+                </c:forEach>
               </select>
             </label>
             <label class="form-control basis-1/4 grow">

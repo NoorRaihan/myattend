@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class FieldUtility {
 
@@ -47,5 +48,13 @@ public class FieldUtility {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String checkNull(String str) {
+        return Objects.requireNonNullElse(str, "");
+    }
+
+    public static String checkNullDate(String str) {
+        return Objects.requireNonNullElse(str, "0000-00-00 00:00:00");
     }
 }

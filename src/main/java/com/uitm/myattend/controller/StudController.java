@@ -89,6 +89,7 @@ public class StudController {
                 session.setAttribute("success", "Student data deleted successfully");
             }
         }catch (Exception e) {
+            e.printStackTrace();
             session.setAttribute("error", e.getMessage());
         }
         response.sendRedirect("/student");
