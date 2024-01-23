@@ -51,7 +51,7 @@ public class LecturerRepository {
 
     public List<Map<String, String>> retrieveDetail(int uid) {
         try {
-            String sql = "SELECT b.*, a.*, c.*  FROM ma_lecturers a " +
+            String sql = "SELECT b.*, a.* FROM ma_lecturers a " +
                     "RIGHT JOIN ma_users b ON a.user_id = b.id " +
                     //"LEFT JOIN ma_users c on a.supervisor_id = c.id " +
                     "WHERE b.role_id = 2 AND b.id = ?";

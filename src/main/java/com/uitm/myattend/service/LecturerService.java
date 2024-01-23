@@ -70,7 +70,7 @@ public class LecturerService {
             }
 
             Map<String, String> lect = lectList.get(0);
-            return (LecturerModel) MapperUtility.mapModel(CourseModel.class, lect);
+            return (LecturerModel) MapperUtility.mapModel(LecturerModel.class, lect);
         }catch (Exception e) {
             e.printStackTrace();
             return null;
