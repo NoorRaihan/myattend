@@ -257,5 +257,7 @@ uri="jakarta.tags.core" %>
 
       <%@ include file="drawer.jsp" %>
     </div>
+    <c:remove var="error" scope="session" />
+    <c:remove var="success" scope="session" />
   </body>
 </html>

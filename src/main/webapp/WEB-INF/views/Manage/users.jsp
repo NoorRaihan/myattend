@@ -442,6 +442,7 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+    <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
 </html>

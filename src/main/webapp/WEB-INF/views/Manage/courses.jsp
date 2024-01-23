@@ -82,61 +82,63 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
-                      <c:forEach var="course" items="${courses}">
-                        <tr>
-                          <td
-                            class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
-                          >
-                            ${course.getCourse_name()}
-                            <dl class="font-normal lg:hidden">
-                              <dd class="mt-1 truncate text-gray-700">
-                                ${course.getCourse_code()}
-                              </dd>
-                              <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                ${course.getCredit_hour()}
-                              </dd>
-                            </dl>
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${course.getCourse_code()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${course.getUser().getFullname()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${course.getCredit_hour()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                          >
-                            <div class="avatar placeholder">
-                              <div
-                                class="${course.getColorConfig()} rounded-full w-6"
-                              ></div>
-                            </div>
-                          </td>
-                          <td
-                            class="px-3 py-4 text-right text-sm text-gray-500"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              class="size-8 fill-blue-500"
+                        <c:forEach var="course" items="${courses}">
+                          <tr>
+                            <td
+                              class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                             >
-                              <path
-                                fill-rule="evenodd"
-                                d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                            <!--<svg
+                              ${course.getCourse_name()}
+                              <dl class="font-normal lg:hidden">
+                                <dd class="mt-1 truncate text-gray-700">
+                                  ${course.getCourse_code()}
+                                </dd>
+                                <dd
+                                  class="mt-1 truncate text-gray-500 sm:hidden"
+                                >
+                                  ${course.getCredit_hour()}
+                                </dd>
+                              </dl>
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${course.getCourse_code()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${course.getUser().getFullname()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${course.getCredit_hour()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            >
+                              <div class="avatar placeholder">
+                                <div
+                                  class="${course.getColorConfig()} rounded-full w-6"
+                                ></div>
+                              </div>
+                            </td>
+                            <td
+                              class="px-3 py-4 text-right text-sm text-gray-500"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                class="size-8 fill-blue-500"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                              <!--<svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               fill="currentColor"
@@ -148,50 +150,52 @@ uri="jakarta.tags.core" %>
                                 clip-rule="evenodd"
                               />
                             </svg>-->
-                          </td>
-                          <td
-                            class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
-                          >
-                            <div class="dropdown dropdown-left dropdown-hover">
+                            </td>
+                            <td
+                              class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
+                            >
                               <div
-                                tabindex="0"
-                                role="button"
-                                class="btn btn-ghost btn-xs"
+                                class="dropdown dropdown-left dropdown-hover"
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="size-6"
+                                <div
+                                  tabindex="0"
+                                  role="button"
+                                  class="btn btn-ghost btn-xs"
                                 >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                              <ul
-                                tabindex="0"
-                                class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-fit"
-                              >
-                                <li>
-                                  <a
-                                    onclick="editCourse.showModal()"
-                                    data-id="${course.getId()}"
-                                    class="edit"
-                                    >Edit</a
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="size-6"
                                   >
-                                </li>
-                                <li>
-                                  <a
-                                    onclick="disableCourse.showModal()"
-                                    class="text-red-600 disable"
-                                    data-id="${course.getId()}"
-                                    >Disable</a
-                                  >
-                                </li>
-                                <!--<li>
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                <ul
+                                  tabindex="0"
+                                  class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-fit"
+                                >
+                                  <li>
+                                    <a
+                                      onclick="editCourse.showModal()"
+                                      data-id="${course.getId()}"
+                                      class="edit"
+                                      >Edit</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      onclick="disableCourse.showModal()"
+                                      class="text-red-600 disable"
+                                      data-id="${course.getId()}"
+                                      >Disable</a
+                                    >
+                                  </li>
+                                  <!--<li>
                                   <a
                                     onclick="enableCourse.showModal()"
                                     class="text-green-600 enable"
@@ -199,11 +203,11 @@ uri="jakarta.tags.core" %>
                                     >Enable</a
                                   >
                                 </li>-->
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <!-- More people... -->
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                          <!-- More people... -->
                         </c:forEach>
                       </tbody>
                     </table>
@@ -296,8 +300,10 @@ uri="jakarta.tags.core" %>
                 class="select select-primary select-sm select-bordered"
               >
                 <option disabled selected>Pick one</option>
-                <c:forEach var="lecturer" items="${lecturers}">
-                    <option value="${lecturer.getUser().getId()}">${lecturer.getUser().getFullname()}</option>
+                <c:forEach var="lecturer" items="${lecturersAll}">
+                  <option value="${lecturer.getUser().getId()}">
+                    ${lecturer.getUser().getFullname()}
+                  </option>
                 </c:forEach>
               </select>
             </label>
@@ -309,6 +315,7 @@ uri="jakarta.tags.core" %>
                 type="number"
                 name="c_credit"
                 class="input input-primary input-sm input-bordered"
+                step="0.1"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -347,7 +354,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Course</h3>
         <form id="courseAdd" action="/course/update" method="post">
-          <input type="hidden" name="id" id="c_id" value="1"/>
+          <input type="hidden" name="id" id="c_id" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -382,7 +389,9 @@ uri="jakarta.tags.core" %>
               >
                 <option disabled selected>Pick one</option>
                 <c:forEach var="lecturer" items="${lecturersAll}">
-                    <option value="${lecturer.getUser().getId()}">${lecturer.getUser().getFullname()}</option>
+                  <option value="${lecturer.getUser().getId()}">
+                    ${lecturer.getUser().getFullname()}
+                  </option>
                 </c:forEach>
               </select>
             </label>
@@ -395,6 +404,7 @@ uri="jakarta.tags.core" %>
                 name="c_credit"
                 id="c_credit"
                 class="input input-primary input-sm input-bordered"
+                step="0.1"
               />
             </label>
             <label class="form-control basis-1/4 grow">
@@ -430,17 +440,23 @@ uri="jakarta.tags.core" %>
       </form>
     </dialog>
     <dialog id="disableCourse" class="modal">
-      <div class="modal-box">
+      <div class="modal-box text-center">
         <h3 class="font-bold text-lg">Disable Course</h3>
         <p class="py-4">Do you really want to disable this course ?</p>
-        <form action="#" method="post">
-          <input type="hidden" name="c_id" id="c_id" value="1" />
-          <div class="modal-action">
+        <div class="modal-action justify-between">
+          <form action="#" method="post">
+            <input type="hidden" name="c_id" id="c_id" value="1" />
+            <button type="submit" class="btn btn-sm btn-ghost text-red-600">
+              Delete Instead
+            </button>
+          </form>
+          <form action="#" method="post">
+            <input type="hidden" name="c_id" id="c_id" value="1" />
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
       <form method="dialog" class="modal-backdrop">
         <button>close</button>
@@ -463,6 +479,7 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+    <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
 </html>
