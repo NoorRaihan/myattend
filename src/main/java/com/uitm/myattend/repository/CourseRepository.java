@@ -182,4 +182,49 @@ public class CourseRepository {
             return false;
         }
     }
+
+    public boolean changeStatus(CourseModel courseModel, boolean isDisable) {
+        try {
+            String curr = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+            String delTms = null;
+
+            if(isDisable) {
+                delTms = curr;
+            }
+
+            String [] field = {
+                    "deleted_at",
+                    "updated_at"
+            };
+
+            String [] fieldval = {
+                    delTms,
+                    curr
+            };
+
+            String [] fieldtype = {
+                    "timestamp",
+                    "timestamp"
+            };
+
+            String cond = "id = ?";
+
+            String [] condval = {
+                    courseModel.getId()
+            };
+
+            String [] condtype = {
+                    "varchar"
+            };
+
+            int result = commDB.update("ma_courses", field, fieldval, fieldtype, cond, condval, condtype);
+            if(result <= 0) {
+                throw new Exception("Failed to update into ma_courses");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
