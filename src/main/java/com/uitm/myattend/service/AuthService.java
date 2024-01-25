@@ -4,11 +4,15 @@ import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.UserRepository;
+import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,6 +42,7 @@ public class AuthService {
             }
             session.setAttribute("sid", common.getToken());
             session.setAttribute("common", common);
+
             return true;
         }catch (Exception e) {
             return false;
@@ -122,6 +127,7 @@ public class AuthService {
             if(token == null) {
                 throw new Exception("Failed to initiate user session");
             }
+
             common.setToken(token);
             common.setUser(userObj);
             session.setAttribute("sid", token);

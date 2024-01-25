@@ -11,6 +11,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -47,9 +48,10 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
         try {
-            UserModel user = userService.insert(body);
+//            userService.fileHandler(file, "1111");
+            UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("message", "New user successfully added");
             }else{
@@ -91,9 +93,9 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void update(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
         try {
-            if(!userService.update(body)) {
+            if(!userService.update(body, file)) {
                 throw new Exception("Failed to update user data");
             }else {
                 session.setAttribute("success", "User data updated successfully");

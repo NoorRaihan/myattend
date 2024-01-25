@@ -1,14 +1,22 @@
 package com.uitm.myattend.model;
 
 import com.uitm.myattend.utility.FieldUtility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.ParseException;
 
 @Component
 @SessionScope
 public class UserModel {
+
+    @Autowired
+    private ResourceLoader resourceLoader;
     private int id;
     private String email;
     private String username;
