@@ -124,6 +124,8 @@ uri="jakarta.tags.core" %>
                           <td
                             class="px-3 py-4 text-right text-sm text-gray-500"
                           >
+                          <c:set var="deleted" value="${course.getDeleted()}"></c:set>
+                          <c:if test="${course.getDeleted() == null}">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
@@ -136,7 +138,9 @@ uri="jakarta.tags.core" %>
                                 clip-rule="evenodd"
                               />
                             </svg>
-                            <!--<svg
+                          </c:if>
+                          <c:if test="${course.getDeleted() != null}">
+                            <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               fill="currentColor"
@@ -147,7 +151,8 @@ uri="jakarta.tags.core" %>
                                 d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
                                 clip-rule="evenodd"
                               />
-                            </svg>-->
+                            </svg>
+                          </c:if>
                           </td>
                           <td
                             class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
@@ -183,6 +188,7 @@ uri="jakarta.tags.core" %>
                                     >Edit</a
                                   >
                                 </li>
+                                <c:if test="${course.getDeleted() == null}">
                                 <li>
                                   <a
                                     onclick="disableCourse.showModal()"
@@ -191,14 +197,17 @@ uri="jakarta.tags.core" %>
                                     >Disable</a
                                   >
                                 </li>
-                                <!--<li>
+                                </c:if>
+                                <c:if test="${course.getDeleted() != null}">
+                                <li>
                                   <a
                                     onclick="enableCourse.showModal()"
                                     class="text-green-600 enable"
                                     data-id="${course.getId()}"
                                     >Enable</a
                                   >
-                                </li>-->
+                                </li>
+                                </c:if>
                               </ul>
                             </div>
                           </td>
@@ -433,8 +442,8 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Disable Course</h3>
         <p class="py-4">Do you really want to disable this course ?</p>
-        <form action="#" method="post">
-          <input type="hidden" name="c_id" id="c_id" value="1" />
+        <form action="/course/disable" method="post">
+          <input type="hidden" name="id" id="disable_id" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
@@ -450,8 +459,8 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Enable Course</h3>
         <p class="py-4">Do you really want to enable this course ?</p>
-        <form action="#" method="post">
-          <input type="hidden" name="c_id" id="c_id" value="1" />
+        <form action="/course/enable" method="post">
+          <input type="hidden" name="id" id="enable_id" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-success text-white">
               Yes

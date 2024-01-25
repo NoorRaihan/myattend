@@ -22,7 +22,11 @@ public class CourseModel {
     private String colorConfig;
 
     public String getDeleted() {
-        return deleted;
+        if(this.deleted.equals("0000-00-00 00:00:00")) {
+            return null;
+        }else {
+            return deleted;
+        }
     }
 
     public void setDeleted(String deleted) {

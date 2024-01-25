@@ -98,13 +98,43 @@ public class CourseController {
         response.sendRedirect("/course");
     }
 
-    @PostMapping("deleted")
+    @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
         try {
             if(!courseService.delete(body)) {
-                throw new Exception("Failed to delete user data");
+                throw new Exception("Failed to delete course data");
             }else {
-                session.setAttribute("success", "User data successfully deleted");
+                session.setAttribute("success", "Course data successfully deleted");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/course");
+    }
+
+    @PostMapping("/disable")
+    public void disable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!courseService.changeStatus(body, true)) {
+                throw new Exception("Failed to disable course data");
+            }else {
+                session.setAttribute("success", "Course data successfully disabled");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/course");
+    }
+
+    @PostMapping("/enable")
+    public void enable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!courseService.changeStatus(body, false)) {
+                throw new Exception("Failed to enable course data");
+            }else {
+                session.setAttribute("success", "Course data successfully enabled");
             }
         }catch (Exception e) {
             session.setAttribute("error", e.getMessage());

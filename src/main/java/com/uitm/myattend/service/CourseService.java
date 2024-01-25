@@ -129,4 +129,22 @@ public class CourseService {
             return false;
         }
     }
+
+    public boolean changeStatus(Map<String, Object> body, boolean isDisable) {
+        try {
+            String cid = (String) body.get("id");
+
+            CourseModel courseModel = new CourseModel();
+            courseModel.setId(cid);
+
+            if(!courseRepository.changeStatus(courseModel, isDisable)) {
+                throw new Exception("Failed to update course status");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
