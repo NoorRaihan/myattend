@@ -6,11 +6,11 @@ $(document).ready(function () {
 
   $(document).on("click", ".disable", function () {
     var id = $(this).data("id");
-    $("#c_id").val(id);
+    $("#disable_id").val(id);
   });
   $(document).on("click", ".enable", function () {
     var id = $(this).data("id");
-    $("#c_id").val(id);
+    $("#enable_id").val(id);
   });
 
   $(document).on("click", ".dtl", function () {

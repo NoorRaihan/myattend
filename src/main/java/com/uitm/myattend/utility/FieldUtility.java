@@ -1,10 +1,15 @@
 package com.uitm.myattend.utility;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
 
@@ -56,5 +61,16 @@ public class FieldUtility {
 
     public static String checkNullDate(String str) {
         return Objects.requireNonNullElse(str, "0000-00-00 00:00:00");
+    }
+
+    public static String encodeBase64(String filepath) {
+        try {
+            Path path = Paths.get(filepath);
+            byte[] bytes = Files.readAllBytes(path);
+
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

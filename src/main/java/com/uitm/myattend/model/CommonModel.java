@@ -1,5 +1,7 @@
 package com.uitm.myattend.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -7,8 +9,19 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class CommonModel {
 
+    @Autowired
+    private ResourceLoader resourceLoader;
     private String token;
     private UserModel userModel;
+    private String profilePicture;
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 
     public UserModel getUser() {
         return userModel;

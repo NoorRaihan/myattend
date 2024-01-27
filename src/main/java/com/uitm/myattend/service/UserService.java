@@ -8,16 +8,26 @@ import com.uitm.myattend.utility.FieldUtility;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpSession;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.metadata.Metadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -28,13 +38,15 @@ public class UserService {
     private final Environment env;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final ResourceLoader resourceLoader;
 
     @Autowired
-    public UserService(UserRepository userRepo, Environment env, PasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserService(UserRepository userRepo, Environment env, PasswordEncoder passwordEncoder, RoleService roleService, ResourceLoader resourceLoader) {
         this.userRepo = userRepo;
         this.env = env;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+        this.resourceLoader = resourceLoader;
     }
 
     public List<UserModel> retrieveAll(HttpSession session) {
@@ -55,23 +67,36 @@ public class UserService {
     }
 
 
-    public UserModel insert(Map<String, Object> body) throws SQLException {
+    public UserModel insert(Map<String, Object> body, MultipartFile file) throws SQLException {
         try {
-            //create new instance
+            //create new instanceapp.whitelist.ext=png
+
             UserModel user = new UserModel();
             String bday = FieldUtility.getFormatted((String) body.get("birthdate"), "yyyy-MM-dd", "yyyyMMdd");
+            String uid = FieldUtility.generateUUID().substring(0,8);
 
-            user.setId(Integer.parseInt(FieldUtility.generateUUID().substring(0,8)));
+            user.setId(Integer.parseInt(uid));
             user.setEmail((String) body.get("email"));
             user.setUsername((String) body.get("username"));
             user.setFullname((String) body.get("fullname"));
             user.setPassword(encrytPassword((String) body.get("password")));
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
-            user.setProfile_pic(env.getProperty("app.defaultProfile"));
+
+            if(file != null) {
+                user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
+                if(!fileHandler(file, uid)) {
+                    throw new Exception("Failed to save profile image");
+                }
+            }else{
+                user.setProfile_pic(env.getProperty("app.defaultProfile"));
+            }
             user.setRole_id(Integer.parseInt((String) body.get("role")));
 
-            userRepo.insert(user);
+            if(!userRepo.insert(user)) {
+                throw new Exception("Failed to insert user data");
+            }
+
             return user;
         }catch (Exception e) {
             e.printStackTrace();
@@ -185,12 +210,13 @@ public class UserService {
         }
     }
 
-    public boolean update(Map<String, Object> body) {
+    public boolean update(Map<String, Object> body, MultipartFile file) {
         try {
             UserModel user = new UserModel();
             String bday = FieldUtility.getFormatted((String) body.get("birthdate"), "yyyy-MM-dd", "yyyyMMdd");
+            String uid = (String) body.get("uid");
 
-            user.setId(Integer.parseInt((String) body.get("uid")));
+            user.setId(Integer.parseInt(uid));
             user.setEmail((String) body.get("email"));
             user.setUsername((String) body.get("username"));
             user.setFullname((String) body.get("fullname"));
@@ -203,9 +229,11 @@ public class UserService {
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
 
-            String dpImage = (String) body.get("dpImage");
-            if(dpImage != null && !dpImage.isEmpty()) {
-                user.setProfile_pic(dpImage);
+            if(file != null) {
+                user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
+                if(!fileHandler(file, (String) body.get("uid"))) {
+                    throw new Exception("Failed to save profile image");
+                }
             }
             user.setRole_id(Integer.parseInt((String) body.get("role")));
 
@@ -218,4 +246,40 @@ public class UserService {
             return false;
         }
     }
+
+    public boolean fileHandler(MultipartFile file, String uid) {
+        try {
+            String location = env.getProperty("app.imagefolder");
+            String newFilename = uid + ".png";
+            Resource resource = resourceLoader.getResource("classpath:");
+            String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", location);
+            Path realPath = Paths.get(fullPath + newFilename);
+
+            InputStream fileInputStream = file.getInputStream();
+            String contentType = getContentType(file.getBytes(), newFilename);
+
+            if(!contentType.equals("image/png")) {
+                throw new Exception("Invalid image format");
+            }
+
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, realPath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String getContentType(byte[] fileBytes, String filename) throws IOException {
+        TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+        Detector detector = tikaConfig.getDetector();
+        TikaInputStream tikaInputStream = TikaInputStream.get(new ByteArrayInputStream(fileBytes));
+        Metadata metadata = new Metadata();
+        metadata.add(Metadata.CONTENT_TYPE, filename);
+        return detector.detect(tikaInputStream, metadata).toString();
+    }
+
 }

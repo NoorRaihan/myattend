@@ -226,7 +226,7 @@ uri="jakarta.tags.core" %>
     <dialog id="newUser" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New User</h3>
-        <form id="userAdd" action="/user/create" method="post">
+        <form id="userAdd" action="/user/create" method="post" enctype="multipart/form-data">
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -330,7 +330,7 @@ uri="jakarta.tags.core" %>
     <dialog id="editUser" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit User</h3>
-        <form action="/user/update" method="post">
+        <form action="/user/update" method="post" enctype="multipart/form-data">
           <input type="hidden" name="uid" id="editId" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">

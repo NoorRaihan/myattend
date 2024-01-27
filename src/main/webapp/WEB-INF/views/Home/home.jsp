@@ -31,17 +31,17 @@ uri="jakarta.tags.core" %>
                     <div class="flex-shrink-0">
                       <img
                         class="mx-auto size-20 rounded-full"
-                        src="${contextPath}/resources/img/MJJ.png"
+                        src="data:image/png;charset=utf-8;base64,${profilePicture}"
                         alt=""
                       />
                     </div>
                     <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                       <p class="text-sm font-medium text-gray-600">Welcome,</p>
                       <p class="text-xl font-bold text-gray-900 sm:text-2xl">
-                        ${sessionScope.common.getUser().getFullname()}
+                        ${userFullname}
                       </p>
                       <p class="text-sm font-medium capitalize text-gray-600">
-                        ${sessionScope.common.getUser().getRole().getRole_name()}
+                        ${userRolename}
                       </p>
                     </div>
                   </div>
