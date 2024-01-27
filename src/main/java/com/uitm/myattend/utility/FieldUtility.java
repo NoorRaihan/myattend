@@ -63,7 +63,7 @@ public class FieldUtility {
         return Objects.requireNonNullElse(str, "0000-00-00 00:00:00");
     }
 
-    public static String encodeBase64(String filepath) {
+    public static String encodeFileBase64(String filepath) {
         try {
             Path path = Paths.get(filepath);
             byte[] bytes = Files.readAllBytes(path);
@@ -72,5 +72,45 @@ public class FieldUtility {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String encodeByteBase64(byte[] bytes) throws Exception {
+        return encodeBase64(null, bytes);
+    }
+
+    public static String encodeStringBase64(String str) throws Exception {
+        return encodeBase64(str, null);
+    }
+
+    public static String encodeBase64(String str, byte[] bytes) throws Exception {
+        if(bytes != null) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }else if(str != null){
+            return Base64.getEncoder().encodeToString(str.getBytes());
+        }else {
+            throw new Exception("null value to be encode");
+        }
+    }
+
+    public static String decodeStringBase64(String str) throws Exception {
+        return decodeBase64(str, null);
+    }
+
+    public static String decodeBytesBase64(byte[] bytes) throws Exception {
+        return decodeBase64(null, bytes);
+    }
+
+    public static String decodeBase64(String str, byte[] bytes) throws Exception {
+        if(str != null) {
+            return new String (Base64.getDecoder().decode(str.getBytes()));
+        }else if(bytes != null){
+            return new String (Base64.getDecoder().decode(bytes));
+        }else {
+            throw new Exception("null value to be encode");
+        }
+    }
+
+    public static void requiredValidator() {
+
     }
 }
