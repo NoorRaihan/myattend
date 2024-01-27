@@ -1,6 +1,7 @@
 package com.uitm.myattend.controller;
 
 import com.uitm.myattend.model.UserModel;
+import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.StudentService;
 import com.uitm.myattend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,11 +28,13 @@ public class UserController {
     private final UserService userService;
     private final StudentService studentService;
     private final TransactionTemplate transactionTemplate;
+    private final AuthService authService;
 
-    public UserController(UserService userService, StudentService studentService, TransactionTemplate transactionTemplate) {
+    public UserController(UserService userService, StudentService studentService, TransactionTemplate transactionTemplate, AuthService authService) {
         this.userService = userService;
         this.studentService = studentService;
         this.transactionTemplate = transactionTemplate;
+        this.authService = authService;
     }
 
     @GetMapping("")
@@ -50,7 +53,6 @@ public class UserController {
     @PostMapping("/create")
     public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
         try {
-//            userService.fileHandler(file, "1111");
             UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("message", "New user successfully added");

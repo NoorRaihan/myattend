@@ -15,6 +15,11 @@ import java.util.Objects;
 
 public class FieldUtility {
 
+    public final static int ADMIN_ROLE = 1;
+    public final static int LECTURER_ROLE = 2;
+    public final static int STUDENT_ROLE = 3;
+    public final static int REGISTANT_ROLE = 4;
+
     public static String getCurrentDate() throws ParseException {
         Date curr = new Date();
         return format(curr, "yyyyMMdd");

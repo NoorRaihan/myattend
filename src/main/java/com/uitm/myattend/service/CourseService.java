@@ -119,7 +119,7 @@ public class CourseService {
         try {
             String id = (String) body.get("id");
 
-            if(courseRepository.delete(id)) {
+            if(!courseRepository.delete(id)) {
                 throw new Exception("Failed to delete course info");
             }
 
