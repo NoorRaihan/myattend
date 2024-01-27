@@ -3,6 +3,7 @@ package com.uitm.myattend.controller;
 import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
 import com.uitm.myattend.service.CourseService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,10 +25,12 @@ public class ClassController {
 
     private final ClassService classService;
     private final CourseService courseService;
+    private final AuthService authService;
 
-    public ClassController(ClassService classService, CourseService courseService) {
+    public ClassController(ClassService classService, CourseService courseService, AuthService authService) {
         this.classService = classService;
         this.courseService = courseService;
+        this.authService = authService;
     }
 
     @GetMapping("/course")

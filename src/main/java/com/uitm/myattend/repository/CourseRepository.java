@@ -31,6 +31,31 @@ public class CourseRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveByLecturer(int uid) {
+        try {
+            String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
+                    "LEFT JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE a.user_id = ?";
+
+            String [] condval = {
+                    Integer.toString(uid)
+            };
+
+            String [] condtype = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condval, condtype);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public List<Map<String, String>> retrieveDetail(String id) {
         try {
             String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
@@ -168,7 +193,7 @@ public class CourseRepository {
         try {
             String cond = "id = ?";
             String [] val = {id};
-            String [] type = {"int"};
+            String [] type = {"varchar"};
 
             int result = commDB.delete("ma_courses", cond, val, type);
 

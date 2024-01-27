@@ -69,6 +69,11 @@ public class AuthService {
         }
     }
 
+    public boolean forbiddenValidator(HttpSession session, int roleid) {
+        CommonModel common = (CommonModel) session.getAttribute("common");
+        return roleid == common.getUser().getRole_id();
+    }
+
 //    public boolean register(Map<String, Object> body) {
 //        try {
 //            //will enhance to retrieve all roles and do dynamic checking
