@@ -1,4 +1,4 @@
-<div class="drawer-side z-50">
+<div class="drawer-side z-40">
   <label for="my-drawer" class="drawer-overlay"></label>
   <ul
     class="menu p-4 my-4 ml-2 xl:ml-4 w-64 bg-white rounded-xl shadow-lg text-base-content"
