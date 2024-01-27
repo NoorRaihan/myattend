@@ -12,6 +12,16 @@ $(document).ready(function () {
     var id = $(this).data("id");
     $("#enable_id").val(id);
   });
+
+  $(document).on("click", ".dtl", function () {
+    var id = $(this).data("id");
+    courseDetails(id);
+  });
+
+  $(document).on("click", ".rmStud", function () {
+    var id = $(this).data("id");
+    $("#s_id").val(id);
+  });
 });
 
 function usrDetails(id) {
@@ -38,6 +48,110 @@ function usrDetails(id) {
           "selected",
           true
         );
+      }
+    },
+    error: function (response) {
+      let msg = "(" + response.respCode + ") " + response.respMessage;
+      $("#alertMsg").html(msg);
+      $("#alert").show().delay(5000).fadeOut();
+    },
+  });
+}
+
+function courseDetails(id) {
+  $.ajax({
+    method: "GET",
+    url: "#",
+    data: { id: id },
+    dataType: "json",
+    success: function (response) {
+      if (response.respStatus == "error") {
+        let msg = "(" + response.respCode + ") " + response.respMessage;
+        $("#alertMsg").html(msg);
+        $("#alert").show().delay(5000).fadeOut();
+      } else {
+        var list = '<ul role="list" class="divide-y divide-gray-200">';
+        for (const dataItem of response.data) {
+          list +=
+            "<li>" +
+            "<div class='group relative flex items-center px-5 py-6'>" +
+            "<div class='-m-1 block flex-1 p-1'>" +
+            "<div class='absolute inset-0 group-hover:bg-neutral' aria-hidden='true'></div>" +
+            "<div class='relative flex min-w-0 flex-1 items-center'>" +
+            "<div class='ml-4 truncate'>" +
+            "<p class='truncate text-sm font-medium text-gray-900'>" +
+            dataItem.name +
+            "</p>" +
+            "<p class='truncate text-sm text-gray-500'>Student ID: " +
+            dataItem.id +
+            "</p>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "<div class='relative ml-2 inline-block flex-shrink-0 text-left'>" +
+            "<button type='button' class='group relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rmStud' onclick='removeStudent.showModal()' data-id='" +
+            dataItem.id +
+            "'>" +
+            "<span class='absolute -inset-1.5'></span>" +
+            "<span class='flex h-full w-full items-center justify-center rounded-full'>" +
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-6 h-6 text-red-500'>" +
+            "<path fill-rule='evenodd' d='M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z' clip-rule='evenodd'/>" +
+            "</svg>" +
+            "</span>" +
+            "</button>" +
+            "</div>" +
+            "</div>" +
+            "</li>";
+        }
+        list += "</ul>";
+        $("#studentList").html(list);
+      }
+    },
+    error: function (response) {
+      let msg = "(" + response.respCode + ") " + response.respMessage;
+      $("#alertMsg").html(msg);
+      $("#alert").show().delay(5000).fadeOut();
+    },
+  });
+
+  $.ajax({
+    method: "GET",
+    url: "#",
+    data: { id: id },
+    dataType: "json",
+    success: function (response) {
+      if (response.respStatus == "error") {
+        let msg = "(" + response.respCode + ") " + response.respMessage;
+        $("#alertMsg").html(msg);
+        $("#alert").show().delay(5000).fadeOut();
+      } else {
+        var classList =
+          "<ul role='list' class='flex-1 divide-y divide-gray-200 overflow-y-auto'>";
+        for (var dataItem of response.data) {
+          classList +=
+            "<li>" +
+            "<div class='group relative flex items-center px-5 py-6'>" +
+            "<div class='-m-1 block flex-1 p-1'>" +
+            "<div class='absolute inset-0 group-hover:bg-neutral' aria-hidden='true'></div>" +
+            "<div class='relative flex min-w-0 flex-1 items-center'>" +
+            "<div class='ml-4 truncate'>" +
+            "<p class='truncate text-sm font-medium text-gray-900'>" +
+            dataItem.classId +
+            "</p>" +
+            "<p class='truncate text-sm text-gray-500'>" +
+            dataItem.date +
+            "</p>" +
+            "<p class='truncate text-sm text-gray-500'>" +
+            dataItem.time +
+            "</p>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</li>";
+        }
+        classList += "</ul>";
+        $("#classList").html(classList);
       }
     },
     error: function (response) {
