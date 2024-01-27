@@ -34,7 +34,7 @@ public class HomeService {
             Resource resource = resourceLoader.getResource("classpath:");
             String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
 
-            request.setAttribute("profilePicture", FieldUtility.encodeBase64(fullPath));
+            request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
         }catch (Exception e) {
             e.printStackTrace();
         }

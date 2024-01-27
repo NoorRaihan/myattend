@@ -73,7 +73,7 @@ public class CourseService {
     public CourseModel retrieveDetail(Map<String, Object> body) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveDetail((String) body.get("id"));
-
+            System.out.println((String) body.get("id"));
             if(courseList.size() != 1) {
                 throw new Exception("Course data retrieve error occured! CourseList size: " + courseList.size());
             }

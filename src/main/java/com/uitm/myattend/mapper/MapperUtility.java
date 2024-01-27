@@ -101,8 +101,29 @@ public class MapperUtility {
         courseObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
         courseObj.setCredit_hour(Double.parseDouble(data.get("CREDIT_HOUR") == null ? "0.00" : data.get("CREDIT_HOUR")));
         courseObj.setDeleted(FieldUtility.checkNullDate(data.get("DELETED_AT")));
-        UserModel userObj = userMapper(data);
-        courseObj.setUser(userObj);
+
+        if(data.containsKey("USERNAME")) {
+            UserModel userObj = userMapper(data);
+            courseObj.setUser(userObj);
+        }
         return courseObj;
+    }
+
+    private static ClassModel classModel(TreeMap<String, String> data) {
+        ClassModel classObj = new ClassModel();
+
+        classObj.setId(data.get("ID"));
+        classObj.setCourse_id(data.get("COURSE_ID"));
+        classObj.setClass_desc(data.get("CLASS_DESC"));
+        classObj.setStart_time(data.get("START_TIME"));
+        classObj.setEnd_time(data.get("END_TIME"));
+        classObj.setVenue(data.get("VENUE"));
+        classObj.setDeleted_at(FieldUtility.checkNullDate(data.get("DELETED_AT")));
+
+        if(data.containsKey("COURSE_CODE")) {
+            CourseModel courseObj = courseModel(data);
+            classObj.setCourse(courseObj);
+        }
+        return classObj;
     }
 }
