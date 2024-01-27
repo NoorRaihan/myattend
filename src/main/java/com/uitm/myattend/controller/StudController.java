@@ -1,8 +1,7 @@
 package com.uitm.myattend.controller;
 
-import com.uitm.myattend.model.LecturerModel;
-import com.uitm.myattend.model.StudentModel;
-import com.uitm.myattend.model.UserModel;
+import com.uitm.myattend.model.*;
+import com.uitm.myattend.service.CourseService;
 import com.uitm.myattend.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +22,11 @@ import java.util.Map;
 public class StudController {
 
     private final StudentService studentService;
+    private final CourseService courseService;
 
-    public StudController(StudentService studentService) {
+    public StudController(StudentService studentService, CourseService courseService) {
         this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     @GetMapping("")
@@ -93,5 +95,41 @@ public class StudController {
             session.setAttribute("error", e.getMessage());
         }
         response.sendRedirect("/student");
+    }
+
+    @GetMapping("/course")
+    @ResponseBody
+    public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            List<StudentModel> studentList = studentService.retrieveByCourse(body);
+            CourseModel courseModel = courseService.retrieveDetail(body);
+
+            if(studentList == null) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Student list does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+            }
+            List<Object> respList = new ArrayList<>();
+            Map<String, Object> courseMap = new HashMap<>();
+            Map<String, List<StudentModel>> studMap = new HashMap<>();
+
+            courseMap.put("course", courseModel);
+            studMap.put("students", studentList);
+            respList.add(courseMap);
+            respList.add(studMap);
+            respMap.put("data", respList);
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
     }
 }

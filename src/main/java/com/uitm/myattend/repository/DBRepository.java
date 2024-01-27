@@ -7,11 +7,13 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.sql.*;
 import java.util.*;
 
 @Repository
+@RequestScope
 public class DBRepository {
 
     private final JdbcTemplate dbTemplate;

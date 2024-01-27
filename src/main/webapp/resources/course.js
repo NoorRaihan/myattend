@@ -7,6 +7,7 @@ $(document).ready(function () {
   $(document).on("click", ".disable", function () {
     var id = $(this).data("id");
     $("#disable_id").val(id);
+    $("#delete_id").val(id);
   });
   $(document).on("click", ".enable", function () {
     var id = $(this).data("id");
@@ -61,7 +62,7 @@ function usrDetails(id) {
 function courseDetails(id) {
   $.ajax({
     method: "GET",
-    url: "#",
+    url: "/student/course",
     data: { id: id },
     dataType: "json",
     success: function (response) {
@@ -71,7 +72,7 @@ function courseDetails(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         var list = '<ul role="list" class="divide-y divide-gray-200">';
-        for (const dataItem of response.data) {
+        for (const dataItem of response.data[1].students) {
           list +=
             "<li>" +
             "<div class='group relative flex items-center px-5 py-6'>" +
@@ -116,7 +117,7 @@ function courseDetails(id) {
 
   $.ajax({
     method: "GET",
-    url: "#",
+    url: "/class/course",
     data: { id: id },
     dataType: "json",
     success: function (response) {
@@ -127,7 +128,7 @@ function courseDetails(id) {
       } else {
         var classList =
           "<ul role='list' class='flex-1 divide-y divide-gray-200 overflow-y-auto'>";
-        for (var dataItem of response.data) {
+        for (var dataItem of response.data[1].classes) {
           classList +=
             "<li>" +
             "<div class='group relative flex items-center px-5 py-6'>" +

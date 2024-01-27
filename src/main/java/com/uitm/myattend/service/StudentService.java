@@ -25,11 +25,11 @@ public class StudentService {
 
     public List<StudentModel> retrieveAll() {
         try {
-            List<Map<String, String>> lectList = studentRepository.retrieve();
+            List<Map<String, String>> studList = studentRepository.retrieve();
 
             List<StudentModel> studModelList = new ArrayList<>();
-            for(Map<String, String> lect : lectList) {
-                studModelList.add((StudentModel) MapperUtility.mapModel(StudentModel.class, lect));
+            for(Map<String, String> stud : studList) {
+                studModelList.add((StudentModel) MapperUtility.mapModel(StudentModel.class, stud));
             }
             return studModelList;
         }catch (Exception e) {
@@ -139,6 +139,23 @@ public class StudentService {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public List<StudentModel> retrieveByCourse(Map<String, Object> body) {
+        try {
+
+            String cid = (String) body.get("id");
+            List<Map<String, String>> studentList = studentRepository.retrieveByCourse(cid);
+
+            List<StudentModel> studModelList = new ArrayList<>();
+            for(Map<String, String> studMap : studentList) {
+                studModelList.add((StudentModel) MapperUtility.mapModel(StudentModel.class, studMap));
+            }
+            return studModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
