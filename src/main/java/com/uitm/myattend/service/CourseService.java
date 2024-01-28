@@ -79,7 +79,9 @@ public class CourseService {
             }
 
             Map<String, String> course = courseList.get(0);
-            return (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+            CourseModel courseObj =  (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+            courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
+            return courseObj;
         }catch (Exception e) {
             e.printStackTrace();
             return null;

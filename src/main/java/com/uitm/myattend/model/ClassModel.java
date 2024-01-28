@@ -11,6 +11,7 @@ public class ClassModel {
     private CourseModel course;
     private String course_id;
     private String class_desc;
+    private String class_date;
     private String start_time;
     private String end_time;
     private String venue;
@@ -78,5 +79,13 @@ public class ClassModel {
 
     public void setDeleted_at(String deleted_at) {
         this.deleted_at = deleted_at;
+    }
+
+    public String getClass_date() {
+        return class_date;
+    }
+
+    public void setClass_date(String class_date) {
+        this.class_date = class_date;
     }
 }
