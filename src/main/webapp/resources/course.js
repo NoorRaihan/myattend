@@ -71,6 +71,7 @@ function courseDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
+        $("#CourseName").html(response.data.course.course_name);
         var list = '<ul role="list" class="divide-y divide-gray-200">';
         for (const dataItem of response.data[1].students) {
           list +=
