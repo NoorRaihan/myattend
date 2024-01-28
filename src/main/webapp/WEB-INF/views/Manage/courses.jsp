@@ -292,6 +292,7 @@ uri="jakarta.tags.core" %>
               <h2 class="text-base font-semibold">Course Details</h2>
               <div class="relative h-40 -mx-4 mt-4 overflow-hidden">
                 <div
+                  id="detailBG"
                   class="absolute h-full w-full bg-gradient-to-br from-green-300 to-emerald-500 -z-10"
                 ></div>
                 <div class="absolute -inset-y-16 -right-10">
