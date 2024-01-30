@@ -10,6 +10,7 @@ uri="jakarta.tags.core" %>
     <title>Home - myAttend+</title>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
@@ -200,7 +201,10 @@ uri="jakarta.tags.core" %>
                               class="dropdown-content z-[1] menu p-2 shadow-lg bg-neutral rounded-box w-fit"
                             >
                               <li>
-                                <label for="detail-drawer" data-id="" class="qr"
+                                <label
+                                  for="detail-drawer"
+                                  data-id=""
+                                  class="viewQR"
                                   >Attendance QR</label
                                 >
                               </li>
