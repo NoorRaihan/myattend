@@ -9,11 +9,39 @@ $(document).ready(function () {
     classAttend(id);
   });
 
-  $(document).on("click", ".delete", function () {
+  $(document).on("click", ".edit", function () {
     var id = $(this).data("id");
-    $("#cid").val(id);
+    classDetails(id);
   });
 });
+
+function classDetails(id) {
+  $.ajax({
+    method: "GET",
+    url: "",
+    data: { id: id },
+    dataType: "json",
+    success: function (response) {
+      if (response.respStatus == "error") {
+        let msg = "(" + response.respCode + ") " + response.respMessage;
+        $("#alertMsg").html(msg);
+        $("#alert").show().delay(5000).fadeOut();
+      } else {
+        $("#cls_id").val(response.data.id);
+        $("#c_id").val(response.data.course_id);
+        $("#cls_date").val(response.data.date);
+        $("#cls_sTime").val(response.data.start_time);
+        $("#cls_eTime").val(response.data.end_time);
+        $("#cls_venue").val(response.data.venue);
+      }
+    },
+    error: function (response) {
+      let msg = "(" + response.respCode + ") " + response.respMessage;
+      $("#alertMsg").html(msg);
+      $("#alert").show().delay(5000).fadeOut();
+    },
+  });
+}
 
 function loadClsList(id) {
   $.ajax({

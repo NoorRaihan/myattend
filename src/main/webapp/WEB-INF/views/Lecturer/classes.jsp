@@ -107,7 +107,7 @@ uri="jakarta.tags.core" %>
                   <h1>Classes List</h1>
                   <button
                     class="btn btn-sm btn-primary"
-                    onclick="newClass.showModal()"
+                    onclick="newClass.showModal(); classAdd.reset();"
                   >
                     New Class
                   </button>
@@ -206,7 +206,7 @@ uri="jakarta.tags.core" %>
                               </li>
                               <li>
                                 <a
-                                  onclick="editCourse.showModal()"
+                                  onclick="editClass.showModal()"
                                   data-id=""
                                   class="edit"
                                   >Edit</a
@@ -214,10 +214,10 @@ uri="jakarta.tags.core" %>
                               </li>
                               <li>
                                 <a
-                                  onclick="disableCourse.showModal()"
+                                  onclick="deleteClass.showModal()"
                                   class="text-red-600 disable"
                                   data-id=""
-                                  >Disable</a
+                                  >Delete</a
                                 >
                               </li>
                             </ul>
@@ -384,6 +384,85 @@ uri="jakarta.tags.core" %>
           </div>
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="editClass" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Edit Class</h3>
+        <form id="classEdt" action="" method="post">
+          <input type="hidden" name="c_id" id="c_id" value="1" />
+          <input type="hidden" name="cls_id" id="cls_id" value="1" />
+          <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Date</span>
+              </div>
+              <input
+                type="date"
+                id="cls_date"
+                name="cls_date"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Start Time</span>
+              </div>
+              <input
+                type="time"
+                id="cls_sTime"
+                name="cls_sTime"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">End Time</span>
+              </div>
+              <input
+                type="time"
+                id="cls_eTime"
+                name="cls_eTime"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Venue</span>
+              </div>
+              <input
+                type="text"
+                id="cls_venue"
+                name="cls_venue"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+          </div>
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+    <dialog id="deleteClass" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Delete Class</h3>
+        <p class="py-4">Do you really want to delete this class ?</p>
+        <form action="" method="post">
+          <input type="hidden" name="id" id="enable_id" value="1" />
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-error text-white">
+              Yes
+            </button>
           </div>
         </form>
       </div>
