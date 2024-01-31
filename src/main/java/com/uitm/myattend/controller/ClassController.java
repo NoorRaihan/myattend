@@ -33,6 +33,11 @@ public class ClassController {
         this.authService = authService;
     }
 
+    @GetMapping("")
+    public String classMgt() {
+        return "Lecturer/classes";
+    }
+
     @GetMapping("/course")
     @ResponseBody
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {

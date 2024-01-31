@@ -71,7 +71,13 @@ function courseDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#CourseName").html(response.data.course.course_name);
+        $("#detailBG").removeClass(
+          "bg-gradient-to-br from-green-300 to-emerald-500 from-lime-300 to-lime-500 from-purple-300 to-purple-500 from-blue-300 to-blue-500 from-cyan-300 to-cyan-500 from-fuchsia-300 to-fuchsia-500 from-pink-300 to-pink-500 from-yellow-300 to-yellow-500 from-orange-300 to-orange-500 from-red-300 to-red-500"
+        );
+        $("#detailBG").addClass(response.data[0].course.colorConfig);
+        $("#courseName").html(response.data[0].course.course_name);
+        $("#courseCode").html(response.data[0].course.course_code);
+        $("#courseLecturer").html(response.data[0].course.course_lecturer);
         var list = '<ul role="list" class="divide-y divide-gray-200">';
         for (const dataItem of response.data[1].students) {
           list +=

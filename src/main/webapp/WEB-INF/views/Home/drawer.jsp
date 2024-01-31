@@ -71,7 +71,7 @@
             Lecturer
           </summary>
           <ul>
-            <li><a href="#">Class Management</a></li>
+            <li><a href="/class">Class Management</a></li>
             <li><a href="#">Student Management</a></li>
           </ul>
         </details>
