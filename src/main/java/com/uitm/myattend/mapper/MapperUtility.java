@@ -140,7 +140,6 @@ public class MapperUtility {
 
         if(data.containsKey("CLASS_DESC")) {
             
-            attendanceModel.setC
         }
 
         return attendanceModel;
