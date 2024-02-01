@@ -68,34 +68,35 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-neutral">
+                      <c:forEach var="course" items="${registeredCourses}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            Course Namae
+                            ${course.getCourse_name()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                CSC691
+                                ${course.getCourse_code()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                3.0
+                                ${course.getCredit_hour()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            CSC691
+                            ${course.getCourse_code()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            Lecturer 1
+                            ${course.getUser().getFullname()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            3.0
+                            ${course.getCredit_hour()}
                           </td>
                           <td
                             class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
@@ -103,13 +104,14 @@ uri="jakarta.tags.core" %>
                             <div
                               class="btn btn-sm rounded-full btn-error text-white unreg"
                               onclick="unregCourse.showModal();"
-                              data-id="1"
+                              data-id="${course.getId()}"
                             >
                               Unregister
                             </div>
                           </td>
                         </tr>
                         <!-- More people... -->
+                      </c:forEach>
                       </tbody>
                     </table>
                   </div>
@@ -157,34 +159,35 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                      <c:forEach var="course2" items="${availableCourses}">
                         <tr>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            Course Namae
+                            ${course2.getCourse_name()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                CSC691
+                                ${course2.getCourse_code()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                3.0
+                                ${course2.getCredit_hour()}
                               </dd>
                             </dl>
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            CSC691
+                            ${course2.getCourse_code()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            Lecturer 1
+                            ${course2.getUser().getFullname()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            3.0
+                            ${course2.getCredit_hour()}
                           </td>
                           <td
                             class="py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-0"
@@ -192,13 +195,14 @@ uri="jakarta.tags.core" %>
                             <div
                               class="btn btn-sm rounded-full btn-primary reg"
                               onclick="regCourse.showModal();"
-                              data-id="1"
+                              data-id="${course2.getId()}"
                             >
                               Register
                             </div>
                           </td>
                         </tr>
                         <!-- More people... -->
+                      </c:forEach>
                       </tbody>
                     </table>
                   </div>
@@ -239,8 +243,9 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Unregister Course</h3>
         <p class="py-4">Do you really want to unregister this course ?</p>
         <div class="modal-action">
-          <form action="" method="post">
-            <input type="hidden" name="id" id="unreg_id" value="1" />
+          <form action="/student/register/course" method="post">
+            <input type="hidden" name="cid" id="unreg_id" value="1" />
+            <input type="hidden" name="ind" id="ind" value="unregister" />
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
             </button>
@@ -255,8 +260,9 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Register Course</h3>
         <p class="py-4">Do you really want to Register this course ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="id" id="reg_id" value="1" />
+        <form action="/student/register/course" method="post">
+          <input type="hidden" name="cid" id="reg_id" value="1" />
+          <input type="hidden" name="ind" id="ind" value="register" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-success text-white">
               Yes

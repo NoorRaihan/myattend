@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CourseRegController {
-    @GetMapping("/courseReg")
-    public String regCourse() {
-        return "Student/courseReg";
-    }
+//    @GetMapping("/courseReg")
+//    public String regCourse() {
+//        return "Student/courseReg";
+//    }
 
 }

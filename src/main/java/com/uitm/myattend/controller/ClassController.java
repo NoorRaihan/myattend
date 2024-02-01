@@ -1,11 +1,13 @@
 package com.uitm.myattend.controller;
 
 import com.uitm.myattend.model.ClassModel;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
 import com.uitm.myattend.service.CourseService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +37,14 @@ public class ClassController {
     }
 
     @GetMapping("")
-    public String classMgt() {
+    public String classMgt(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
+        request.setAttribute("courses", courseList);
         return "Lecturer/classes";
     }
 
