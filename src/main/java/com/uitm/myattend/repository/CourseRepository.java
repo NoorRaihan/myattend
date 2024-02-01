@@ -252,4 +252,118 @@ public class CourseRepository {
             return false;
         }
     }
+
+    public boolean registerCourseStudent(int uid, String cid) {
+        try {
+            String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+            String [] field = {
+                    "stud_id",
+                    "course_id",
+                    "created_at",
+                    "updated_at"
+            };
+
+            String [] fieldVal = {
+                    Integer.toString(uid),
+                    cid,
+                    currTms,
+                    currTms
+            };
+
+            String [] fieldType = {
+                    "int",
+                    "varchar",
+                    "timestamp",
+                    "timestamp"
+            };
+
+            int result = commDB.insert("ma_courses_students", field, fieldVal, fieldType);
+            if(result <= 0) {
+                throw new Exception("Failed to insert into ma_courses_students");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCourseStudent(int uid, String cid) {
+        try {
+            String cond = "stud_id = ? AND course_id = ?";
+
+            System.out.println("stud_id = " + uid);
+            System.out.println("course_id = " + cid);
+            String [] condVal = {
+                    Integer.toString(uid),
+                    cid
+            };
+
+            String []  condType = {
+                    "int",
+                    "varchar"
+            };
+
+            int result = commDB.delete("ma_courses_students", cond, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to delete ma_courses_students");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Map<String, String>> retrieveAvailableCourse(int uid) {
+        try {
+            String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
+                    "LEFT JOIN ma_users b ON a.user_id = b.id WHERE a.id NOT IN (" +
+                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ?" +
+                    ") AND a.deleted_at IS NULL";
+
+            String [] condVal = {
+                    Integer.toString(uid)
+            };
+
+            String [] condType = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve SQL: " + sql);
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveRegisteredStudentCourse(int uid) {
+        try {
+            String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
+                    "LEFT JOIN ma_users b ON a.user_id = b.id WHERE a.id IN (" +
+                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ?" +
+                    ") AND a.deleted_at IS NULL";
+
+            String [] condVal = {
+                    Integer.toString(uid)
+            };
+
+            String [] condType = {
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve SQL: " + sql);
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }
