@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $(document).on("click", ".course", function () {
     var id = $(this).data("id");
+    console.log(id)
     loadClsList(id);
   });
 
@@ -23,7 +24,7 @@ $(document).ready(function () {
 function classDetails(id) {
   $.ajax({
     method: "GET",
-    url: "",
+    url: "/class/detail",
     data: { id: id },
     dataType: "json",
     success: function (response) {
@@ -51,7 +52,7 @@ function classDetails(id) {
 function loadClsList(id) {
   $.ajax({
     method: "GET",
-    url: "",
+    url: "/class/course",
     data: { id: id },
     dataType: "json",
     success: function (response) {

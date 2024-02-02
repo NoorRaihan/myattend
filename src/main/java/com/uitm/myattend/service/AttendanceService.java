@@ -1,5 +1,6 @@
 package com.uitm.myattend.service;
 
+import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.repository.AttendanceRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.core.env.Environment;
@@ -14,6 +15,20 @@ public class AttendanceService {
     public AttendanceService(AttendanceRepository attendanceRepository, Environment env) {
         this.attendanceRepository = attendanceRepository;
         this.env = env;
+    }
+
+    public boolean insert(AttendanceModel attendance) {
+        try {
+
+            if(!attendanceRepository.insert(attendance)) {
+                throw new Exception("Failed to process an attendance");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public String encryptStringBase64(String str) throws Exception{
