@@ -1,19 +1,19 @@
 package com.uitm.myattend.controller;
 
 import com.uitm.myattend.model.ClassModel;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
 import com.uitm.myattend.service.CourseService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +34,14 @@ public class ClassController {
     }
 
     @GetMapping("")
-    public String classMgt() {
+    public String classMgt(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
+        request.setAttribute("courses", courseList);
         return "Lecturer/classes";
     }
 
@@ -73,5 +80,57 @@ public class ClassController {
             respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
         }
         return respMap;
+    }
+
+    @GetMapping("/detail")
+    @ResponseBody
+    public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            ClassModel classModel = classService.retrieveDetail(body);
+            CourseModel courseModel = courseService.retrieveDetail(body);
+
+            if(classModel == null || courseModel == null) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Class List does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+            }
+
+            List<Object> respList = new ArrayList<>();
+            Map<String, Object> courseMap = new HashMap<>();
+            Map<String, ClassModel> classMap = new HashMap<>();
+
+            courseMap.put("course", courseModel);
+            classMap.put("class", classModel);
+            respList.add(courseMap);
+            respList.add(classMap);
+            respMap.put("data", respList);
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
+    }
+
+    @PostMapping("/store")
+    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            if(!classService.insert(body)) {
+                session.setAttribute("error", "Failed to register new class");
+            }else {
+                session.setAttribute("success", "New class successfully created");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
+            e.printStackTrace();
+        }
+        response.sendRedirect("/class");
     }
 }

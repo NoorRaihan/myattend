@@ -135,4 +135,52 @@ public class StudController {
         }
         return respMap;
     }
+
+    @GetMapping("/register/course")
+    public String regCourse(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        System.out.println("VALIDATION " + authService.authenticate(session));
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<CourseModel> courseList = courseService.retrieveAvailableCourseStudent(commonModel.getUser().getId());
+        System.out.println("AVAILABLE : " + courseList);
+        request.setAttribute("availableCourses", courseList);
+
+        List<CourseModel> courseList2 = courseService.retrieveRegisteredCourseStudent(commonModel.getUser().getId());
+        request.setAttribute("registeredCourses", courseList2);
+
+        return "Student/courseReg";
+    }
+
+
+    @PostMapping("/register/course")
+    public void registerCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+            CommonModel commonModel = (CommonModel) session.getAttribute("common");
+            String ind = (String) body.get("ind");
+            body.put("uid", Integer.toString(commonModel.getUser().getId()));
+
+            boolean result = false;
+            if(ind.equalsIgnoreCase("register")) {
+                result = courseService.registerStudent(body, true);
+            }else if (ind.equalsIgnoreCase("unregister")) {
+                result = courseService.registerStudent(body, false);
+            }else{
+                System.err.println("Invalid indicator");
+            }
+
+            if(!result) {
+                session.setAttribute("error" , "Internal server error. Please contact admin for futher assistance");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        response.sendRedirect("/student/register/course");
+    }
 }

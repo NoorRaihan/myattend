@@ -16,11 +16,13 @@ import java.util.*;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final StudentService studentService;
     private final Environment env;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository, Environment env) {
+    public CourseService(CourseRepository courseRepository, StudentService studentService, Environment env) {
         this.courseRepository = courseRepository;
+        this.studentService = studentService;
         this.env = env;
     }
 
@@ -147,6 +149,80 @@ public class CourseService {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean registerStudent(Map<String, Object> body, boolean isRegister) {
+        try {
+            int uid = Integer.parseInt((String) body.get("uid"));
+            String cid = (String) body.get("cid");
+
+            StudentModel studentModel = studentService.retrieveDetail(uid);
+            if(studentModel == null) {
+                throw new Exception("Student data does not configured or does not exists");
+            }
+
+            boolean result;
+            if(isRegister) {
+                result = courseRepository.registerCourseStudent(uid, cid);
+            }else {
+                result = courseRepository.deleteCourseStudent(uid, cid);
+            }
+            return result;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<CourseModel> retrieveAvailableCourseStudent(int uid) {
+        try {
+            List<Map<String, String>> courseList = courseRepository.retrieveAvailableCourse(uid);
+            System.out.println(courseList);
+            List<CourseModel> courseModelList = new ArrayList<>();
+            for(Map<String, String> course : courseList) {
+                CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+                courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
+                courseModelList.add(courseObj);
+            }
+            return courseModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<CourseModel> retrieveRegisteredCourseStudent(int uid) {
+        try {
+            List<Map<String, String>> courseList = courseRepository.retrieveRegisteredStudentCourse(uid);
+
+            List<CourseModel> courseModelList = new ArrayList<>();
+            for(Map<String, String> course : courseList) {
+                CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+                courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
+                courseModelList.add(courseObj);
+            }
+            return courseModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<CourseModel> retrieveCourseByLecturer(int uid) {
+        try {
+            List<Map<String, String>> courseList = courseRepository.retrieveByLecturer(uid);
+
+            List<CourseModel> courseModelList = new ArrayList<>();
+            for(Map<String, String> course : courseList) {
+                CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+                courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
+                courseModelList.add(courseObj);
+            }
+            return courseModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 }

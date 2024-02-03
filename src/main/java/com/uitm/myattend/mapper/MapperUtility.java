@@ -126,4 +126,27 @@ public class MapperUtility {
         }
         return classObj;
     }
+
+    private static AttendanceModel attendanceModel(TreeMap<String, String> data) {
+        AttendanceModel attendanceModel = new AttendanceModel();
+
+        attendanceModel.setId(data.get("ID"));
+        attendanceModel.setClass_id(data.get("CLASS_ID"));
+        attendanceModel.setStud_id(Integer.parseInt(data.get("STUD_ID")));
+        attendanceModel.setAttend_date(data.get("ATTEND_DATE"));
+        attendanceModel.setAttend_time(data.get("ATTEND_TIME"));
+        attendanceModel.setStatus(data.get("STATUS"));
+
+        if(data.containsKey("CLASS_DESC")) {
+            ClassModel classModel = classModel(data);
+            attendanceModel.setClassModel(classModel);
+        }
+
+        if(data.containsKey("USERNAME")) {
+            UserModel userModel = userMapper(data);
+            attendanceModel.setUser(userModel);
+        }
+
+        return attendanceModel;
+    }
 }

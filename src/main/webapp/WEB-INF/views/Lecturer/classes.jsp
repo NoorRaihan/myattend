@@ -30,16 +30,17 @@ uri="jakarta.tags.core" %>
             class="flex ml-2 overflow-x-auto scrollbar-hide"
             aria-labelledby="profile-overview-title"
           >
+          <c:forEach var="course" items="${courses}">
             <div
-              class="mx-2 card bg-gradient-to-br from-blue-300 to-blue-500 shadow-lg hover:shadow-xl overflow-hidden w-72 flex-shrink-0 cursor-pointer course"
-              data-id="1"
+              class="mx-2 card ${course.getColorConfig()} shadow-lg hover:shadow-xl overflow-hidden w-72 flex-shrink-0 cursor-pointer course"
+              data-id="${course.getId()}"
             >
               <div class="card-body">
                 <div class="flex flex-row justify-between z-10">
                   <div class="flex flex-col">
-                    <p class="text-2xl font-bold">CSC584</p>
-                    <p class="text-lg font-semibold">Enterprise Programming</p>
-                    <p class="text-sm">3.0 Credit Hours</p>
+                    <p class="text-2xl font-bold">${course.getCourse_code()}</p>
+                    <p class="text-lg font-semibold">${course.getCourse_name()}</p>
+                    <p class="text-sm">${course.getCredit_hour()} Credit Hours</p>
                   </div>
                 </div>
                 <div class="absolute -top-7 -right-5">
@@ -62,39 +63,7 @@ uri="jakarta.tags.core" %>
                 </div>
               </div>
             </div>
-
-            <div
-              class="mx-2 card bg-gradient-to-br from-orange-300 to-orange-500 shadow-lg hover:shadow-xl overflow-hidden w-72 flex-shrink-0 cursor-pointer course"
-              data-id="1"
-            >
-              <div class="card-body">
-                <div class="flex flex-row justify-between z-10">
-                  <div class="flex flex-col">
-                    <p class="text-2xl font-bold">ICT502</p>
-                    <p class="text-lg font-semibold">Database Engineering</p>
-                    <p class="text-sm">2.0 Credit Hours</p>
-                  </div>
-                </div>
-                <div class="absolute -top-7 -right-5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="size-28 fill-slate-200"
-                  >
-                    <path
-                      d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
-                    />
-                    <path
-                      d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
-                    />
-                    <path
-                      d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
+            </c:forEach>
           </section>
           <div
             class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
@@ -342,16 +311,26 @@ uri="jakarta.tags.core" %>
     <dialog id="newClass" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New Class</h3>
-        <form id="classAdd" action="" method="post">
-          <input type="hidden" name="c_id" id="c_id" value="1" />
+        <form id="classAdd" action="/class/store" method="post">
+          <input type="hidden" name="cid" id="c_id" value="1" />
           <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-1/4 grow">
+            <div class="label">
+                <span class="label-text">Class Name/Description</span>
+            </div>
+            <input
+                type="text"
+                name="class_desc"
+                class="input input-primary input-sm input-bordered"
+            />
+            </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Date</span>
               </div>
               <input
                 type="date"
-                name="cls_date"
+                name="class_date"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -361,7 +340,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="time"
-                name="cls_sTime"
+                name="start_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -371,7 +350,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="time"
-                name="cls_eTime"
+                name="end_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -381,7 +360,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="cls_venue"
+                name="venue"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
