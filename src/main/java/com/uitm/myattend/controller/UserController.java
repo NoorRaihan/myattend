@@ -4,6 +4,7 @@ import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.StudentService;
 import com.uitm.myattend.service.UserService;
+import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -53,17 +54,32 @@ public class UserController {
     @PostMapping("/create")
     public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
         try {
+            FieldUtility.requiredValidator(body, userRequiredFields());
+
             UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("message", "New user successfully added");
             }else{
-                session.setAttribute("error", "Failed to add a new user");
+                session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
             }
             response.sendRedirect("/user");
         }catch (Exception e) {
-            session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
+            session.setAttribute("error", e.getMessage());
             response.sendRedirect("/user");
         }
+    }
+
+    private String [][] userRequiredFields() {
+        String [][] field = {
+                {"fullname", "Fullname is required"},
+                {"username", "Username is required"},
+                {"email", "Email is required"},
+                {"password", "Password is required"},
+                {"gender", "Gender is required"},
+                {"birthdate", "Birth date is required"},
+                {"role", "Role is required"}
+        };
+        return field;
     }
 
     @GetMapping("/detail")
@@ -97,6 +113,8 @@ public class UserController {
     @PostMapping("/update")
     public void update(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
         try {
+            FieldUtility.requiredValidator(body, userRequiredFields());
+
             if(!userService.update(body, file)) {
                 throw new Exception("Failed to update user data");
             }else {
