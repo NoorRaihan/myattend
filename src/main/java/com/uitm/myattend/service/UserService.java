@@ -83,7 +83,8 @@ public class UserService {
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
 
-            if(file != null) {
+            //System.out.println(file.getOriginalFilename().isEmpty());
+            if(file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                 user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
                 if(!fileHandler(file, uid)) {
                     throw new Exception("Failed to save profile image");
@@ -229,7 +230,7 @@ public class UserService {
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
 
-            if(file != null) {
+            if(file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                 user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
                 if(!fileHandler(file, (String) body.get("uid"))) {
                     throw new Exception("Failed to save profile image");
