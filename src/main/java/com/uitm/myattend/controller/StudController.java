@@ -4,6 +4,7 @@ import com.uitm.myattend.model.*;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.CourseService;
 import com.uitm.myattend.service.StudentService;
+import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,11 @@ public class StudController {
     }
 
     @GetMapping("")
-    public String index(HttpServletRequest request, HttpServletResponse response) {
+    public String index(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
         List<StudentModel> studList = studentService.retrieveAll();
         request.setAttribute("students", studList);
         request.setAttribute("totalStudent", studList.size());
@@ -42,9 +47,14 @@ public class StudController {
 
     @GetMapping("/detail")
     @ResponseBody
-    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return null;
+            }
+
             int uid = Integer.parseInt((String)body.get("uid"));
             StudentModel student = studentService.retrieveDetail(uid);
 
@@ -69,10 +79,15 @@ public class StudController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
             //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
+            FieldUtility.requiredValidator(body, studentRequiredFields());
             if(!studentService.editStudent(body)) {
                 throw new Exception("Failed to update student data");
             }else {
@@ -85,8 +100,12 @@ public class StudController {
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
             if(studentService.delete(body)) {
                 throw new Exception("Failed to delete student data");
@@ -102,9 +121,16 @@ public class StudController {
 
     @GetMapping("/course")
     @ResponseBody
-    public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+    public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
+
             List<StudentModel> studentList = studentService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
 
@@ -142,6 +168,7 @@ public class StudController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+
         System.out.println("VALIDATION " + authService.authenticate(session));
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
         List<CourseModel> courseList = courseService.retrieveAvailableCourseStudent(commonModel.getUser().getId());
@@ -162,6 +189,7 @@ public class StudController {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
+
             CommonModel commonModel = (CommonModel) session.getAttribute("common");
             String ind = (String) body.get("ind");
             body.put("uid", Integer.toString(commonModel.getUser().getId()));
@@ -182,5 +210,13 @@ public class StudController {
             e.printStackTrace();
         }
         response.sendRedirect("/student/register/course");
+    }
+
+    private String[][] studentRequiredFields() {
+        return new String[][] {
+                {"program", "Program is required"},
+                {"intake", "Intake is required"},
+                {"semester", "Semester is required"}
+        };
     }
 }

@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 public class FieldUtility {
@@ -115,7 +116,13 @@ public class FieldUtility {
         }
     }
 
-    public static void requiredValidator() {
-
+    public static void requiredValidator(Map<String, Object> body, String [][] validate) throws Exception{
+        for(String [] data : validate) {
+            String key = data[0];
+            String errMsg = data[1];
+            if(body.get(key) == null || body.get(key).toString().isEmpty()) {
+                throw new Exception(errMsg);
+            }
+        }
     }
 }
