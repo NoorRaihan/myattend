@@ -1,7 +1,6 @@
 $(document).ready(function () {
   $(document).on("click", ".course", function () {
     var id = $(this).data("id");
-    console.log(id)
     loadClsList(id);
   });
 
