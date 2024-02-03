@@ -27,14 +27,10 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final StudentService studentService;
-    private final TransactionTemplate transactionTemplate;
     private final AuthService authService;
 
-    public UserController(UserService userService, StudentService studentService, TransactionTemplate transactionTemplate, AuthService authService) {
+    public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
-        this.studentService = studentService;
-        this.transactionTemplate = transactionTemplate;
         this.authService = authService;
     }
 
@@ -52,10 +48,14 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
+    public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
-            FieldUtility.requiredValidator(body, userRequiredFields());
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
+            FieldUtility.requiredValidator(body, userRequiredFields());
             UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("message", "New user successfully added");
@@ -84,9 +84,16 @@ public class UserController {
 
     @GetMapping("/detail")
     @ResponseBody
-    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
+
             int uid = Integer.parseInt((String)body.get("uid"));
             UserModel user = userService.retrieveUserById(uid);
 
@@ -111,8 +118,13 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
+    public void update(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request ,HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             FieldUtility.requiredValidator(body, userRequiredFields());
 
             if(!userService.update(body, file)) {

@@ -32,7 +32,12 @@ public class CourseController {
         this.authService = authService;
     }
     @GetMapping("")
-    public String course(HttpServletRequest request, HttpServletResponse response) {
+    public String course(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        
         List<CourseModel> courseList = courseService.retrieveAll();
         request.setAttribute("courses", courseList);
 
@@ -46,24 +51,37 @@ public class CourseController {
     }
 
     @PostMapping("/create")
-    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            FieldUtility.requiredValidator(body, courseRequiredFields());
             if(courseService.insert(body)) {
                 session.setAttribute("message", "New course successfully added");
             }else {
-                session.setAttribute("message", "Failed to add new course");
+                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
             }
         }catch (Exception e) {
-            session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
+            session.setAttribute("error", e.getMessage());
         }
         response.sendRedirect("/course");
     }
 
     @GetMapping("/detail")
     @ResponseBody
-    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+    public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
+
             CourseModel course = courseService.retrieveDetail(body);
 
             if(course == null) {
@@ -82,14 +100,19 @@ public class CourseController {
             //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
             respMap.put("respCode", "000198");
             respMap.put("respStatus", "error");
-            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respMessage", "Internal server error. Please contact admin for further assistance");
         }
         return respMap;
     }
 
     @PostMapping("/update")
-    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+            FieldUtility.requiredValidator(body, courseRequiredFields());
             if(!courseService.update(body)) {
                 throw new Exception("Failed to update course information");
             }else {
@@ -103,8 +126,13 @@ public class CourseController {
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             if(!courseService.delete(body)) {
                 throw new Exception("Failed to delete course data");
             }else {
@@ -118,8 +146,13 @@ public class CourseController {
     }
 
     @PostMapping("/disable")
-    public void disable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void disable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             if(!courseService.changeStatus(body, true)) {
                 throw new Exception("Failed to disable course data");
             }else {
@@ -133,8 +166,13 @@ public class CourseController {
     }
 
     @PostMapping("/enable")
-    public void enable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void enable(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             if(!courseService.changeStatus(body, false)) {
                 throw new Exception("Failed to enable course data");
             }else {
@@ -145,5 +183,14 @@ public class CourseController {
             e.printStackTrace();
         }
         response.sendRedirect("/course");
+    }
+
+    private String [][] courseRequiredFields() {
+        return new String[][]{
+                {"c_name", "Course name is required"},
+                {"c_code", "Course code is required"},
+                {"c_credit", "Credit hour is required"},
+                {"c_lect", "Lecture must be assigned to a course"}
+        };
     }
 }
