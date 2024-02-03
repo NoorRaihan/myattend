@@ -11,17 +11,16 @@ public class AttendanceModel {
     private ClassModel classModel;
     private int stud_id;
     private UserModel user;
-    private String class_date;
-    private String start_time;
-    private String end_time;
-    private String venue;
+    private String attend_date;
+    private String attend_time;
+    private String status;
 
-    public String getClass_date() {
-        return class_date;
+    public String getStatus() {
+        return status;
     }
 
-    public void setClass_date(String class_date) {
-        this.class_date = class_date;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getId() {
@@ -64,27 +63,19 @@ public class AttendanceModel {
         this.user = user;
     }
 
-    public String getStart_time() {
-        return start_time;
+    public String getAttend_date() {
+        return attend_date;
     }
 
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
+    public void setAttend_date(String attend_date) {
+        this.attend_date = attend_date;
     }
 
-    public String getEnd_time() {
-        return end_time;
+    public String getAttend_time() {
+        return attend_time;
     }
 
-    public void setEnd_time(String end_time) {
-        this.end_time = end_time;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
+    public void setAttend_time(String attend_time) {
+        this.attend_time = attend_time;
     }
 }

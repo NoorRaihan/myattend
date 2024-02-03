@@ -47,6 +47,37 @@ public class ClassRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveDetail(String id) {
+        try {
+            String [] field = {
+                    "id",
+                    "course_id",
+                    "class_desc",
+                    "class_date",
+                    "start_time",
+                    "end_time",
+                    "venue",
+                    "deleted_at"
+            };
+
+            String cond = "id = ?";
+
+            String [] condval = {
+                    id
+            };
+
+            String [] condtype = {
+                    "varchar"
+            };
+
+            return commDB.select("ma_classes", field, cond, condval, condtype);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean insert(ClassModel classObj) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
@@ -66,6 +97,7 @@ public class ClassRepository {
             String [] fieldVal = {
                     classObj.getId(),
                     classObj.getCourse_id(),
+                    classObj.getClass_desc(),
                     FieldUtility.date2Oracle(classObj.getClass_date()),
                     FieldUtility.timestamp2Oracle(classObj.getStart_time()),
                     FieldUtility.timestamp2Oracle(classObj.getEnd_time()),
@@ -75,6 +107,7 @@ public class ClassRepository {
             };
 
             String [] fieldType = {
+                    "varchar",
                     "varchar",
                     "varchar",
                     "date",
@@ -138,6 +171,23 @@ public class ClassRepository {
             };
 
             int result = commDB.update("ma_classes", field, fieldVal, fieldType, cond, condval, condtype);
+            if(result <= 0) {
+                throw new Exception("Failed to insert a class record");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(String id) {
+        try {
+            String cond = "id = ?";
+            String [] condval  = {id};
+            String [] condtype  = {"varchar"};
+
+            int result = commDB.delete("ma_classes", cond, condval, condtype);
             if(result <= 0) {
                 throw new Exception("Failed to insert a class record");
             }

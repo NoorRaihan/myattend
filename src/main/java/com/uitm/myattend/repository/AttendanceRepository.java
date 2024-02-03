@@ -1,6 +1,7 @@
 package com.uitm.myattend.repository;
 
 import com.uitm.myattend.model.AttendanceModel;
+import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -14,19 +15,45 @@ public class AttendanceRepository {
 
     public boolean insert(AttendanceModel attendanceModel) {
         try {
+            String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+
             String []  field = {
                     "id",
                     "class_id",
                     "stud_id",
-                    "class_date",
-                    "start_time",
-                    "end_time",
-                    "venue"
+                    "status",
+                    "attend_date",
+                    "attend_time",
+                    "created_at",
+                    "updated_at"
             };
 
             String [] fieldVal = {
-                    attendanceModel.
+                    attendanceModel.getId(),
+                    attendanceModel.getClass_id(),
+                    Integer.toString(attendanceModel.getStud_id()),
+                    attendanceModel.getAttend_date(),
+                    attendanceModel.getAttend_time(),
+                    currTms,
+                    currTms
             };
+
+            String [] fieldType = {
+                    "varchar",
+                    "varchar",
+                    "int",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar"
+            };
+
+            int result = commDB.insert("ma_attendances", field, fieldVal, fieldType);
+            if(result <= 0) {
+                throw new Exception("Failed to insert into ma_attendances");
+            }
+            return true;
         }catch (Exception e) {
             e.printStackTrace();
             return false;

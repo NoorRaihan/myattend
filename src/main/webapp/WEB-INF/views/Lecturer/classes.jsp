@@ -33,7 +33,7 @@ uri="jakarta.tags.core" %>
           <c:forEach var="course" items="${courses}">
             <div
               class="mx-2 card ${course.getColorConfig()} shadow-lg hover:shadow-xl overflow-hidden w-72 flex-shrink-0 cursor-pointer course"
-              data-id="1"
+              data-id="${course.getId()}"
             >
               <div class="card-body">
                 <div class="flex flex-row justify-between z-10">
@@ -311,16 +311,26 @@ uri="jakarta.tags.core" %>
     <dialog id="newClass" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New Class</h3>
-        <form id="classAdd" action="" method="post">
-          <input type="hidden" name="c_id" id="c_id" value="1" />
+        <form id="classAdd" action="/class/store" method="post">
+          <input type="hidden" name="cid" id="c_id" value="1" />
           <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-1/4 grow">
+            <div class="label">
+                <span class="label-text">Class Name/Description</span>
+            </div>
+            <input
+                type="text"
+                name="class_desc"
+                class="input input-primary input-sm input-bordered"
+            />
+            </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Date</span>
               </div>
               <input
                 type="date"
-                name="cls_date"
+                name="class_date"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -330,7 +340,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="time"
-                name="cls_sTime"
+                name="start_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -340,7 +350,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="time"
-                name="cls_eTime"
+                name="end_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -350,7 +360,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="cls_venue"
+                name="venue"
                 class="input input-primary input-sm input-bordered"
               />
             </label>

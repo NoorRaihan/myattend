@@ -133,13 +133,18 @@ public class MapperUtility {
         attendanceModel.setId(data.get("ID"));
         attendanceModel.setClass_id(data.get("CLASS_ID"));
         attendanceModel.setStud_id(Integer.parseInt(data.get("STUD_ID")));
-        attendanceModel.setClass_date(data.get("CLASS_DATE"));
-        attendanceModel.setStart_time(data.get("START_TIME"));
-        attendanceModel.setEnd_time(data.get("END_TIME"));
-        attendanceModel.setVenue(data.get("VENUE"));
+        attendanceModel.setAttend_date(data.get("ATTEND_DATE"));
+        attendanceModel.setAttend_time(data.get("ATTEND_TIME"));
+        attendanceModel.setStatus(data.get("STATUS"));
 
         if(data.containsKey("CLASS_DESC")) {
-            
+            ClassModel classModel = classModel(data);
+            attendanceModel.setClassModel(classModel);
+        }
+
+        if(data.containsKey("USERNAME")) {
+            UserModel userModel = userMapper(data);
+            attendanceModel.setUser(userModel);
         }
 
         return attendanceModel;
