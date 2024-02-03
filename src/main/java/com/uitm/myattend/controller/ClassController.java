@@ -39,6 +39,7 @@ public class ClassController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
         List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
         request.setAttribute("courses", courseList);
@@ -50,6 +51,13 @@ public class ClassController {
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
+
             List<ClassModel> classList = classService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
 
@@ -84,9 +92,14 @@ public class ClassController {
 
     @GetMapping("/detail")
     @ResponseBody
-    public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
+    public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return null;
+            }
+
             ClassModel classModel = classService.retrieveDetail(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
 
@@ -120,8 +133,13 @@ public class ClassController {
     }
 
     @PostMapping("/store")
-    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void store(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             if(!classService.insert(body)) {
                 session.setAttribute("error", "Failed to register new class");
             }else {
