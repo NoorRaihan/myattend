@@ -154,7 +154,6 @@ public class DBRepository {
 
             System.out.println("Query: " + query);
             if(condval != null && condval.length > 0) {
-                System.out.println("executed1");
                 dbTemplate.query(query, prepareSQLStatement(field, null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
                     public HashMap<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -174,7 +173,6 @@ public class DBRepository {
                     }
                 });
             }else{
-                System.out.println("executed2");
                 dbTemplate.query(query,
                         new ResultSetExtractor<HashMap<String, String>>() {
                             @Override
@@ -202,13 +200,13 @@ public class DBRepository {
         return data;
     }
 
-    /**
-     * varchar = char/timestamp
-     * number = decimal/int
-     **/
     public int insert(String table, String [] fields, String [] values, String [] datatype) {
+        return insert(table, fields, values, datatype, Collections.emptyMap());
+    }
+
+    public int insert(String table, String [] fields, String [] values, String [] datatype, Map<String, String> sqlFunction) {
         try {
-            String query = buildInsertQuery(table, fields);
+            String query = buildInsertQuery(table, fields, sqlFunction);
             System.out.println("Query: " + query);
 
             return this.dbTemplate.update(query, prepareSQLStatement(fields, values, datatype));
@@ -219,8 +217,12 @@ public class DBRepository {
     }
 
     public int update(String table, String [] fields, String [] values, String [] datatype, String cond, String [] condval, String [] condtype) {
+        return update(table, fields, values, datatype, cond, condval, condtype, Collections.emptyMap());
+    }
+
+    public int update(String table, String [] fields, String [] values, String [] datatype, String cond, String [] condval, String [] condtype, Map<String, String> sqlFunction) {
         try {
-            String query = buildUpdateQuery(table, fields, cond);
+            String query = buildUpdateQuery(table, fields, cond, sqlFunction);
             System.out.println("Query: " + query);
 
             if(query == null) {
@@ -274,15 +276,15 @@ public class DBRepository {
         }
     }
 
-    public String buildUpdateQuery(String table, String [] field, String cond) {
+    public String buildUpdateQuery(String table, String [] field, String cond, Map<String, String> sqlFunction) {
         try {
             String query = "update " + table + " set";
 
             for(int i=0; i<field.length; i++) {
                 if(i != field.length-1) {
-                    query += " " + field[i] + " = ?,";
+                    query += " " + field[i] + " = " + sqlFunction.getOrDefault(field[i], "?") + ",";
                 }else{
-                    query += " " + field[i] + " = ?";
+                    query += " " + field[i] + " = " + sqlFunction.getOrDefault(field[i], "?");
                 }
             }
 
@@ -298,7 +300,7 @@ public class DBRepository {
 
     }
 
-    private String buildInsertQuery(String table, String[] field) {
+    private String buildInsertQuery(String table, String[] field, Map<String, String> sqlFunction) {
         try{
             String query = "insert into " + table + " $field values($value)";
 
@@ -307,10 +309,10 @@ public class DBRepository {
             for(int i=0; i<field.length; i++) {
                 if(i != field.length-1) {
                     ffield += field[i] + ",";
-                    valField += "?,";
+                    valField += sqlFunction.getOrDefault(field[i], "?") + ",";
                 }else {
                     ffield += field[i];
-                    valField += "?";
+                    valField += sqlFunction.getOrDefault(field[i], "?");
                 }
             }
             query = query.replace("$field", "("+ffield+")").replace("$value", valField);
@@ -354,7 +356,7 @@ public class DBRepository {
         return (ps) -> {
             try {
                 if(values != null && values.length > 0) {
-                    for(int i=0; i<fields.length; i++) {
+                    for(int i=0; i<values.length; i++) {
                         switch (datatype[i].toUpperCase()) {
                             case "VARCHAR" -> ps.setString(i+1, values[i]);
                             case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(values[i]));
