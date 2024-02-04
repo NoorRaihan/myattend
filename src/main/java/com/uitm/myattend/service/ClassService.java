@@ -77,24 +77,24 @@ public class ClassService {
             if(!classRepository.insert(classModel)) {
                 throw new Exception("Failed to register a new class");
             }
-            created = true;
-            Map<String, Object> tempMap = new HashMap<>();
-            tempMap.put("id", body.get("cid"));
-
-            List<StudentModel> studentList = studentService.retrieveByCourse(tempMap);
-
-            for(StudentModel student : studentList) {
-                AttendanceModel attendanceModel = new AttendanceModel();
-                attendanceModel.setId(UUID.randomUUID().toString());
-                attendanceModel.setClass_id(uuid);
-                attendanceModel.setStud_id(student.getUser_id());
-                attendanceModel.setStatus("AB");
-
-                if(!attendanceService.insert(attendanceModel)) {
-                    throw new Exception("Failed to process attendance");
-                }
-            }
-
+            // attendance auto process will handle by sql trigger event not by program
+//            created = true;
+//            Map<String, Object> tempMap = new HashMap<>();
+//            tempMap.put("id", body.get("cid"));
+//
+//            List<StudentModel> studentList = studentService.retrieveByCourse(tempMap);
+//
+//            for(StudentModel student : studentList) {
+//                AttendanceModel attendanceModel = new AttendanceModel();
+//                attendanceModel.setId(UUID.randomUUID().toString());
+//                attendanceModel.setClass_id(uuid);
+//                attendanceModel.setStud_id(student.getUser_id());
+//                attendanceModel.setStatus("AB");
+//
+//                if(!attendanceService.insert(attendanceModel)) {
+//                    throw new Exception("Failed to process attendance");
+//                }
+//            }
             return true;
         }catch (Exception e) {
             //delete class -> will cascade to delete all attendance

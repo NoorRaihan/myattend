@@ -15,8 +15,6 @@ import java.text.ParseException;
 @SessionScope
 public class UserModel {
 
-    @Autowired
-    private ResourceLoader resourceLoader;
     private int id;
     private String email;
     private String username;

@@ -35,7 +35,11 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String index(HttpServletRequest request, HttpSession session) {
+    public String index(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
         List<UserModel> userList = userService.retrieveAll(session);
         request.setAttribute("users", userList);
         request.setAttribute("totalUser", userList.size());
@@ -74,7 +78,7 @@ public class UserController {
                 {"fullname", "Fullname is required"},
                 {"username", "Username is required"},
                 {"email", "Email is required"},
-                {"password", "Password is required"},
+                //{"password", "Password is required"},
                 {"gender", "Gender is required"},
                 {"birthdate", "Birth date is required"},
                 {"role", "Role is required"}

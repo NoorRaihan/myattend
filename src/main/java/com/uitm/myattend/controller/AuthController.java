@@ -23,7 +23,6 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-        System.out.println("SID: " + session.getAttribute("sid"));
         return "Auth/login";
     }
 
