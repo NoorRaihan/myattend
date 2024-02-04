@@ -2,6 +2,7 @@ package com.uitm.myattend.utility;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,6 +115,32 @@ public class FieldUtility {
         }else {
             throw new Exception("null value to be encode");
         }
+    }
+
+    public static String encryptStringBase64(String keys, String str) throws Exception{
+        byte[] key = keys.getBytes();
+        byte[] data = str.getBytes();
+
+        byte[] xored = xorWithKey(data, key);
+        return FieldUtility.encodeByteBase64(xored);
+    }
+
+    public static String decryptStringBase64(String keys, String str) throws Exception{
+        byte[] key = keys.getBytes();
+        byte[] data = str.getBytes();
+
+        byte[] decoded = FieldUtility.decodeBytesBase64(data).getBytes();
+        byte[] xored = xorWithKey(decoded, key);
+        return new String(xored, StandardCharsets.UTF_8);
+    }
+
+    public static byte[] xorWithKey(byte[] data, byte[] key) {
+        byte[] output = new byte[data.length];
+
+        for(int i=0; i<data.length; i++) {
+            output[i] = (byte) (data[i] ^ key[i % key.length]);
+        }
+        return output;
     }
 
     public static void requiredValidator(Map<String, Object> body, String [][] validate) throws Exception{

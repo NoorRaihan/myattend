@@ -7,6 +7,7 @@ import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.utility.FieldUtility;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,14 +16,12 @@ import java.util.*;
 public class ClassService {
 
     private final ClassRepository classRepository;
-    private final StudentService studentService;
     private final CourseService courseService;
-    private final AttendanceService attendanceService;
+    private final Environment env;
 
-    public ClassService(ClassRepository classRepository, StudentService studentService, AttendanceService attendanceService, CourseService courseService) {
+    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService) {
         this.classRepository = classRepository;
-        this.studentService = studentService;
-        this.attendanceService = attendanceService;
+        this.env = env;
         this.courseService = courseService;
     }
 
@@ -120,7 +119,7 @@ public class ClassService {
             Map<String, Object> respMap = new HashMap<>();
             ClassModel classModel = retrieveDetail(body);
             String buildURL = classModel.getId() + "." + FieldUtility.getCurrentTimestamp();
-            encrypted = "myattend" + "." + attendanceService.encryptStringBase64(buildURL);
+            encrypted = "myattend" + "." + FieldUtility.encryptStringBase64(env.getProperty("app.key"),buildURL);
             respMap.put("class", classModel);
             respMap.put("attendanceURL", encrypted);
 
