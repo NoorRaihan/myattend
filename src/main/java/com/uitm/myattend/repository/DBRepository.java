@@ -28,59 +28,11 @@ public class DBRepository {
         return dbTemplate.getDataSource().getConnection();
     }
 
-    public void setAutoCommit(boolean commit) throws SQLException {
-        dbTemplate
-                .getDataSource()
-                .getConnection()
-                .setAutoCommit(commit);
-    }
-
-    public boolean getAutoCommit() throws SQLException {
-       return dbTemplate
-               .getDataSource()
-               .getConnection()
-               .getAutoCommit();
-    }
-
-    public void commit() throws SQLException{
-        dbTemplate
-                .getDataSource()
-                .getConnection()
-                .commit();
-    }
-
-    public void rollback() throws SQLException{
-        dbTemplate
-                .getDataSource()
-                .getConnection()
-                .rollback();
-    }
-
-    public void startTransaction() {
-        try {
-            if(getAutoCommit()) {
-                System.out.println("commit: " + getAutoCommit());
-                setAutoCommit(false);
-            }
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void closeConnection() throws SQLException {
         dbTemplate
                 .getDataSource()
                 .getConnection()
                 .close();
-    }
-
-    public void endTransaction() {
-        try {
-            setAutoCommit(true);
-            closeConnection();
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public List<Map<String, String>> getResult() {
@@ -107,9 +59,9 @@ public class DBRepository {
         ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
         try {
-
+            System.out.println("Sql: " + query);
             if(query.split(" ")[0].equalsIgnoreCase("select")) {
-                dbTemplate.query(query, prepareSQLStatement(null, null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
+                dbTemplate.query(query, prepareSQLStatement(null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
                     public HashMap<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                         HashMap<String, String> temp = null;
@@ -152,9 +104,8 @@ public class DBRepository {
         try {
             String query = buildSelectQuery(table, field, cond);
 
-            System.out.println("Query: " + query);
             if(condval != null && condval.length > 0) {
-                dbTemplate.query(query, prepareSQLStatement(field, null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
+                dbTemplate.query(query, prepareSQLStatement(null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
                     public HashMap<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                         HashMap<String, String> temp = null;
@@ -163,11 +114,9 @@ public class DBRepository {
                         while(rs.next()) {
                             temp = new HashMap<String, String>();
                             for(String key : field) {
-                                System.out.println(rs.getString(key));
                                 temp.put(key, rs.getString(key));
                             }
                             data.add(temp);
-                            System.out.println(temp);
                         }
                         return temp;
                     }
@@ -207,7 +156,6 @@ public class DBRepository {
     public int insert(String table, String [] fields, String [] values, String [] datatype, Map<String, String> sqlFunction) {
         try {
             String query = buildInsertQuery(table, fields, sqlFunction);
-            System.out.println("Query: " + query);
 
             return this.dbTemplate.update(query, prepareSQLStatement(fields, values, datatype));
         } catch (Exception e) {
@@ -223,12 +171,11 @@ public class DBRepository {
     public int update(String table, String [] fields, String [] values, String [] datatype, String cond, String [] condval, String [] condtype, Map<String, String> sqlFunction) {
         try {
             String query = buildUpdateQuery(table, fields, cond, sqlFunction);
-            System.out.println("Query: " + query);
 
             if(query == null) {
                 throw new Exception("Invalid query");
             }
-            return this.dbTemplate.update(query, prepareSQLStatement(fields, values, datatype, condval, condtype));
+            return this.dbTemplate.update(query, prepareSQLStatement(values, datatype, condval, condtype));
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             return -1;
@@ -242,7 +189,6 @@ public class DBRepository {
             if(query == null) {
                 throw new Exception("Invalid query");
             }
-            System.out.println("Query: " + query);
 
             return this.dbTemplate.update(query, new PreparedStatementSetter() {
                 @Override
@@ -269,7 +215,9 @@ public class DBRepository {
             if(cond == null) {
                 throw new Exception("Delete operation need 'where' condition");
             }
-            return "delete from " + table + " where " + cond;
+            String query =  "delete from " + table + " where " + cond;
+            System.out.println("Sql: " + query);
+            return query;
         }catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             return null;
@@ -292,6 +240,7 @@ public class DBRepository {
                 throw new Exception("Update operation need 'where' condition");
             }
             query += " where " + cond;
+            System.out.println("Sql: " + query);
             return query;
         }catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
@@ -316,6 +265,7 @@ public class DBRepository {
                 }
             }
             query = query.replace("$field", "("+ffield+")").replace("$value", valField);
+            System.out.println("Sql: " + query);
             return query;
         }catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
@@ -338,6 +288,7 @@ public class DBRepository {
             if(cond != null && !cond.isEmpty()) {
                 query += " where " + cond;
             }
+            System.out.println("Sql: " + query);
             return query;
         }catch (Exception e){
             System.err.println("ERROR: " + e.getMessage());
@@ -348,14 +299,14 @@ public class DBRepository {
 
 
     private PreparedStatementSetter prepareSQLStatement(String [] fields, String [] values, String [] datatype) {
-        return prepareSQLStatement(fields, values, datatype, null, null);
+        return prepareSQLStatement(values, datatype, null, null);
     }
 
-    private PreparedStatementSetter prepareSQLStatement(String [] fields, String [] values, String [] datatype, String [] condval, String [] condtype) {
-        System.out.println("executed prepare");
-        return (ps) -> {
+    private PreparedStatementSetter prepareSQLStatement(String [] values, String [] datatype, String [] condval, String [] condtype) {
+        PreparedStatementSetter prepSetter =  (ps) -> {
             try {
                 if(values != null && values.length > 0) {
+                    System.out.println("Field Value: " + Arrays.toString(values));
                     for(int i=0; i<values.length; i++) {
                         switch (datatype[i].toUpperCase()) {
                             case "VARCHAR" -> ps.setString(i+1, values[i]);
@@ -370,7 +321,7 @@ public class DBRepository {
                 }
 
                 if(condval != null && condval.length > 0) {
-
+                    System.out.println("Cond Value: " + Arrays.toString(condval));
                     int counter = values == null ? 0 : values.length;
                     for(int i=counter; i<counter + condval.length; i++) {
                         int y = i-counter;
@@ -393,6 +344,8 @@ public class DBRepository {
                 throw new RuntimeException();
             }
         };
+
+        return prepSetter;
     }
 
     private void setColumnLabel(ResultSet rs) {

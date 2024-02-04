@@ -251,7 +251,6 @@ public class UserRepository {
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
-            System.out.println(Arrays.toString(fieldVal));
 
             String [] fieldType = {
                     "varchar",
@@ -358,7 +357,6 @@ public class UserRepository {
                 fieldType = fieldTypeList.toArray(String[]::new);
             }
 
-            System.out.println(Arrays.toString(fieldval));
 
             String cond = "id = ?";
             String [] condval = {Integer.toString(userModel.getId())};

@@ -102,7 +102,6 @@ public class LecturerService {
     public boolean update(Map<String, Object> body) {
         try {
             LecturerModel lecturer = new LecturerModel();
-            System.out.println("SV " + body.get("sv").toString().isEmpty());
             lecturer.setUser_id(Integer.parseInt((String)body.get("uid")));
             lecturer.setLect_id(Integer.parseInt((String)body.get("lect_id")));
             lecturer.setSupervisor_id(body.get("sv") == null || body.get("sv").toString().isEmpty() ?  -1 : Integer.parseInt((String)body.get("sv")));

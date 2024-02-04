@@ -23,6 +23,8 @@ public class MapperUtility {
             case "LECTURERMODEL" -> obj = lecturerMapper(tempMap);
             case "STUDENTMODEL" -> obj = studentMapper(tempMap);
             case "COURSEMODEL" -> obj = courseModel(tempMap);
+            case "CLASSMODEL" -> obj = classModel(tempMap);
+            case "ATTENDANCEMODEL" -> obj = attendanceModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -30,7 +32,6 @@ public class MapperUtility {
     }
 
     private static UserModel userMapper(TreeMap<String, String> data) {
-        System.out.println("DATA: " + data.get("ID"));
         UserModel userObj = new UserModel();
         userObj.setId(Integer.parseInt(data.get("ID") == null ? "-1" : data.get("ID")));
         userObj.setUsername(data.get("USERNAME"));

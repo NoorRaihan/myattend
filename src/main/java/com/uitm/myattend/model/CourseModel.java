@@ -9,8 +9,6 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class CourseModel {
 
-    @Autowired
-    private Environment env;
     private UserModel user;
     private int user_id;
     private String id;

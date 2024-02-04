@@ -75,7 +75,6 @@ public class CourseService {
     public CourseModel retrieveDetail(Map<String, Object> body) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveDetail((String) body.get("id"));
-            System.out.println((String) body.get("id"));
             if(courseList.size() != 1) {
                 throw new Exception("Course data retrieve error occured! CourseList size: " + courseList.size());
             }
@@ -178,7 +177,6 @@ public class CourseService {
     public List<CourseModel> retrieveAvailableCourseStudent(int uid) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveAvailableCourse(uid);
-            System.out.println(courseList);
             List<CourseModel> courseModelList = new ArrayList<>();
             for(Map<String, String> course : courseList) {
                 CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);

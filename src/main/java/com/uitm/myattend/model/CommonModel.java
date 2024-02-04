@@ -9,8 +9,6 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class CommonModel {
 
-    @Autowired
-    private ResourceLoader resourceLoader;
     private String token;
     private UserModel userModel;
     private String profilePicture;

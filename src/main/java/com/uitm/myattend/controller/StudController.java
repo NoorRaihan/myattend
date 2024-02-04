@@ -169,10 +169,8 @@ public class StudController {
             return null;
         }
 
-        System.out.println("VALIDATION " + authService.authenticate(session));
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
         List<CourseModel> courseList = courseService.retrieveAvailableCourseStudent(commonModel.getUser().getId());
-        System.out.println("AVAILABLE : " + courseList);
         request.setAttribute("availableCourses", courseList);
 
         List<CourseModel> courseList2 = courseService.retrieveRegisteredCourseStudent(commonModel.getUser().getId());
