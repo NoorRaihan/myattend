@@ -107,7 +107,7 @@ public class StudController {
                 return;
             }
 
-            if(studentService.delete(body)) {
+            if(!studentService.delete(body)) {
                 throw new Exception("Failed to delete student data");
             }else {
                 session.setAttribute("success", "Student data deleted successfully");

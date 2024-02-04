@@ -6,6 +6,8 @@ import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+
 @Service
 public class AttendanceService {
 
@@ -43,8 +45,9 @@ public class AttendanceService {
         byte[] key = env.getProperty("app.key").getBytes();
         byte[] data = str.getBytes();
 
-        byte[] xored = xorWithKey(data, key);
-        return FieldUtility.decodeBytesBase64(xored);
+        byte[] decoded = FieldUtility.decodeBytesBase64(data).getBytes();
+        byte[] xored = xorWithKey(decoded, key);
+        return new String(xored, StandardCharsets.UTF_8);
     }
 
     public byte[] xorWithKey(byte[] data, byte[] key) {

@@ -32,6 +32,23 @@ public class LecturerRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveSV() {
+        try {
+            String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +
+                    "INNER JOIN ma_users b ON a.user_id = b.id " +
+                    "WHERE b.role_id = 2";
+
+            int result = commDB.sqlQuery(sql);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public List<Map<String, String>> retrieveConfirmAvailable() {
         try {
             String sql = "SELECT b.*, a.*  FROM ma_lecturers a " +

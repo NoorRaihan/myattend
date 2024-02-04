@@ -294,7 +294,7 @@ uri="jakarta.tags.core" %>
                 class="select select-primary select-sm select-bordered"
               >
                 <option value="">None</option>
-                <c:forEach var="lecturer" items="${lecturers}">
+                <c:forEach var="lecturer" items="${lecturerSv}">
                   <option value="${lecturer.getUser().getId()}">
                     ${lecturer.getUser().getFullname()}
                   </option>
@@ -318,7 +318,7 @@ uri="jakarta.tags.core" %>
           Do you really want to delete this lecturer's information ?
         </p>
         <form action="" method="post">
-          <input type="hidden" name="id" id="id" value="1" />
+          <input type="hidden" name="uid" id="uid" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes

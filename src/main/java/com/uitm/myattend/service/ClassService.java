@@ -5,6 +5,7 @@ import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.ClassRepository;
+import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -42,8 +43,8 @@ public class ClassService {
     public ClassModel retrieveDetail(Map<String, Object> body) {
         try {
 
-            String cid = (String) body.get("id");
-            List<Map<String, String>> classList = classRepository.retrieveByCourse(cid);
+            String id = (String) body.get("id");
+            List<Map<String, String>> classList = classRepository.retrieveDetail(id);
 
             if(classList.size() != 1) {
                 throw new Exception("Data error on class list size : " + classList.size());
@@ -62,9 +63,9 @@ public class ClassService {
         boolean created = false;
         try {
             ClassModel classModel = new ClassModel();
-            String classDate = (String) body.get("class_date");
-            String startTime = classDate + " " + (String) body.get("start_time") + ":00";
-            String endTime = classDate + " " + (String) body.get("end_time") + ":00";
+            String classDate = FieldUtility.getFormatted((String) body.get("class_date"), "yyyy-MM-dd", "yyyyMMdd");
+            String startTime = classDate + ((String) body.get("start_time")).replace(":", "") + "00000";
+            String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
 
             classModel.setId(uuid);
             classModel.setCourse_id((String) body.get("cid"));
@@ -103,6 +104,23 @@ public class ClassService {
             }
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public Map<String, Object> generateAttendanceUnique(Map<String, Object> body) {
+        try {
+            String encrypted;
+            Map<String, Object> respMap = new HashMap<>();
+            ClassModel classModel = retrieveDetail(body);
+            String buildURL = classModel.getId() + "." + FieldUtility.getCurrentTimestamp();
+            encrypted = "myattend" + "." + attendanceService.encryptStringBase64(buildURL);
+            respMap.put("class", classModel);
+            respMap.put("attendanceURL", encrypted);
+
+            return respMap;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

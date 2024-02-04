@@ -151,4 +151,34 @@ public class ClassController {
         }
         response.sendRedirect("/class");
     }
+
+    @GetMapping("/generateQR")
+    @ResponseBody
+    public Map<String, Object> generateQR(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+
+            //ClassModel classModel = classService.retrieveDetail(body);
+            Map<String, Object> uniqueMap = classService.generateAttendanceUnique(body);
+
+            if(uniqueMap == null) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Failed to generate unique id");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+            }
+
+            respMap.put("data", uniqueMap);
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
+    }
 }
