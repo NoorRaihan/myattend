@@ -116,6 +116,7 @@ public class MapperUtility {
         classObj.setId(data.get("ID"));
         classObj.setCourse_id(data.get("COURSE_ID"));
         classObj.setClass_desc(data.get("CLASS_DESC"));
+        classObj.setClass_date(data.get("CLASS_DATE"));
         classObj.setStart_time(data.get("START_TIME"));
         classObj.setEnd_time(data.get("END_TIME"));
         classObj.setVenue(data.get("VENUE"));

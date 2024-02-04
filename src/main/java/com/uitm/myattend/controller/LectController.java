@@ -39,7 +39,9 @@ public class LectController {
         }
 
         List<LecturerModel> lectList = lecturerService.retrieveAll();
+        List<LecturerModel> svList = lecturerService.retrieveSV();
         request.setAttribute("lecturers", lectList);
+        request.setAttribute("lecturerSv", svList);
         request.setAttribute("totalLecturer", lectList.size());
         return "Manage/lecturers";
     }
@@ -108,6 +110,11 @@ public class LectController {
                 return;
             }
 
+            if(!lecturerService.delete(body)) {
+                throw new Exception("Failed to delete lecturer data");
+            }else {
+                session.setAttribute("success", "Lecturer data deleted successfully");
+            }
         }catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", e.getMessage());

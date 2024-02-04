@@ -63,7 +63,7 @@ public class StudentRepository {
 
     public List<Map<String, String>> retrieveByCourse(String cid) {
         try {
-            String sql = "SELECT b.* FROM ma_courses_students a " +
+            String sql = "SELECT c.*, b.* FROM ma_courses_students a " +
                     "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
                     "INNER JOIN ma_users c ON b.user_id = c.id " +
                     "WHERE a.course_id = ?";

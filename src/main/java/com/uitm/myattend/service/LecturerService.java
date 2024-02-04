@@ -45,6 +45,26 @@ public class LecturerService {
         }
     }
 
+    public List<LecturerModel> retrieveSV() {
+        try {
+            List<Map<String, String>> lectList = lecturerRepository.retrieveSV();
+
+            List<LecturerModel> lectModelList = new ArrayList<>();
+            for(Map<String, String> lect : lectList) {
+                LecturerModel lectModel = (LecturerModel) MapperUtility.mapModel(LecturerModel.class, lect);
+                if(lectModel.getSupervisor_id() > 0) {
+                    UserModel svModel = userService.retrieveUserById(Integer.parseInt(lect.get("SUPERVISOR_ID")));
+                    lectModel.setSupervisor(svModel);
+                }
+                lectModelList.add(lectModel);
+            }
+            return lectModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public List<LecturerModel> retrieveAvailableConfirm() {
         try {
             List<Map<String, String>> lectList = lecturerRepository.retrieveConfirmAvailable();
@@ -84,7 +104,7 @@ public class LecturerService {
 
             lecturer.setUser_id(Integer.parseInt((String)body.get("uid")));
             lecturer.setLect_id(Integer.parseInt(lectId));
-            lecturer.setSupervisor_id(body.get("sv").toString().isEmpty() || body.get("sv") == null ?  -1 : Integer.parseInt((String)body.get("sv")));
+            lecturer.setSupervisor_id(body.get("sv") == null || body.get("sv").toString().isEmpty() ?  -1 : Integer.parseInt((String)body.get("sv")));
             lecturer.setStart_date(FieldUtility.getFormatted((String) body.get("startDate"), "yyyy-MM-dd", "yyyyMMdd"));
             lecturer.setQualification((String) body.get("qualify"));
             lecturer.setSalary(Double.parseDouble((String)body.get("salary")));
@@ -154,7 +174,7 @@ public class LecturerService {
         try {
             int uid = Integer.parseInt((String) body.get("uid"));
 
-            if(lecturerRepository.delete(uid, null)) {
+            if(!lecturerRepository.delete(uid, null)) {
                 throw new Exception("Failed to delete lecturer info");
             }
 
