@@ -59,4 +59,51 @@ public class AttendanceRepository {
             return false;
         }
     }
+
+    public boolean update(String classId, int uid, String status) {
+        try {
+            String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+
+            String [] field = {
+                    "status",
+                    "attend_date",
+                    "attend_time",
+                    "updated_at"
+            };
+
+            String []  fieldVal = {
+                    status,
+                    FieldUtility.date2Oracle(FieldUtility.getCurrentDate()),
+                    currTms,
+                    currTms
+            };
+
+            String [] fieldType = {
+                    "varchar",
+                    "date",
+                    "timestamp",
+                    "timestamp"
+            };
+
+            String cond = "class_id = ? AND stud_id = ?";
+            String [] condVal = {
+                    classId,
+                    Integer.toString(uid)
+            };
+            String [] condType = {
+                    "varchar",
+                    "int"
+            };
+
+
+            int result = commDB.update("ma_attendances", field, fieldVal, fieldType, cond, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to update ma_attendances : " + uid);
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -87,6 +87,34 @@ public class StudentRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveDetailByCourse(String cid, int uid) {
+        try {
+            String sql = "SELECT c.*, b.* FROM ma_courses_students a " +
+                    "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
+                    "INNER JOIN ma_users c ON b.user_id = c.id " +
+                    "WHERE a.course_id = ? AND a.stud_id = ?";
+
+            String [] condVal = {
+                    cid,
+                    Integer.toString(uid)
+            };
+
+            String [] condType = {
+                    "varchar",
+                    "int"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result == -1) {
+                throw new Exception("Failed to execute query statement");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public List<Map<String, String>> retrieveRaw(Integer uid, Integer studId) {
         try {
             String [] field = {

@@ -158,4 +158,18 @@ public class StudentService {
             return null;
         }
     }
+
+    public StudentModel retrieveDetailByCourse(String cid, int uid) {
+        try {
+            List<Map<String, String>> studentList = studentRepository.retrieveDetailByCourse(cid, uid);
+
+            if(studentList.isEmpty()) {
+                return null;
+            }
+            return (StudentModel) MapperUtility.mapModel(StudentModel.class, studentList.get(0));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

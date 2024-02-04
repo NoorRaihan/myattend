@@ -4,6 +4,7 @@ import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.service.AttendanceService;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
 import com.uitm.myattend.service.CourseService;
@@ -26,11 +27,13 @@ public class ClassController {
     private final ClassService classService;
     private final CourseService courseService;
     private final AuthService authService;
+    private final AttendanceService attendanceService;
 
-    public ClassController(ClassService classService, CourseService courseService, AuthService authService) {
+    public ClassController(ClassService classService, CourseService courseService, AuthService authService, AttendanceService attendanceService) {
         this.classService = classService;
         this.courseService = courseService;
         this.authService = authService;
+        this.attendanceService = attendanceService;
     }
 
     @GetMapping("")
@@ -51,12 +54,12 @@ public class ClassController {
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-//            if(!authService.authenticate(session)) {
-//                respMap.put("respCode", "00002");
-//                respMap.put("respStatus", "error");
-//                respMap.put("respMessage", "Unauthorized request");
-//                return respMap;
-//            }
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
 
             List<ClassModel> classList = classService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
@@ -90,10 +93,10 @@ public class ClassController {
     public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-//            if(!authService.authenticate(session)) {
-//                response.sendRedirect(request.getContextPath() + "/login");
-//                return null;
-//            }
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return null;
+            }
 
             ClassModel classModel = classService.retrieveDetail(body);
 
@@ -165,6 +168,28 @@ public class ClassController {
             respMap.put("respCode", "000198");
             respMap.put("respStatus", "error");
             respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
+    }
+
+    @PostMapping("/attend")
+    @ResponseBody
+    public Map<String, Object> attendance(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+
+            if(attendanceService.checkAttendance(body)) {
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "Attendance marked");
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", e.getMessage());
         }
         return respMap;
     }
