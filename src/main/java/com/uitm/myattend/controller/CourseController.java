@@ -37,7 +37,7 @@ public class CourseController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
-        
+
         List<CourseModel> courseList = courseService.retrieveAll();
         request.setAttribute("courses", courseList);
 

@@ -312,7 +312,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Add New Class</h3>
         <form id="classAdd" action="/class/store" method="post">
-          <input type="hidden" name="cid" id="c_id" value="1" />
+          <input type="hidden" name="cid" id="c_id" value="7f12b098-35e2-4e4e-bca3-27d74412d73b" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-1/4 grow">
             <div class="label">

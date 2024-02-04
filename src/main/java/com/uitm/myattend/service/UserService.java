@@ -83,7 +83,6 @@ public class UserService {
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
 
-            //System.out.println(file.getOriginalFilename().isEmpty());
             if(file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                 user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
                 if(!fileHandler(file, uid)) {

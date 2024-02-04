@@ -239,7 +239,6 @@ public class UserRepository {
             };
 
             String [] fieldVal = {
-                    Integer.toString(user.getId()),
                     user.getEmail(),
                     user.getUsername(),
                     user.getFullname(),
@@ -252,10 +251,8 @@ public class UserRepository {
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp())
             };
 
-            System.out.println(Arrays.toString(fieldVal));
 
             String [] fieldType = {
-                    "int",
                     "varchar",
                     "varchar",
                     "varchar",
@@ -268,7 +265,10 @@ public class UserRepository {
                     "timestamp"
             };
 
-            int row = commDB.insert("ma_users", field, fieldVal, fieldType);
+            Map<String, String> sqlFunction  = new HashMap<>();
+            sqlFunction.put("id", "uidseq.NEXTVAL");
+
+            int row = commDB.insert("ma_users", field, fieldVal, fieldType, sqlFunction);
             if(row <= 0) {
                 throw new Exception("Failed to insert into ma_users");
             }
@@ -357,7 +357,6 @@ public class UserRepository {
                 fieldType = fieldTypeList.toArray(String[]::new);
             }
 
-            System.out.println(Arrays.toString(fieldval));
 
             String cond = "id = ?";
             String [] condval = {Integer.toString(userModel.getId())};
