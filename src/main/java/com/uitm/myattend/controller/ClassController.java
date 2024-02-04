@@ -51,12 +51,12 @@ public class ClassController {
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-            if(!authService.authenticate(session)) {
-                respMap.put("respCode", "00002");
-                respMap.put("respStatus", "error");
-                respMap.put("respMessage", "Unauthorized request");
-                return respMap;
-            }
+//            if(!authService.authenticate(session)) {
+//                respMap.put("respCode", "00002");
+//                respMap.put("respStatus", "error");
+//                respMap.put("respMessage", "Unauthorized request");
+//                return respMap;
+//            }
 
             List<ClassModel> classList = classService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
@@ -71,15 +71,10 @@ public class ClassController {
                 respMap.put("respMessage", "successfully retrieved");
             }
 
-            List<Object> respList = new ArrayList<>();
-            Map<String, Object> courseMap = new HashMap<>();
-            Map<String, List<ClassModel>> classMap = new HashMap<>();
-
-            courseMap.put("course", courseModel);
-            classMap.put("classes", classList);
-            respList.add(courseMap);
-            respList.add(classMap);
-            respMap.put("data", respList);
+            Map<String, Object> tempMap = new HashMap<>();
+            tempMap.put("course", courseModel);
+            tempMap.put("classes", classList);
+            respMap.put("data", tempMap);
         }catch (Exception e) {
             e.printStackTrace();
             //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
@@ -95,15 +90,15 @@ public class ClassController {
     public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-            if(!authService.authenticate(session)) {
-                response.sendRedirect(request.getContextPath() + "/login");
-                return null;
-            }
+//            if(!authService.authenticate(session)) {
+//                response.sendRedirect(request.getContextPath() + "/login");
+//                return null;
+//            }
 
             ClassModel classModel = classService.retrieveDetail(body);
-            CourseModel courseModel = courseService.retrieveDetail(body);
 
-            if(classModel == null || courseModel == null) {
+
+            if(classModel == null) {
                 respMap.put("respCode", "00001");
                 respMap.put("respStatus", "error");
                 respMap.put("respMessage", "Class List does not found!");
@@ -113,15 +108,7 @@ public class ClassController {
                 respMap.put("respMessage", "successfully retrieved");
             }
 
-            List<Object> respList = new ArrayList<>();
-            Map<String, Object> courseMap = new HashMap<>();
-            Map<String, ClassModel> classMap = new HashMap<>();
-
-            courseMap.put("course", courseModel);
-            classMap.put("class", classModel);
-            respList.add(courseMap);
-            respList.add(classMap);
-            respMap.put("data", respList);
+            respMap.put("data", classModel);
         }catch (Exception e) {
             e.printStackTrace();
             //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");

@@ -124,17 +124,17 @@ public class StudController {
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-            if(!authService.authenticate(session)) {
-                respMap.put("respCode", "00002");
-                respMap.put("respStatus", "error");
-                respMap.put("respMessage", "Unauthorized request");
-                return respMap;
-            }
+//            if(!authService.authenticate(session)) {
+//                respMap.put("respCode", "00002");
+//                respMap.put("respStatus", "error");
+//                respMap.put("respMessage", "Unauthorized request");
+//                return respMap;
+//            }
 
             List<StudentModel> studentList = studentService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
 
-            if(studentList == null) {
+            if(studentList == null || courseModel == null) {
                 respMap.put("respCode", "00001");
                 respMap.put("respStatus", "error");
                 respMap.put("respMessage", "Student list does not found!");
@@ -143,15 +143,11 @@ public class StudController {
                 respMap.put("respStatus", "success");
                 respMap.put("respMessage", "successfully retrieved");
             }
-            List<Object> respList = new ArrayList<>();
-            Map<String, Object> courseMap = new HashMap<>();
-            Map<String, List<StudentModel>> studMap = new HashMap<>();
 
-            courseMap.put("course", courseModel);
-            studMap.put("students", studentList);
-            respList.add(courseMap);
-            respList.add(studMap);
-            respMap.put("data", respList);
+            Map<String, Object> tempMap = new HashMap<>();
+            tempMap.put("course", courseModel);
+            tempMap.put("students", studentList);
+            respMap.put("data", tempMap);
         }catch (Exception e) {
             e.printStackTrace();
             //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");

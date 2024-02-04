@@ -74,12 +74,12 @@ function courseDetails(id) {
         $("#detailBG").removeClass(
           "bg-gradient-to-br from-green-300 to-emerald-500 from-lime-300 to-lime-500 from-purple-300 to-purple-500 from-blue-300 to-blue-500 from-cyan-300 to-cyan-500 from-fuchsia-300 to-fuchsia-500 from-pink-300 to-pink-500 from-yellow-300 to-yellow-500 from-orange-300 to-orange-500 from-red-300 to-red-500"
         );
-        $("#detailBG").addClass(response.data[0].course.colorConfig);
-        $("#courseName").html(response.data[0].course.course_name);
-        $("#courseCode").html(response.data[0].course.course_code);
-        $("#courseLecturer").html(response.data[0].course.course_lecturer);
+        $("#detailBG").addClass(response.data.course.colorConfig);
+        $("#courseName").html(response.data.course.course_name);
+        $("#courseCode").html(response.data.course.course_code);
+        $("#courseLecturer").html(response.data.course.course_lecturer);
         var list = '<ul role="list" class="divide-y divide-gray-200">';
-        for (const dataItem of response.data[1].students) {
+        for (const dataItem of response.data.students) {
           list +=
             "<li>" +
             "<div class='group relative flex items-center px-5 py-6'>" +
@@ -88,17 +88,17 @@ function courseDetails(id) {
             "<div class='relative flex min-w-0 flex-1 items-center'>" +
             "<div class='ml-4 truncate'>" +
             "<p class='truncate text-sm font-medium text-gray-900'>" +
-            dataItem.name +
+            dataItem.user.fullname +
             "</p>" +
             "<p class='truncate text-sm text-gray-500'>Student ID: " +
-            dataItem.id +
+            dataItem.stud_id +
             "</p>" +
             "</div>" +
             "</div>" +
             "</div>" +
             "<div class='relative ml-2 inline-block flex-shrink-0 text-left'>" +
             "<button type='button' class='group relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rmStud' onclick='removeStudent.showModal()' data-id='" +
-            dataItem.id +
+            dataItem.user.id +
             "'>" +
             "<span class='absolute -inset-1.5'></span>" +
             "<span class='flex h-full w-full items-center justify-center rounded-full'>" +
@@ -135,7 +135,7 @@ function courseDetails(id) {
       } else {
         var classList =
           "<ul role='list' class='flex-1 divide-y divide-gray-200 overflow-y-auto'>";
-        for (var dataItem of response.data[1].classes) {
+        for (var dataItem of response.data.classes) {
           classList +=
             "<li>" +
             "<div class='group relative flex items-center px-5 py-6'>" +
@@ -144,13 +144,13 @@ function courseDetails(id) {
             "<div class='relative flex min-w-0 flex-1 items-center'>" +
             "<div class='ml-4 truncate'>" +
             "<p class='truncate text-sm font-medium text-gray-900'>" +
-            dataItem.classId +
+            dataItem.class_desc +
             "</p>" +
             "<p class='truncate text-sm text-gray-500'>" +
-            dataItem.date +
+            dataItem.formattedClassDate +
             "</p>" +
             "<p class='truncate text-sm text-gray-500'>" +
-            dataItem.time +
+            dataItem.formStartTime + " - " + dataItem.formEndTime
             "</p>" +
             "</div>" +
             "</div>" +

@@ -28,7 +28,7 @@ public class FieldUtility {
 
     public static String getCurrentTimestamp() throws ParseException {
         Date curr = new Date();
-        return getFormatted(new Timestamp(curr.getTime()).toString(), "yyyy-MM-dd hh:mm:ss.SSS", "yyyyMMddHHmmssSSS");
+        return getFormatted(new Timestamp(curr.getTime()).toString(), "yyyy-MM-dd HH:mm:ss.SSS", "yyyyMMddHHmmssSSS");
     }
 
 
@@ -43,7 +43,7 @@ public class FieldUtility {
     }
 
     public static String timestamp2Oracle(String timestamp) throws ParseException {
-        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-MM-dd hh:mm:ss.SSS");
+        return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-MM-dd HH:mm:ss.SSS");
     }
 
     public static String date2Oracle(String date) throws ParseException {

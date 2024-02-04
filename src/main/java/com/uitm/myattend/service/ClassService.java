@@ -3,6 +3,7 @@ package com.uitm.myattend.service;
 import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.model.ClassModel;
+import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.utility.FieldUtility;
@@ -15,12 +16,14 @@ public class ClassService {
 
     private final ClassRepository classRepository;
     private final StudentService studentService;
+    private final CourseService courseService;
     private final AttendanceService attendanceService;
 
-    public ClassService(ClassRepository classRepository, StudentService studentService, AttendanceService attendanceService) {
+    public ClassService(ClassRepository classRepository, StudentService studentService, AttendanceService attendanceService, CourseService courseService) {
         this.classRepository = classRepository;
         this.studentService = studentService;
         this.attendanceService = attendanceService;
+        this.courseService = courseService;
     }
 
     public List<ClassModel> retrieveByCourse(Map<String, Object> body) {
@@ -50,7 +53,11 @@ public class ClassService {
                 throw new Exception("Data error on class list size : " + classList.size());
             }
 
-            return (ClassModel) MapperUtility.mapModel(ClassModel.class, classList.get(0));
+            ClassModel classModel = (ClassModel) MapperUtility.mapModel(ClassModel.class, classList.get(0));
+            body.put("id", classModel.getCourse_id());
+            CourseModel courseModel = courseService.retrieveDetail(body);
+            classModel.setCourse(courseModel);
+            return classModel;
 
         }catch (Exception e) {
             e.printStackTrace();

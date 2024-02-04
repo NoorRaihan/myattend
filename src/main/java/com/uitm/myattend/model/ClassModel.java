@@ -1,7 +1,10 @@
 package com.uitm.myattend.model;
 
+import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.text.ParseException;
 
 @Component
 @SessionScope
@@ -87,5 +90,21 @@ public class ClassModel {
 
     public void setClass_date(String class_date) {
         this.class_date = class_date;
+    }
+
+    public String getFormClassDate() throws ParseException {
+        return FieldUtility.getFormatted(this.class_date, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
+    public String getFormattedClassDate() throws ParseException {
+        return FieldUtility.getFormatted(this.class_date, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormStartTime() throws ParseException {
+        return FieldUtility.getFormatted(this.start_time, "yyyy-MM-dd h:m:s", "HH:mm");
+    }
+
+    public String getFormEndTime() throws ParseException {
+        return FieldUtility.getFormatted(this.end_time, "yyyy-MM-dd h:m:s", "HH:mm");
     }
 }
