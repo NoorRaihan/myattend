@@ -167,4 +167,39 @@ public class ClassService {
             return false;
         }
     }
+
+    public List<ClassModel> retrieveActive() {
+        try {
+            String currTms = FieldUtility.getCurrentTimestamp();
+            String currDate = FieldUtility.getCurrentDate();
+
+            List<Map<String, String>> classList = classRepository.retrieveActive(currDate, currTms);
+            List<ClassModel> activeList = new ArrayList<>();
+            for(Map<String, String> data : classList) {
+                ClassModel obj = (ClassModel) MapperUtility.mapModel(ClassModel.class, data);
+                obj.getCourse().setColorConfig(env.getProperty("color." + obj.getCourse().getColor()));
+                activeList.add(obj);
+            }
+            return activeList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<ClassModel> retrieveToday() {
+        try {
+            String currDate = FieldUtility.getCurrentDate();
+
+            List<Map<String, String>> classList = classRepository.retrieveToday(currDate);
+            List<ClassModel> activeList = new ArrayList<>();
+            for(Map<String, String> data : classList) {
+                activeList.add((ClassModel) MapperUtility.mapModel(ClassModel.class, data));
+            }
+            return activeList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }
