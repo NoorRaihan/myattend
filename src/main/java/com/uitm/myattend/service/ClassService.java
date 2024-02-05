@@ -74,7 +74,7 @@ public class ClassService {
             String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
 
             classModel.setId(uuid);
-            classModel.setCourse_id((String) body.get("cid"));
+            classModel.setCourse_id((String) body.get("course_id"));
             classModel.setClass_desc((String) body.get("class_desc"));
             classModel.setClass_date(classDate);
             classModel.setStart_time(startTime);
