@@ -1,9 +1,6 @@
 package com.uitm.myattend.controller;
 
-import com.uitm.myattend.model.ClassModel;
-import com.uitm.myattend.model.CommonModel;
-import com.uitm.myattend.model.CourseModel;
-import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.model.*;
 import com.uitm.myattend.service.AttendanceService;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
@@ -235,5 +232,32 @@ public class ClassController {
             session.setAttribute("error", e.getMessage());
         }
         response.sendRedirect("/class");
+    }
+
+    @GetMapping("/attendList")
+    @ResponseBody
+    public Map<String, Object> attendanceList(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            List<AttendanceModel> attList = attendanceService.retrieveAttendance(body);
+
+            if(attList == null) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Internal server error. Please contact admin for further assistance");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+            }
+            respMap.put("data", attList);
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", e.getMessage());
+        }
+        return respMap;
     }
 }
