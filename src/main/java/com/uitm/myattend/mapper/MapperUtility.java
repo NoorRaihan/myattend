@@ -33,7 +33,13 @@ public class MapperUtility {
 
     private static UserModel userMapper(TreeMap<String, String> data) {
         UserModel userObj = new UserModel();
-        userObj.setId(Integer.parseInt(data.get("ID") == null ? "-1" : data.get("ID")));
+
+        if(data.containsKey("USER_ID")) {
+            userObj.setId(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
+        }else{
+            userObj.setId(Integer.parseInt(data.get("ID") == null ? "-1" : data.get("ID")));
+        }
+
         userObj.setUsername(data.get("USERNAME"));
         userObj.setEmail(data.get("EMAIL"));
         userObj.setPassword(data.get("PASSWORD"));
@@ -113,13 +119,13 @@ public class MapperUtility {
     private static ClassModel classModel(TreeMap<String, String> data) {
         ClassModel classObj = new ClassModel();
 
-        classObj.setId(data.get("ID"));
-        classObj.setCourse_id(data.get("COURSE_ID"));
-        classObj.setClass_desc(data.get("CLASS_DESC"));
-        classObj.setClass_date(data.get("CLASS_DATE"));
-        classObj.setStart_time(data.get("START_TIME"));
-        classObj.setEnd_time(data.get("END_TIME"));
-        classObj.setVenue(data.get("VENUE"));
+        classObj.setId(FieldUtility.checkNull(data.get("ID")));
+        classObj.setCourse_id(FieldUtility.checkNull(data.get("COURSE_ID")));
+        classObj.setClass_desc(FieldUtility.checkNull(data.get("CLASS_DESC")));
+        classObj.setClass_date(FieldUtility.checkNullDate(data.get("CLASS_DATE")));
+        classObj.setStart_time(FieldUtility.checkNullDate(data.get("START_TIME")));
+        classObj.setEnd_time(FieldUtility.checkNullDate(data.get("END_TIME")));
+        classObj.setVenue(FieldUtility.checkNull(data.get("VENUE")));
         classObj.setDeleted_at(FieldUtility.checkNullDate(data.get("DELETED_AT")));
 
         if(data.containsKey("COURSE_CODE")) {
@@ -144,9 +150,9 @@ public class MapperUtility {
             attendanceModel.setClassModel(classModel);
         }
 
-        if(data.containsKey("USERNAME")) {
-            UserModel userModel = userMapper(data);
-            attendanceModel.setUser(userModel);
+        if(data.containsKey("STUD_ID")) {
+            StudentModel studentModel = studentMapper(data);
+            attendanceModel.setStudent(studentModel);
         }
 
         return attendanceModel;

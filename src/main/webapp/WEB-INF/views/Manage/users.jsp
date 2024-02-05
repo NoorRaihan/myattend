@@ -212,6 +212,11 @@ uri="jakarta.tags.core" %>
           </div>
         </div>
         <script>
+          let error = "${sessionScope.error}";
+          if (error != "") {
+            $("#alertMsg").html(error);
+            $("#alert").show().delay(3000).fadeOut();
+          }
           let succ = "${sessionScope.success}";
           if (succ != "") {
             $("#succMsg").html(succ);

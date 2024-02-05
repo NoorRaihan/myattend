@@ -10,10 +10,18 @@ public class AttendanceModel {
     private String class_id;
     private ClassModel classModel;
     private int stud_id;
-    private UserModel user;
+    private StudentModel student;
     private String attend_date;
     private String attend_time;
     private String status;
+
+    public StudentModel getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentModel student) {
+        this.student = student;
+    }
 
     public String getStatus() {
         return status;
@@ -53,14 +61,6 @@ public class AttendanceModel {
 
     public void setStud_id(int stud_id) {
         this.stud_id = stud_id;
-    }
-
-    public UserModel getUser() {
-        return user;
-    }
-
-    public void setUser(UserModel user) {
-        this.user = user;
     }
 
     public String getAttend_date() {

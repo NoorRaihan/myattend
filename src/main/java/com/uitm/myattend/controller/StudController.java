@@ -124,12 +124,12 @@ public class StudController {
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
-//            if(!authService.authenticate(session)) {
-//                respMap.put("respCode", "00002");
-//                respMap.put("respStatus", "error");
-//                respMap.put("respMessage", "Unauthorized request");
-//                return respMap;
-//            }
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
 
             List<StudentModel> studentList = studentService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);

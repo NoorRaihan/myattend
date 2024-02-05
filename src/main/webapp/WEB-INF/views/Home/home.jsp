@@ -59,18 +59,19 @@ uri="jakarta.tags.core" %>
           <div
             class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
+            <c:forEach var="active" items="${activeList}">
             <a href="/qrscan" class="basis-full">
               <div
                 id="clsActive"
-                class="card bg-gradient-to-br from-green-300 to-emerald-500 shadow-lg overflow-hidden"
+                class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
               >
                 <div class="card-body min-w-full">
                   <h1 class="card-title z-10">Active Class</h1>
                   <div class="flex flex-row justify-between z-10">
                     <div class="flex flex-col">
-                      <p class="text-3xl font-bold">CSC584</p>
-                      <p class="text-xl">Enterprise Programming</p>
-                      <p class="text-sm">17 Jan 2024 | 10:00 AM - 11:00 AM</p>
+                      <p class="text-3xl font-bold">${active.getCourse().getCourse_code()}</p>
+                      <p class="text-xl">${active.getCourse().getCourse_name()}</p>
+                      <p class="text-sm">${active.getFormattedClassDate()} | ${active.getFormStartTime()}  - ${active.getFormEndTime()}</p>
                     </div>
                     <div class="flex flex-col">
                       <button
@@ -101,6 +102,7 @@ uri="jakarta.tags.core" %>
                 </div>
               </div>
             </a>
+            </c:forEach>
             <div
               id="clsList"
               class="card card-compact md:basis-2/4 basis-full bg-white shadow-lg grow transition-all"
@@ -139,77 +141,43 @@ uri="jakarta.tags.core" %>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
+                    <c:forEach var="today" items="${todayList}">
                       <tr>
                         <td
                           class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                         >
-                          CSC584
+                          ${today.getCourse().getCourse_code()}
                           <dl class="font-normal lg:hidden">
                             <dd class="mt-1 truncate text-gray-700">
-                              Enterprise Programming
+                              ${today.getCourse().getCourse_name()}
                             </dd>
                             <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                              17 Jan 2024
+                              ${today.getFormattedClassDate()}
                             </dd>
                           </dl>
                         </td>
                         <td
                           class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                         >
-                          Enterprise Programming
+                          ${today.getCourse().getCourse_name()}
                         </td>
                         <td
                           class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                         >
-                          17 Jan 2024
+                          ${today.getFormattedClassDate()}
                         </td>
                         <td
                           class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
                         >
-                          10:00 AM
+                          ${today.getFormStartTime()}
                         </td>
                         <td
                           class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
                         >
-                          11:00 AM
+                          ${today.getFormEndTime()}
                         </td>
                       </tr>
-
-                      <tr>
-                        <td
-                          class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
-                        >
-                          ICT502
-                          <dl class="font-normal lg:hidden">
-                            <dd class="mt-1 truncate text-gray-700">
-                              Database Engineering
-                            </dd>
-                            <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                              17 Jan 2024
-                            </dd>
-                          </dl>
-                        </td>
-                        <td
-                          class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                        >
-                          Database Engineering
-                        </td>
-                        <td
-                          class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                        >
-                          17 Jan 2024
-                        </td>
-                        <td
-                          class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
-                        >
-                          11:00 AM
-                        </td>
-                        <td
-                          class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
-                        >
-                          12:00 PM
-                        </td>
-                      </tr>
+                    </c:forEach>
                     </tbody>
                   </table>
                 </div>

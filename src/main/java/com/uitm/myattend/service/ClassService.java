@@ -7,6 +7,7 @@ import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.utility.FieldUtility;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,14 +16,12 @@ import java.util.*;
 public class ClassService {
 
     private final ClassRepository classRepository;
-    private final StudentService studentService;
     private final CourseService courseService;
-    private final AttendanceService attendanceService;
+    private final Environment env;
 
-    public ClassService(ClassRepository classRepository, StudentService studentService, AttendanceService attendanceService, CourseService courseService) {
+    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService) {
         this.classRepository = classRepository;
-        this.studentService = studentService;
-        this.attendanceService = attendanceService;
+        this.env = env;
         this.courseService = courseService;
     }
 
@@ -75,7 +74,7 @@ public class ClassService {
             String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
 
             classModel.setId(uuid);
-            classModel.setCourse_id((String) body.get("cid"));
+            classModel.setCourse_id((String) body.get("course_id"));
             classModel.setClass_desc((String) body.get("class_desc"));
             classModel.setClass_date(classDate);
             classModel.setStart_time(startTime);
@@ -120,7 +119,7 @@ public class ClassService {
             Map<String, Object> respMap = new HashMap<>();
             ClassModel classModel = retrieveDetail(body);
             String buildURL = classModel.getId() + "." + FieldUtility.getCurrentTimestamp();
-            encrypted = "myattend" + "." + attendanceService.encryptStringBase64(buildURL);
+            encrypted = "myattend" + "." + FieldUtility.encryptStringBase64(env.getProperty("app.key"),buildURL);
             respMap.put("class", classModel);
             respMap.put("attendanceURL", encrypted);
 
@@ -131,4 +130,76 @@ public class ClassService {
         }
     }
 
+    public boolean update(Map<String, Object> body) {
+        try {
+            ClassModel classModel = new ClassModel();
+            String classDate = FieldUtility.getFormatted((String) body.get("class_date"), "yyyy-MM-dd", "yyyyMMdd");
+            String startTime = classDate + ((String) body.get("start_time")).replace(":", "") + "00000";
+            String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
+
+            classModel.setId((String) body.get("id"));
+            classModel.setCourse_id((String) body.get("course_id"));
+            classModel.setClass_desc((String) body.get("class_desc"));
+            classModel.setClass_date(classDate);
+            classModel.setStart_time(startTime);
+            classModel.setEnd_time(endTime);
+            classModel.setVenue((String) body.get("venue"));
+
+            if(!classRepository.update(classModel)) {
+                throw new Exception("Failed to update class info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            String id = (String) body.get("id");
+            if(!classRepository.delete(id)) {
+                throw new Exception("Failed to delete class");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<ClassModel> retrieveActive() {
+        try {
+            String currTms = FieldUtility.getCurrentTimestamp();
+            String currDate = FieldUtility.getCurrentDate();
+
+            List<Map<String, String>> classList = classRepository.retrieveActive(currDate, currTms);
+            List<ClassModel> activeList = new ArrayList<>();
+            for(Map<String, String> data : classList) {
+                ClassModel obj = (ClassModel) MapperUtility.mapModel(ClassModel.class, data);
+                obj.getCourse().setColorConfig(env.getProperty("color." + obj.getCourse().getColor()));
+                activeList.add(obj);
+            }
+            return activeList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<ClassModel> retrieveToday() {
+        try {
+            String currDate = FieldUtility.getCurrentDate();
+
+            List<Map<String, String>> classList = classRepository.retrieveToday(currDate);
+            List<ClassModel> activeList = new ArrayList<>();
+            for(Map<String, String> data : classList) {
+                activeList.add((ClassModel) MapperUtility.mapModel(ClassModel.class, data));
+            }
+            return activeList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }

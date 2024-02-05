@@ -88,7 +88,7 @@ uri="jakarta.tags.core" %>
                             <c:forEach var="course" items="${courses}">
                               <tr>
                                 <td
-                                  class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                                  class="w-full max-w-0 py-4 pl-4 pr-3 courseObjtext-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                                 >
                                   ${course.getCourse_name()}
                                   <dl class="font-normal lg:hidden">

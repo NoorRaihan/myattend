@@ -1,22 +1,33 @@
 package com.uitm.myattend.service;
 
+import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.AttendanceModel;
+import com.uitm.myattend.model.ClassModel;
+import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.AttendanceRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
+    private final UserService userService;
+    private final StudentService studentService;
+    private final ClassService classService;
     private final Environment env;
 
-    public AttendanceService(AttendanceRepository attendanceRepository, Environment env) {
+    public AttendanceService(AttendanceRepository attendanceRepository, Environment env, ClassService classService, UserService userService, StudentService studentService) {
         this.attendanceRepository = attendanceRepository;
+        this.userService = userService;
+        this.studentService = studentService;
         this.env = env;
+        this.classService = classService;
     }
 
     public boolean insert(AttendanceModel attendance) {
@@ -33,29 +44,90 @@ public class AttendanceService {
         }
     }
 
-    public String encryptStringBase64(String str) throws Exception{
-        byte[] key = env.getProperty("app.key").getBytes();
-        byte[] data = str.getBytes();
+    public boolean checkAttendance(Map<String, Object> body) throws Exception{
+        String data = ((String) body.get("data"));
+        String [] dataArr = data.split("\\.");
 
-        byte[] xored = xorWithKey(data, key);
-        return FieldUtility.encodeByteBase64(xored);
-    }
-
-    public String decryptStringBase64(String str) throws Exception{
-        byte[] key = env.getProperty("app.key").getBytes();
-        byte[] data = str.getBytes();
-
-        byte[] decoded = FieldUtility.decodeBytesBase64(data).getBytes();
-        byte[] xored = xorWithKey(decoded, key);
-        return new String(xored, StandardCharsets.UTF_8);
-    }
-
-    public byte[] xorWithKey(byte[] data, byte[] key) {
-        byte[] output = new byte[data.length];
-
-        for(int i=0; i<data.length; i++) {
-            output[i] = (byte) (data[i] ^ key[i % key.length]);
+        if(dataArr.length != 3) {
+            throw new Exception("Invalid request! Insufficient parameter");
         }
-        return output;
+
+        String ind = dataArr[0];
+        String b64 = dataArr[1];
+        String sessId = dataArr[2];
+
+        String tmp = userService.retrieveToken(sessId).get(0).get("user_id");
+
+        if(tmp == null) {
+            throw new Exception("Invalid session request");
+        }
+
+        int uid = Integer.parseInt(tmp);
+
+        if(!ind.equals("myattend")) {
+            throw new Exception("Invalid indicator");
+        }
+
+        String decrypted = FieldUtility.decryptStringBase64(env.getProperty("app.key"), b64);
+        String [] decryptArr = decrypted.split("\\.");
+        System.out.println("Decrypted BASE64: " + decrypted);
+        if(decryptArr.length != 2) {
+            throw new Exception("Invalid request");
+        }
+        String classId = decryptArr[0];
+        long qrTms = Long.parseLong(decryptArr[1]);
+
+        //validate class existing and time validality
+        Map<String, Object> classMap = new HashMap<>();
+        classMap.put("id", classId);
+        ClassModel classModel = classService.retrieveDetail(classMap);
+
+        if(classModel == null) {
+            throw new Exception("Invalid class id!");
+        }
+
+        StudentModel studentModel = studentService.retrieveDetailByCourse(classModel.getCourse_id(), uid);
+        if(studentModel == null) {
+            throw new Exception("Student does not enroll in the course");
+        }
+
+        long currTms = Long.parseLong(FieldUtility.getCurrentTimestamp());
+        long classStart = Long.parseLong(FieldUtility.getFormatted(classModel.getStart_time(), "yyyy-MM-dd h:m:s", "yyyyMMddHHmmssSSS"));
+        long classEnd = Long.parseLong(FieldUtility.getFormatted(classModel.getEnd_time(), "yyyy-MM-dd h:m:s", "yyyyMMddHHmmssSSS"));
+
+        if(currTms < classStart) {
+            throw new Exception("Class has not started yet");
+        }
+
+        if(currTms > classEnd) {
+            throw new Exception("Class attendance already expired");
+        }
+
+        //each qr only valid for 1 minute
+        if(currTms > (qrTms + 100000)) {
+            throw new Exception("Qr ID has expired");
+        }
+
+        //mark as attend the class
+        if(!attendanceRepository.update(classId, uid, "C")) {
+            throw new Exception("Failed to update the attendance");
+        }
+        return true;
+    }
+
+    public List<AttendanceModel> retrieveAttendance(Map<String, Object> body) {
+        try {
+            String classId = (String) body.get("id");
+            List<Map<String, String>> attList =  attendanceRepository.retrieveAttendance(classId);
+
+            List<AttendanceModel> attModelList = new ArrayList<>();
+            for(Map<String, String> data : attList) {
+                attModelList.add((AttendanceModel) MapperUtility.mapModel(AttendanceModel.class, data));
+            }
+            return attModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

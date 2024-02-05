@@ -4,6 +4,7 @@ import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +144,7 @@ public class ClassRepository {
             };
 
             String [] fieldVal = {
-                    classObj.getCourse_id(),
+                    classObj.getClass_desc(),
                     FieldUtility.date2Oracle(classObj.getClass_date()),
                     FieldUtility.timestamp2Oracle(classObj.getStart_time()),
                     FieldUtility.timestamp2Oracle(classObj.getEnd_time()),
@@ -172,7 +173,7 @@ public class ClassRepository {
 
             int result = commDB.update("ma_classes", field, fieldVal, fieldType, cond, condval, condtype);
             if(result <= 0) {
-                throw new Exception("Failed to insert a class record");
+                throw new Exception("Failed to update a class record");
             }
             return true;
         }catch (Exception e) {
@@ -195,6 +196,61 @@ public class ClassRepository {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public List<Map<String, String>> retrieveActive(String currDate, String currTms) {
+        try {
+            String sql = "SELECT a.*, b.* FROM ma_classes a " +
+                    "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "WHERE TO_CHAR(a.START_TIME, 'yyyyMMddHH24MISSff3') <= ? AND ? <= TO_CHAR(a.END_TIME, 'yyyyMMddHH24MISSff3') " +
+                    "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ?";
+
+            String [] condVal = {
+                    currTms,
+                    currTms,
+                    currDate
+            };
+
+            String [] condType = {
+                    "varchar",
+                    "varchar",
+                    "varchar"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve active class record");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveToday(String currDate) {
+        try {
+            String sql = "SELECT a.*, b.* FROM ma_classes a " +
+                    "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "WHERE TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ?";
+
+            String [] condVal = {
+                    currDate
+            };
+
+            String [] condType = {
+                    "varchar"
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve today class record");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 }
