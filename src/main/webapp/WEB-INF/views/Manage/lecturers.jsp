@@ -236,7 +236,7 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="fullname"
                 id="fullname"
-                class="input input-primary input-sm input-bordered"
+                class="input input-primary input-sm input-bordered" disabled
               />
             </label>
             <label class="form-control basis-2/4 grow">
