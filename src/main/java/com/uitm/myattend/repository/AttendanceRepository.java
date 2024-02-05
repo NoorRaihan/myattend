@@ -4,6 +4,11 @@ import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public class AttendanceRepository {
 
@@ -104,6 +109,27 @@ public class AttendanceRepository {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public List<Map<String, String>> retrieveAttendance(String classId) {
+        try {
+            String sql = "SELECT a.*, b.*, c.*, c.id AS USER_ID FROM ma_attendances a " +
+                    "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
+                    "INNER JOIN ma_users c ON b.user_id = c.id " +
+                    "WHERE a.class_id = ?";
+
+            String [] condVal = {classId};
+            String [] condType = {"varchar"};
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve attendances on class : " + classId);
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 }

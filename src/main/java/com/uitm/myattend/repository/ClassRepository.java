@@ -143,7 +143,7 @@ public class ClassRepository {
             };
 
             String [] fieldVal = {
-                    classObj.getCourse_id(),
+                    classObj.getClass_desc(),
                     FieldUtility.date2Oracle(classObj.getClass_date()),
                     FieldUtility.timestamp2Oracle(classObj.getStart_time()),
                     FieldUtility.timestamp2Oracle(classObj.getEnd_time()),
@@ -172,7 +172,7 @@ public class ClassRepository {
 
             int result = commDB.update("ma_classes", field, fieldVal, fieldType, cond, condval, condtype);
             if(result <= 0) {
-                throw new Exception("Failed to insert a class record");
+                throw new Exception("Failed to update a class record");
             }
             return true;
         }catch (Exception e) {

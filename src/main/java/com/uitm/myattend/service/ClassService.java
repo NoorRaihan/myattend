@@ -130,4 +130,41 @@ public class ClassService {
         }
     }
 
+    public boolean update(Map<String, Object> body) {
+        try {
+            ClassModel classModel = new ClassModel();
+            String classDate = FieldUtility.getFormatted((String) body.get("class_date"), "yyyy-MM-dd", "yyyyMMdd");
+            String startTime = classDate + ((String) body.get("start_time")).replace(":", "") + "00000";
+            String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
+
+            classModel.setId((String) body.get("id"));
+            classModel.setCourse_id((String) body.get("course_id"));
+            classModel.setClass_desc((String) body.get("class_desc"));
+            classModel.setClass_date(classDate);
+            classModel.setStart_time(startTime);
+            classModel.setEnd_time(endTime);
+            classModel.setVenue((String) body.get("venue"));
+
+            if(!classRepository.update(classModel)) {
+                throw new Exception("Failed to update class info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            String id = (String) body.get("id");
+            if(!classRepository.delete(id)) {
+                throw new Exception("Failed to delete class");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

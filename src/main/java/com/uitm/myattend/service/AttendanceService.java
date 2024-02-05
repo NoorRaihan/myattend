@@ -1,5 +1,6 @@
 package com.uitm.myattend.service;
 
+import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.model.StudentModel;
@@ -10,8 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AttendanceService {
@@ -70,6 +70,10 @@ public class AttendanceService {
 
         String decrypted = FieldUtility.decryptStringBase64(env.getProperty("app.key"), b64);
         String [] decryptArr = decrypted.split("\\.");
+        System.out.println("Decrypted BASE64: " + decrypted);
+        if(decryptArr.length != 2) {
+            throw new Exception("Invalid request");
+        }
         String classId = decryptArr[0];
         long qrTms = Long.parseLong(decryptArr[1]);
 
@@ -109,5 +113,21 @@ public class AttendanceService {
             throw new Exception("Failed to update the attendance");
         }
         return true;
+    }
+
+    public List<AttendanceModel> retrieveAttendance(Map<String, Object> body) {
+        try {
+            String classId = (String) body.get("id");
+            List<Map<String, String>> attList =  attendanceRepository.retrieveAttendance(classId);
+
+            List<AttendanceModel> attModelList = new ArrayList<>();
+            for(Map<String, String> data : attList) {
+                attModelList.add((AttendanceModel) MapperUtility.mapModel(AttendanceModel.class, data));
+            }
+            return attModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
