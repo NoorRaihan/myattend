@@ -8,6 +8,7 @@ import com.uitm.myattend.service.AttendanceService;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.ClassService;
 import com.uitm.myattend.service.CourseService;
+import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -192,5 +193,47 @@ public class ClassController {
             respMap.put("respMessage", e.getMessage());
         }
         return respMap;
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        try {
+            //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            //FieldUtility.requiredValidator(body, studentRequiredFields());
+            if(!classService.update(body)) {
+                throw new Exception("Failed to save data");
+            }else {
+                session.setAttribute("success", "Data saved");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/class");
+    }
+
+    @PostMapping("/delete")
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        try {
+            //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            //FieldUtility.requiredValidator(body, studentRequiredFields());
+            if(!classService.delete(body)) {
+                throw new Exception("Failed to delete data");
+            }else {
+                session.setAttribute("success", "Data deleted successfully");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/class");
     }
 }

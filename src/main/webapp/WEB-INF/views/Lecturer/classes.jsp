@@ -321,8 +321,8 @@ uri="jakarta.tags.core" %>
     <dialog id="editClass" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Class</h3>
-        <form id="classEdt" action="" method="post">
-          <input type="hidden" name="course_id" id="c_id" value="1" />
+        <form id="classEdt" action="/class/update" method="post">
+          <input type="hidden" name="cid" id="c_id" value="1" />
           <input type="hidden" name="id" id="cls_id" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-1/4 grow">
@@ -332,7 +332,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 id="cls_desc"
-                name="cls_desc"
+                name="class_desc"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -343,7 +343,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="date"
                 id="cls_date"
-                name="cls_date"
+                name="class_date"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -354,7 +354,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="time"
                 id="cls_sTime"
-                name="cls_sTime"
+                name="start_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -365,7 +365,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="time"
                 id="cls_eTime"
-                name="cls_eTime"
+                name="end_time"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -376,7 +376,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 id="cls_venue"
-                name="cls_venue"
+                name="venue"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -394,7 +394,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Class</h3>
         <p class="py-4">Do you really want to delete this class ?</p>
-        <form action="" method="post">
+        <form action="/class/delete" method="post">
           <input type="hidden" name="id" id="del_id" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">

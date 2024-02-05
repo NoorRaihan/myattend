@@ -70,6 +70,10 @@ public class AttendanceService {
 
         String decrypted = FieldUtility.decryptStringBase64(env.getProperty("app.key"), b64);
         String [] decryptArr = decrypted.split("\\.");
+        System.out.println("Decrypted BASE64: " + decrypted);
+        if(decryptArr.length != 2) {
+            throw new Exception("Invalid request");
+        }
         String classId = decryptArr[0];
         long qrTms = Long.parseLong(decryptArr[1]);
 
