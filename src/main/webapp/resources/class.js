@@ -15,7 +15,7 @@ $(document).ready(function () {
     $("#del_id").val(id);
   });
 
-  $(document).on("click", ".viewQR", function () {
+  $(document).on("click", ".qr", function () {
     var id = $(this).data("id");
     generateQR(id);
   });
@@ -246,7 +246,7 @@ function classAttend(id) {
 function generateQR(id) {
   $.ajax({
     url: "/class/generateQR",
-    method: "POST",
+    method: "GET",
     data: { id: id },
     dataType: "json",
     success: function (response) {
@@ -257,8 +257,8 @@ function generateQR(id) {
       } else {
         var details = response.data;
 
-        var strt = new Date(details.start_time);
-        var end = new Date(details.end_time);
+        var strt = new Date(details.class.start_time);
+        var end = new Date(details.class.end_time);
         var options = {
           weekday: "long",
           year: "numeric",
@@ -269,7 +269,7 @@ function generateQR(id) {
           hour12: true,
         };
         var date = strt
-          .toLocaleDateString("en-US", options)
+          .toLocaleDateString("en-GB", options)
           .replace(",", " | ");
 
         // Generate a QR code
@@ -279,7 +279,7 @@ function generateQR(id) {
           level: "H",
           foreground: "#872f7b",
           padding: 25,
-          value: "eppik/evt/" + details.id,
+          value: details.attendenceURL,
         });
 
         // Create a print-friendly window
@@ -287,10 +287,10 @@ function generateQR(id) {
         printWindow.document.open();
         printWindow.document.write('<html data-theme="light">');
         printWindow.document.write(
-          '<html data-theme="light"><head><title>Maklumat Aktiviti</title>'
+          '<html data-theme="light"><head><title>Class QR</title>'
         );
         printWindow.document.write(
-          '<link href="./dist/output.css" rel="stylesheet">'
+          '<link href="/resources/output.css" rel="stylesheet">'
         );
         printWindow.document.write(
           '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">'
@@ -306,14 +306,14 @@ function generateQR(id) {
         );
         printWindow.document.write(
           '<h1 class="text-2xl font-bold text-center">' +
-            details.evt_ttl +
+            details.class.class_desc +
             "</h1>"
         );
         printWindow.document.write(
           '<p class="text-lg font-semibold text-center">' + date + "</p>"
         );
         printWindow.document.write(
-          '<p class="text-center">' + details.evt_loc + "</p>"
+          '<p class="text-center">' + details.class.venue + "</p>"
         );
         printWindow.document.write(
           '<img src="' +
