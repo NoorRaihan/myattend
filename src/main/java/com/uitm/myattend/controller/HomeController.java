@@ -44,4 +44,9 @@ public class HomeController {
         return "Home/qrscan";
     }
 
+    @GetMapping("/utility")
+    public String utilityMgt() {
+        return "Manage/utilities";
+    }
+
 }
