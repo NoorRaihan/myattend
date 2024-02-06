@@ -114,7 +114,7 @@ public class AttendanceRepository {
 
     public List<Map<String, String>> retrieveAttendance(String classId) {
         try {
-            String sql = "SELECT a.*, b.*, c.*, c.id AS USER_ID FROM ma_attendances a " +
+            String sql = "SELECT a.*, b.*, c.*, c.id AS UID FROM ma_attendances a " +
                     "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
                     "INNER JOIN ma_users c ON b.user_id = c.id " +
                     "WHERE a.class_id = ?";
