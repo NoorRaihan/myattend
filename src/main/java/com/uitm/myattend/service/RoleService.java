@@ -2,6 +2,7 @@ package com.uitm.myattend.service;
 
 import com.uitm.myattend.model.RoleModel;
 import com.uitm.myattend.repository.RoleRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
@@ -34,6 +35,49 @@ public class RoleService {
             return roleObj;
         }catch (Exception e) {
             return null;
+        }
+    }
+
+    public void insert(Map<String, Object> body) throws Exception{
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId((String) body.get("id"));
+        roleModel.setId((String) body.get("name"));
+
+        if(!roleRepo.retrieve(Integer.parseInt(roleModel.getId())).isEmpty()) {
+            throw new Exception("Role id already existed");
+        }
+
+        if(!roleRepo.insert(roleModel)) {
+            throw new Exception("Failed to register new role");
+        }
+    }
+
+    public void update(Map<String, Object> body) throws Exception{
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId((String) body.get("id"));
+        roleModel.setId((String) body.get("name"));
+
+        if(!roleRepo.retrieve(Integer.parseInt(roleModel.getId())).isEmpty()) {
+            throw new Exception("Role id already existed");
+        }
+
+        if(!roleRepo.update(roleModel, Integer.parseInt((String) body.get("oriid")))) {
+            throw new Exception("Failed to update role");
+        }
+    }
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            int roleId = Integer.parseInt((String) body.get("id"));
+
+            if(!roleRepo.delete(roleId)) {
+                throw new Exception("Failed to delete role data");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
