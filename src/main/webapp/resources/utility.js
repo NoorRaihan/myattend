@@ -6,7 +6,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".roleDelete", function () {
     var id = $(this).data("id");
-    $("#roleId").val(id);
+    $("#roleid").val(id);
   });
 
   $(document).on("click", ".statusEdit", function () {
@@ -23,8 +23,8 @@ $(document).ready(function () {
 function roleDetails(id) {
   $.ajax({
     method: "GET",
-    url: "",
-    data: { role_id: id },
+    url: "/utility/detail",
+    data: { id: id },
     dataType: "json",
     success: function (response) {
       if (response.respStatus == "error") {
@@ -33,6 +33,7 @@ function roleDetails(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         $("#role_id").val(response.data.id);
+        $("#oriId").val(response.data.id);
         $("#role_name").val(response.data.role_name);
       }
     },
