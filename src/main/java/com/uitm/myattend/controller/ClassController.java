@@ -47,6 +47,19 @@ public class ClassController {
         return "Lecturer/classes";
     }
 
+    @GetMapping("/studentList")
+    public String studList(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
+        request.setAttribute("courses", courseList);
+        return "Lecturer/studentList";
+    }
+
     @GetMapping("/course")
     @ResponseBody
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {

@@ -30,8 +30,78 @@ const html5QrCode = new Html5Qrcode("qrscan");
 const qrCodeSuccessCallback = (decodedText, decodedResult) => {
   /* handle success */
   html5QrCode.stop();
-  var check = decodedText.split("/");
-  var uid = $("#uid").data("id");
+  var check = decodedText.split(".");
+  var sid = $("#id").data("id");
+  let data = decodedText + "." + sid;
+  console.log(data);
+
+  if (check[0] === "myattend") {
+    $.ajax({
+      method: "POST",
+      url: "/class/attend",
+      data: { data: data },
+      dataType: "json",
+      success: function (response) {
+        if (response.respStatus == "error") {
+          $("#icn").attr({
+            src: "https://cdn.lordicon.com/gzaeqxlp.json",
+            trigger: "in",
+            delay: "500",
+            stroke: "bold",
+            state: "in-reveal",
+            colors: "primary:#e83a30,secondary:#e83a30",
+            style: "width:150px;height:150px",
+          });
+          $(".teMsg").html("ERROR");
+          let msg = "(" + response.respCode + ") " + response.respMessage;
+          $(".eMsg").html(msg);
+          $("#attendMsg").showModal();
+        } else {
+          $("#icn").attr({
+            src: "https://cdn.lordicon.com/cdfdnjgp.json",
+            trigger: "in",
+            delay: "500",
+            stroke: "bold",
+            state: "in-reveal",
+            colors: "primary:#16c72e,secondary:#16c72e",
+            style: "width:150px;height:150px",
+          });
+          $(".teMsg").html("SUCCESS");
+          $(".eMsg").html(
+            "Congratulations! Your attendance has been recorded."
+          );
+        }
+      },
+      error: function (response) {
+        $("#icn").attr({
+          src: "https://cdn.lordicon.com/gzaeqxlp.json",
+          trigger: "in",
+          delay: "500",
+          stroke: "bold",
+          state: "in-reveal",
+          colors: "primary:#e83a30,secondary:#e83a30",
+          style: "width:150px;height:150px",
+        });
+        $(".teMsg").html("ERROR");
+        let msg = "(" + response.respCode + ") " + response.respMessage;
+        $(".eMsg").html(msg);
+        $("#attendMsg").showModal();
+      },
+    });
+  } else {
+    $("#icn").attr({
+      src: "https://cdn.lordicon.com/ywkmznae.json",
+      trigger: "in",
+      delay: "500",
+      stroke: "bold",
+      state: "in-reveal",
+      colors: "primary:#e86830,secondary:#e88c30",
+      style: "width:150px;height:150px",
+    });
+    $(".teMsg").html("ERROR");
+    $(".eMsg").html("Sorry, this QR code is invalid");
+    $("#attendMsg").showModal();
+  }
 };
 
 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
