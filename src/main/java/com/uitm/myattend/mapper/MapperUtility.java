@@ -34,8 +34,8 @@ public class MapperUtility {
     private static UserModel userMapper(TreeMap<String, String> data) {
         UserModel userObj = new UserModel();
 
-        if(data.containsKey("USER_ID")) {
-            userObj.setId(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
+        if(data.containsKey("UID")) {
+            userObj.setId(Integer.parseInt(data.get("UID") == null ? "-1" : data.get("UID")));
         }else{
             userObj.setId(Integer.parseInt(data.get("ID") == null ? "-1" : data.get("ID")));
         }
