@@ -116,7 +116,7 @@ uri="jakarta.tags.core" %>
                 >
                   <div class="stat place-items-center basis-1/4 sm:basis-full">
                     <div class="stat-title">Total</div>
-                    <div class="stat-value text-primary">${totalUser}</div>
+                    <div class="stat-value text-primary">${totalClass}</div>
                     <div class="stat-desc">Classes today</div>
                   </div>
                 </div>

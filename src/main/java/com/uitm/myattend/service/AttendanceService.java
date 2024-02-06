@@ -8,9 +8,12 @@ import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.AttendanceRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -21,13 +24,20 @@ public class AttendanceService {
     private final StudentService studentService;
     private final ClassService classService;
     private final Environment env;
+    private ResourceLoader resourceLoader;
 
-    public AttendanceService(AttendanceRepository attendanceRepository, Environment env, ClassService classService, UserService userService, StudentService studentService) {
+    public AttendanceService(AttendanceRepository attendanceRepository,
+                             Environment env,
+                             ClassService classService,
+                             UserService userService,
+                             StudentService studentService,
+                             ResourceLoader resourceLoader) {
         this.attendanceRepository = attendanceRepository;
         this.userService = userService;
         this.studentService = studentService;
         this.env = env;
         this.classService = classService;
+        this.resourceLoader =resourceLoader;
     }
 
     public boolean insert(AttendanceModel attendance) {
@@ -122,7 +132,11 @@ public class AttendanceService {
 
             List<AttendanceModel> attModelList = new ArrayList<>();
             for(Map<String, String> data : attList) {
-                attModelList.add((AttendanceModel) MapperUtility.mapModel(AttendanceModel.class, data));
+                AttendanceModel obj = (AttendanceModel) MapperUtility.mapModel(AttendanceModel.class, data);
+//                Resource resource = resourceLoader.getResource("classpath:");
+//                String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", obj.getStudent().getUser().getProfile_pic());
+//                obj.getStudent().getUser().setProfile_pic(FieldUtility.encodeFileBase64(fullPath));
+                attModelList.add(obj);
             }
             return attModelList;
         }catch (Exception e) {

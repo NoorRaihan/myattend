@@ -8,12 +8,14 @@ import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -40,6 +42,11 @@ public class UserController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+
+        if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
         List<UserModel> userList = userService.retrieveAll(session);
         request.setAttribute("users", userList);
         request.setAttribute("totalUser", userList.size());
@@ -57,6 +64,10 @@ public class UserController {
             if(!authService.authenticate(session)) {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
+            }
+
+            if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
 
             FieldUtility.requiredValidator(body, userRequiredFields());
@@ -94,6 +105,13 @@ public class UserController {
             if(!authService.authenticate(session)) {
                 respMap.put("respCode", "00002");
                 respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthenticated request");
+                return respMap;
+            }
+
+            if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+                respMap.put("respCode", "00099");
+                respMap.put("respStatus", "error");
                 respMap.put("respMessage", "Unauthorized request");
                 return respMap;
             }
@@ -129,6 +147,10 @@ public class UserController {
                 return;
             }
 
+            if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+
             FieldUtility.requiredValidator(body, userRequiredFields());
 
             if(!userService.update(body, file)) {
@@ -144,8 +166,17 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) throws IOException {
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+
             if(!userService.delete(body)) {
                 throw new Exception("Failed to delete user data");
             }else {

@@ -48,7 +48,15 @@ public class ClassController {
     }
 
     @GetMapping("/list")
-    public String classList() {
+    public String classList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+
+        List<ClassModel> todayList = classService.retrieveToday();
+        request.setAttribute("todayList", todayList);
+        request.setAttribute("totalClass", todayList.size());
         return "Student/classList";
     }
 
