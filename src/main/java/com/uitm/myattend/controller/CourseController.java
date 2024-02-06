@@ -185,6 +185,26 @@ public class CourseController {
         response.sendRedirect("/course");
     }
 
+    @PostMapping("/unregister")
+    public void unregister(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            //FieldUtility.requiredValidator(body, courseRequiredFields());
+            if(courseService.unregisterStudent(body)) {
+                session.setAttribute("message", "Student removed");
+            }else {
+                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/course");
+    }
+
     private String [][] courseRequiredFields() {
         return new String[][]{
                 {"c_name", "Course name is required"},

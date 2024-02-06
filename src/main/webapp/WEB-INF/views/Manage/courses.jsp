@@ -700,8 +700,9 @@ uri="jakarta.tags.core" %>
         <p class="py-4">
           Do you really want to remove this student form this course ?
         </p>
-        <form action="#" method="post">
-          <input type="hidden" name="s_id" id="s_id" value="1" />
+        <form action="/course/unregister" method="post">
+          <input type="hidden" name="uid" id="s_id" value="1" />
+          <input type="hidden" name="cid" id="co_id" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
