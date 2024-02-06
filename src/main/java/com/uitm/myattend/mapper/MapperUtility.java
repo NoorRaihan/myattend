@@ -25,6 +25,7 @@ public class MapperUtility {
             case "COURSEMODEL" -> obj = courseModel(tempMap);
             case "CLASSMODEL" -> obj = classModel(tempMap);
             case "ATTENDANCEMODEL" -> obj = attendanceModel(tempMap);
+            case "ROLEMODEL" -> obj = roleMapper(tempMap);
             default -> throw new Exception("Invalid class");
         }
 

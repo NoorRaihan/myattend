@@ -49,13 +49,13 @@ uri="jakarta.tags.core" %>
                             scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                           >
-                            Role Name
+                            Role ID
                           </th>
                           <th
                             scope="col"
                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                           >
-                            Role ID
+                            Role Name
                           </th>
                           <th
                             scope="col"
@@ -66,15 +66,15 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
-                        <c:forEach var="user" items="${users}">
+                        <c:forEach var="role" items="${roles}">
                           <tr>
                             <td
                               class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                             >
-                              ${user.getFullname()}
+                              ${role.getId()}
                             </td>
                             <td class="px-3 py-4 text-sm text-gray-500">
-                              ${user.getRole().getRole_name()}
+                              ${role.getRole_name()}
                             </td>
                             <td
                               class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
@@ -107,7 +107,7 @@ uri="jakarta.tags.core" %>
                                   <li>
                                     <a
                                       onclick="editRole.showModal()"
-                                      data-id="${user.getId()}"
+                                      data-id="${role.getId()}"
                                       class="roleEdit"
                                       >Edit</a
                                     >
@@ -116,7 +116,7 @@ uri="jakarta.tags.core" %>
                                     <a
                                       onclick="deleteRole.showModal()"
                                       class="text-red-600 roleDelete"
-                                      data-id="${user.getId()}"
+                                      data-id="${role.getId()}"
                                       >Delete</a
                                     >
                                   </li>
@@ -166,9 +166,8 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Add New User Role</h3>
         <form
           id="roleAdd"
-          action=""
+          action="/role/create"
           method="post"
-          enctype="multipart/form-data"
         >
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
@@ -177,7 +176,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="role_name"
+                name="name"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -187,7 +186,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="number"
-                name="role_id"
+                name="id"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -203,9 +202,9 @@ uri="jakarta.tags.core" %>
     </dialog>
     <dialog id="editRole" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Edit User</h3>
-        <form action="" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="role_id" id="roleId" value="1" />
+        <h3 class="font-bold text-lg">Edit Role</h3>
+        <form action="/role/update" method="post">
+          <input type="hidden" name="oriid" id="oriId" value="1" />
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
@@ -213,7 +212,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="role_name"
+                name="name"
                 id="role_name"
                 class="input input-primary input-sm input-bordered"
               />
@@ -224,7 +223,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="number"
-                name="role_id"
+                name="id"
                 id="role_id"
                 class="input input-primary input-sm input-bordered"
               />
@@ -243,8 +242,8 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Role</h3>
         <p class="py-4">Do you really want to delete this role ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="role_id" id="roleid" value="1" />
+        <form action="/role/delete" method="post">
+          <input type="hidden" name="id" id="roleid" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes

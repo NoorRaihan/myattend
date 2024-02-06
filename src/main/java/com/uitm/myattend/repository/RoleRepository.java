@@ -78,6 +78,26 @@ public class RoleRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveAll() {
+        try {
+            String [] field = {
+                    "id",
+                    "role_name",
+            };
+
+            List<Map<String, String>> data = commDB.select("ma_roles", field);
+
+            if(data == null) {
+                throw new Exception("Failed to retrieve role");
+            }
+
+            return data;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public boolean update(RoleModel roleModel, int roleId) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
