@@ -72,7 +72,7 @@
           </summary>
           <ul>
             <li><a href="/class">Class Management</a></li>
-            <li><a href="#">Student Management</a></li>
+            <li><a href="/class/studentList">Student List</a></li>
           </ul>
         </details>
       </li>
