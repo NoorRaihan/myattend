@@ -63,7 +63,9 @@ uri="jakarta.tags.core" %>
               <div class="card-body">
                 <div class="card-title justify-between">
                   <h2>User Details</h2>
-                  <button class="btn btn-primary">Edit Profile</button>
+                  <button class="btn btn-sm rounded-full btn-primary">
+                    Edit Profile
+                  </button>
                 </div>
                 <div class="flex flex-wrap gap-3">
                   <label class="form-control basis-full">
@@ -73,18 +75,18 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value="${userFullname}"
+                      value=""
                       disabled
                     />
                   </label>
-                  <label class="form-control basis-full">
+                  <label class="form-control basis-2/5">
                     <div class="label">
                       <span class="label-text">Username</span>
                     </div>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value="${}"
+                      value=""
                       disabled
                     />
                   </label>
