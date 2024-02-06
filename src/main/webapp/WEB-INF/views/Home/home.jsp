@@ -11,6 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
@@ -47,9 +48,14 @@ uri="jakarta.tags.core" %>
                   </div>
                   <div class="mt-5 flex justify-center sm:mt-0">
                     <a
-                      href="#"
+                      id="profileBtn"
                       class="btn btn-sm btn-primary rounded-full text-white"
                       >View Profile</a
+                    >
+                    <a
+                      id="dashboardBtn"
+                      class="btn btn-sm btn-primary rounded-full text-white hidden"
+                      >View Dashboard</a
                     >
                   </div>
                 </div>
@@ -57,20 +63,22 @@ uri="jakarta.tags.core" %>
             </div>
           </section>
           <div
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
+            id="profile"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
           >
-            <div class="card basis-3/5 bg-white shadow-xl">
+            <div class="card basis-3/5 bg-white shadow-xl grow">
               <div class="card-body">
                 <div class="card-title justify-between">
-                  <h2>User Details</h2>
+                  <h2>User Profile</h2>
                   <button class="btn btn-sm rounded-full btn-primary">
                     Edit Profile
                   </button>
                 </div>
+                <p class="mt-4 font-semibold">User Information</p>
                 <div class="flex flex-wrap gap-3">
                   <label class="form-control basis-full">
                     <div class="label">
-                      <span class="label-text">Fullname</span>
+                      <span class="label-text">Full Name</span>
                     </div>
                     <input
                       type="text"
@@ -90,17 +98,162 @@ uri="jakarta.tags.core" %>
                       disabled
                     />
                   </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">E-Mail</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Gender</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Birthdate</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <!-- if user a student -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Student Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Student ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Program</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Intake</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Semester</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                  </div>
+                  <!-- if user a lecturer -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Lecturer Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Lecturer ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Supervisor Name</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Start Date</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Qualification</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Salary</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="card basis-1/5 bg-white shadow-xl">
+            <div class="card basis-1/5 bg-white shadow-xl grow">
               <div class="card-body">
                 <h2 class="card-title">User Stats</h2>
               </div>
             </div>
           </div>
           <div
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
+            id="dashboard"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
             <c:forEach var="active" items="${activeList}">
               <a href="/qrscan" class="basis-full">

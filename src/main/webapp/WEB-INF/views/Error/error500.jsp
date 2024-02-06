@@ -11,7 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
   </head>
   <body class="h-full">
-    <div class="absolute top-0 right-5 -rotate-45">
+    <div class="absolute top-0 right-5 -rotate-45 -z-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -25,7 +25,7 @@ uri="jakarta.tags.core" %>
         />
       </svg>
     </div>
-    <div class="absolute bottom-5 left-0 rotate-12">
+    <div class="absolute bottom-5 left-0 rotate-12 -z-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -39,7 +39,7 @@ uri="jakarta.tags.core" %>
         />
       </svg>
     </div>
-    <div class="absolute top-1/4 left-20 md:left-1/4 rotate-45">
+    <div class="absolute top-1/4 left-20 md:left-1/4 rotate-45 -z-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -53,7 +53,7 @@ uri="jakarta.tags.core" %>
         />
       </svg>
     </div>
-    <div class="absolute bottom-1/4 right-10 md:right-1/4 -rotate-12">
+    <div class="absolute bottom-1/4 right-10 md:right-1/4 -rotate-12 -z-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
