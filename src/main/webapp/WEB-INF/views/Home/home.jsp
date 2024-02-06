@@ -70,7 +70,10 @@ uri="jakarta.tags.core" %>
               <div class="card-body">
                 <div class="card-title justify-between">
                   <h2>User Profile</h2>
-                  <button class="btn btn-sm rounded-full btn-primary">
+                  <button
+                    class="btn btn-sm rounded-full btn-primary"
+                    onclick="editProfile.showModal()"
+                  >
                     Edit Profile
                   </button>
                 </div>
@@ -429,6 +432,90 @@ uri="jakarta.tags.core" %>
 
       <%@ include file="drawer.jsp" %>
     </div>
+    <dialog id="editProfile" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Edit User</h3>
+        <form action="/user/update" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="uid" id="editId" value="1" />
+          <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-full">
+              <div class="label">
+                <span class="label-text">Full Name</span>
+              </div>
+              <input
+                type="text"
+                name="fullname"
+                id="fullname"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Username</span>
+              </div>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Gender</span>
+              </div>
+              <select
+                name="gender"
+                id="gender"
+                class="select select-primary select-sm select-bordered"
+              >
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Birthdate</span>
+              </div>
+              <input
+                type="date"
+                name="birthdate"
+                id="birthdate"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Email</span>
+              </div>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-full grow">
+              <div class="label">
+                <span class="label-text">Profile Picture</span>
+              </div>
+              <input
+                type="file"
+                name="dpImage"
+                id="dpImage"
+                class="file-input file-input-primary file-input-sm file-input-bordered file-input-primary"
+              />
+            </label>
+          </div>
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
