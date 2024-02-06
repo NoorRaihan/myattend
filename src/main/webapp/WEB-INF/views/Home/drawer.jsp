@@ -98,7 +98,7 @@
           </summary>
           <ul>
             <li><a href="/student/register/course">Course Registeration</a></li>
-            <li><a href="#">Class List</a></li>
+            <li><a href="/class/list">Class List</a></li>
           </ul>
         </details>
       </li>

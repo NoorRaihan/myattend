@@ -47,6 +47,11 @@ public class ClassController {
         return "Lecturer/classes";
     }
 
+    @GetMapping("/list")
+    public String classList() {
+        return "Student/classList";
+    }
+
     @GetMapping("/studentList")
     public String studList(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
