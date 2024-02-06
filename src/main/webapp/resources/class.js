@@ -156,7 +156,7 @@ function loadClsList(id) {
 function classAttend(id) {
   $.ajax({
     method: "GET",
-    url: "",
+    url: "/class/attendList",
     data: { id: id },
     dataType: "json",
     success: function (response) {
@@ -168,31 +168,40 @@ function classAttend(id) {
         $("#c_id").val(response.data.id);
         var studList =
           "<ul role='list' class='flex-1 divide-y divide-gray-200 overflow-y-auto'>";
-        for (var student of response.data.students) {
+        for (var stuData of response.data) {
           studList +=
             `<li>
             <div class='group relative flex items-center px-5 py-6'>
               <div class='-m-1 block flex-1 p-1'>
                 <div class='absolute inset-0' aria-hidden='true'></div>
                 <div class='relative flex min-w-0 flex-1 items-center'>
+                  <span class='relative inline-block flex-shrink-0 mr-3'>
+                    <img
+                      class='h-10 w-10 rounded-full'
+                      src='` +
+            stuData.student.user.profile_pic +
+            `'
+                      alt=''
+                    />
+                  </span>
                   <div class='truncate'>
                     <p class='truncate text-sm font-medium text-gray-900'>` +
-            student.name +
+            stuData.student.user.fullname +
             `</p>
                     <p class='truncate text-sm text-gray-500'>` +
-            student.id +
+            stuData.student.user.id +
             `</p>
                   </div>
                 </div>
               </div>
               `;
-          if (student.status == 1) {
+          if (stuData.status == "C") {
             studList += `<div class='relative ml-2 inline-block flex-shrink-0 tooltip' data-tip='Present'>
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='size-7 fill-green-500'>
                   <path fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z' clip-rule='evenodd'>
                 </svg>
               </div>`;
-          } else if (student.status == 2) {
+          } else if (stuData.status == "AB") {
             studList += `<div
             class="relative ml-2 inline-block flex-shrink-0 tooltip"
             data-tip="Absent"
@@ -210,7 +219,7 @@ function classAttend(id) {
               />
             </svg>
           </div>`;
-          } else if (student.status == 3) {
+          } else {
             studList += `<div
             class="relative ml-2 inline-block flex-shrink-0 tooltip"
             data-tip="Absent with reason"
@@ -232,7 +241,7 @@ function classAttend(id) {
           studList += `</div></li>`;
         }
         studList += "</ul>";
-        $("#studentList").html(studList);
+        $("#attendList").html(studList);
       }
     },
     error: function (response) {
@@ -279,8 +288,9 @@ function generateQR(id) {
           level: "H",
           foreground: "#872f7b",
           padding: 25,
-          value: details.attendenceURL,
+          value: details.attendanceURL,
         });
+        console.log(details.attendanceURL);
 
         // Create a print-friendly window
         var printWindow = window.open("", "_blank");

@@ -24,7 +24,7 @@ uri="jakarta.tags.core" %>
             name="menu"
             value="<li class='sm:hidden'>Lecturer</li><li>Class Management</li>"
           />
-          <jsp:param name="title" value="Course Management" />
+          <jsp:param name="title" value="Class Management" />
         </jsp:include>
         <div class="w-auto my-10">
           <section
@@ -123,7 +123,7 @@ uri="jakarta.tags.core" %>
             >
               <div class="card-body">
                 <h1 class="card-title">Student Attendance</h1>
-                <div id="attendence">
+                <div id="attendList">
                   <ul
                     role="list"
                     class="flex-1 divide-y divide-gray-200 overflow-y-auto"
