@@ -11,6 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
@@ -47,9 +48,14 @@ uri="jakarta.tags.core" %>
                   </div>
                   <div class="mt-5 flex justify-center sm:mt-0">
                     <a
-                      href="#"
+                      id="profileBtn"
                       class="btn btn-sm btn-primary rounded-full text-white"
                       >View Profile</a
+                    >
+                    <a
+                      id="dashboardBtn"
+                      class="btn btn-sm btn-primary rounded-full text-white hidden"
+                      >View Dashboard</a
                     >
                   </div>
                 </div>
@@ -57,20 +63,25 @@ uri="jakarta.tags.core" %>
             </div>
           </section>
           <div
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
+            id="profile"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
           >
-            <div class="card basis-3/5 bg-white shadow-xl">
+            <div class="card basis-3/5 bg-white shadow-xl grow">
               <div class="card-body">
                 <div class="card-title justify-between">
-                  <h2>User Details</h2>
-                  <button class="btn btn-sm rounded-full btn-primary">
+                  <h2>User Profile</h2>
+                  <button
+                    class="btn btn-sm rounded-full btn-primary"
+                    onclick="editProfile.showModal()"
+                  >
                     Edit Profile
                   </button>
                 </div>
+                <p class="mt-4 font-semibold">User Information</p>
                 <div class="flex flex-wrap gap-3">
                   <label class="form-control basis-full">
                     <div class="label">
-                      <span class="label-text">Fullname</span>
+                      <span class="label-text">Full Name</span>
                     </div>
                     <input
                       type="text"
@@ -90,17 +101,162 @@ uri="jakarta.tags.core" %>
                       disabled
                     />
                   </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">E-Mail</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Gender</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Birthdate</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value=""
+                      disabled
+                    />
+                  </label>
+                  <!-- if user a student -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Student Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Student ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Program</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Intake</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Semester</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                  </div>
+                  <!-- if user a lecturer -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Lecturer Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Lecturer ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Supervisor Name</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Start Date</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Qualification</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Salary</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value=""
+                        disabled
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="card basis-1/5 bg-white shadow-xl">
+            <div class="card basis-1/5 bg-white shadow-xl grow">
               <div class="card-body">
                 <h2 class="card-title">User Stats</h2>
               </div>
             </div>
           </div>
           <div
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
+            id="dashboard"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
             <c:forEach var="active" items="${activeList}">
               <a href="/qrscan" class="basis-full">
@@ -276,6 +432,90 @@ uri="jakarta.tags.core" %>
 
       <%@ include file="drawer.jsp" %>
     </div>
+    <dialog id="editProfile" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Edit User</h3>
+        <form action="/user/update" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="uid" id="editId" value="1" />
+          <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-full">
+              <div class="label">
+                <span class="label-text">Full Name</span>
+              </div>
+              <input
+                type="text"
+                name="fullname"
+                id="fullname"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Username</span>
+              </div>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Gender</span>
+              </div>
+              <select
+                name="gender"
+                id="gender"
+                class="select select-primary select-sm select-bordered"
+              >
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Birthdate</span>
+              </div>
+              <input
+                type="date"
+                name="birthdate"
+                id="birthdate"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Email</span>
+              </div>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-full grow">
+              <div class="label">
+                <span class="label-text">Profile Picture</span>
+              </div>
+              <input
+                type="file"
+                name="dpImage"
+                id="dpImage"
+                class="file-input file-input-primary file-input-sm file-input-bordered file-input-primary"
+              />
+            </label>
+          </div>
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
