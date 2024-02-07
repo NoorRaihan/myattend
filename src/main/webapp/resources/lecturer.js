@@ -8,6 +8,8 @@ $(document).ready(function () {
     var id = $(this).data("id");
     $("#uid").val(id);
   });
+
+  $("#lecturerDT").DataTable();
 });
 
 function studDetails(id) {
