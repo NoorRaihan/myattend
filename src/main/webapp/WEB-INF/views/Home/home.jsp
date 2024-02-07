@@ -15,7 +15,10 @@ uri="jakarta.tags.core" %>
     <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
-    <c:set var="role" value="${sessionScope.common.getUser().getRole().getId()}" />
+    <c:set
+      var="role"
+      value="${sessionScope.common.getUser().getRole().getId()}"
+    />
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
@@ -24,12 +27,18 @@ uri="jakarta.tags.core" %>
           <jsp:param name="title" value="Home" />
         </jsp:include>
         <div class="w-auto my-10">
-          <section class="mx-4 flex flex-wrap items-start gap-5" aria-labelledby="profile-overview-title">
+          <section
+            class="mx-4 flex flex-wrap items-start gap-5"
+            aria-labelledby="profile-overview-title"
+          >
             <div
               class="overflow-hidden rounded-xl bg-gradient-to-tl from-secondary to-white shadow-lg basis-2/5 grow"
             >
               <div class="p-6">
-                <div id="prfl1" class="sm:flex sm:items-center sm:justify-between">
+                <div
+                  id="prfl1"
+                  class="sm:flex sm:items-center sm:justify-between"
+                >
                   <div id="prfl2" class="sm:flex sm:space-x-5">
                     <div class="flex-shrink-0">
                       <img
@@ -38,7 +47,10 @@ uri="jakarta.tags.core" %>
                         alt=""
                       />
                     </div>
-                    <div id="prfl3" class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                    <div
+                      id="prfl3"
+                      class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left"
+                    >
                       <p class="text-sm font-medium text-gray-600">Welcome,</p>
                       <p class="text-xl font-bold text-gray-900 sm:text-2xl">
                         ${userFullname}
@@ -63,7 +75,10 @@ uri="jakarta.tags.core" %>
                 </div>
               </div>
             </div>
-            <div id="profile" class="card basis-2/4 bg-white shadow-xl grow hidden">
+            <div
+              id="profile"
+              class="card basis-2/4 bg-white shadow-xl grow hidden"
+            >
               <div class="card-body">
                 <div class="card-title justify-between">
                   <h2>User Profile</h2>
@@ -78,7 +93,9 @@ uri="jakarta.tags.core" %>
                 <div class="flex flex-wrap gap-3">
                   <label class="form-control basis-full">
                     <div class="label">
-                      <span class="label-text font-semibold text-primary">Full Name</span>
+                      <span class="label-text font-semibold text-primary"
+                        >Full Name</span
+                      >
                     </div>
                     <input
                       type="text"
@@ -89,7 +106,9 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text font-semibold text-primary">Username</span>
+                      <span class="label-text font-semibold text-primary"
+                        >Username</span
+                      >
                     </div>
                     <input
                       type="text"
@@ -100,7 +119,9 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text font-semibold text-primary">E-Mail</span>
+                      <span class="label-text font-semibold text-primary"
+                        >E-Mail</span
+                      >
                     </div>
                     <input
                       type="text"
@@ -111,7 +132,9 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text font-semibold text-primary">Gender</span>
+                      <span class="label-text font-semibold text-primary"
+                        >Gender</span
+                      >
                     </div>
                     <input
                       type="text"
@@ -122,7 +145,9 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text font-semibold text-primary">Birthdate</span>
+                      <span class="label-text font-semibold text-primary"
+                        >Birthdate</span
+                      >
                     </div>
                     <input
                       type="text"
@@ -132,120 +157,140 @@ uri="jakarta.tags.core" %>
                     />
                   </label>
                   <c:if test="${role == 3}">
-                  <!-- if user a student -->
-                  <div class="basis-full flex flex-wrap gap-3">
-                    <p class="mt-4 font-bold basis-full">
-                      Student Information
-                    </p>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Student ID</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${studentProfile.getStud_id()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Program</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${studentProfile.getProgram()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Intake</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${studentProfile.getIntake()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Semester</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${studentProfile.getSemester()}"
-                        disabled
-                      />
-                    </label>
-                  </div>
+                    <!-- if user a student -->
+                    <div class="basis-full flex flex-wrap gap-3">
+                      <p class="mt-4 font-bold basis-full">
+                        Student Information
+                      </p>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Student ID</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${studentProfile.getStud_id()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Program</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${studentProfile.getProgram()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Intake</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${studentProfile.getIntake()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Semester</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${studentProfile.getSemester()}"
+                          disabled
+                        />
+                      </label>
+                    </div>
                   </c:if>
                   <c:if test="${role == 2}">
-                  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-                  <!-- if user a lecturer -->
-                  <div class="basis-full flex flex-wrap gap-3">
-                    <p class="mt-4 font-bold basis-full">
-                      Lecturer Information
-                    </p>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Lecturer ID</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${lecturerProfile.getLect_id()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Supervisor Name</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${lecturerProfile.getSupervisor().getFullname()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Start Date</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${lecturerProfile.getFormatStartDate()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Qualification</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${lecturerProfile.getQualification()}"
-                        disabled
-                      />
-                    </label>
-                    <label class="form-control basis-2/5">
-                      <div class="label">
-                        <span class="label-text font-semibold text-primary">Salary</span>
-                      </div>
-                      <input
-                        type="text"
-                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value="${lecturerProfile.getSalary()}"
-                        disabled
-                      />
-                    </label>
-                  </div>
+                    <script
+                      src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"
+                    ></script>
+                    <!-- if user a lecturer -->
+                    <div class="basis-full flex flex-wrap gap-3">
+                      <p class="mt-4 font-bold basis-full">
+                        Lecturer Information
+                      </p>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Lecturer ID</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${lecturerProfile.getLect_id()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Supervisor Name</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${lecturerProfile.getSupervisor().getFullname()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Start Date</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${lecturerProfile.getFormatStartDate()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Qualification</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${lecturerProfile.getQualification()}"
+                          disabled
+                        />
+                      </label>
+                      <label class="form-control basis-2/5">
+                        <div class="label">
+                          <span class="label-text font-semibold text-primary"
+                            >Salary</span
+                          >
+                        </div>
+                        <input
+                          type="text"
+                          class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                          value="${lecturerProfile.getSalary()}"
+                          disabled
+                        />
+                      </label>
+                    </div>
                   </c:if>
                 </div>
               </div>
@@ -310,7 +355,10 @@ uri="jakarta.tags.core" %>
                   </a>
                 </c:when>
                 <c:when test="${role == 2}">
-                  <a class="basis-full" onclick="generateQR('${active.getId()}')">
+                  <a
+                    class="basis-full"
+                    onclick="generateQR('${active.getId()}')"
+                  >
                     <div
                       id="clsActive"
                       class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
@@ -451,21 +499,27 @@ uri="jakarta.tags.core" %>
               <div class="card-body">
                 <h1 class="card-title">Attendance Perfomance</h1>
                 <div class="flex flex-wrap">
-                <c:forEach var="course" items="${courses}">
-                  <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
+                  <c:forEach var="course" items="${courses}">
                     <div
-                      class="radial-progress ${course.getColorConfig()} text-transparent bg-clip-text"
-                      style="--value: ${perf.get(course.getCourse_code())}"
-                      role="progressbar"
+                      class="flex flex-row min-w-fit justify-center mt-5 mx-4"
                     >
-                      ${perf.get(course.getCourse_code())}%
+                      <div
+                        class="radial-progress text-primary"
+                        style="--value: ${perf.get(course.getCourse_code())}"
+                        role="progressbar"
+                      >
+                        ${perf.get(course.getCourse_code())}%
+                      </div>
+                      <div class="flex flex-col ml-4">
+                        <p
+                          class="text-xl font-bold ${course.getColorConfig()} text-transparent bg-clip-text"
+                        >
+                          ${course.getCourse_code()}
+                        </p>
+                        <p class="text-sm">${course.getCourse_name()}</p>
+                      </div>
                     </div>
-                    <div class="flex flex-col ml-4">
-                      <p class="text-xl font-bold">${course.getCourse_code()}</p>
-                      <p class="text-sm">${course.getCourse_name()}</p>
-                    </div>
-                  </div>
-                </c:forEach>
+                  </c:forEach>
                 </div>
               </div>
             </div>
@@ -478,7 +532,11 @@ uri="jakarta.tags.core" %>
     <dialog id="editProfile" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit User</h3>
-        <form action="/user/profile" method="post" enctype="multipart/form-data">
+        <form
+          action="/user/profile"
+          method="post"
+          enctype="multipart/form-data"
+        >
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
