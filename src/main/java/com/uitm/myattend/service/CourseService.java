@@ -4,6 +4,7 @@ import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.repository.CourseRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,15 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final StudentService studentService;
+    private final ClassRepository classRepository;
     private final Environment env;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository, StudentService studentService, Environment env) {
+    public CourseService(CourseRepository courseRepository, StudentService studentService, Environment env, ClassRepository classRepository) {
         this.courseRepository = courseRepository;
         this.studentService = studentService;
         this.env = env;
+        this.classRepository = classRepository;
     }
 
     public List<CourseModel> retrieveAll() {
@@ -144,6 +147,9 @@ public class CourseService {
                 throw new Exception("Failed to update course status");
             }
 
+            if(!classRepository.changeStatus(cid, isDisable)) {
+                throw new Exception("Failed to update class status");
+            }
             return true;
         }catch (Exception e) {
             e.printStackTrace();

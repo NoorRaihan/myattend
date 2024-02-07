@@ -49,10 +49,10 @@ public class HomeService {
             request.setAttribute("userFullname", userObj.getFullname());
             request.setAttribute("userRolename", userObj.getRole().getRole_name());
 
-            List<ClassModel> activeList = classService.retrieveActive();
+            List<ClassModel> activeList = classService.retrieveActive(session);
             request.setAttribute("activeList", activeList);
 
-            List<ClassModel> todayList = classService.retrieveToday();
+            List<ClassModel> todayList = classService.retrieveToday(session);
             request.setAttribute("todayList", todayList);
 
             UserModel userProfile = userService.retrieveUserById(common.getUser().getId());

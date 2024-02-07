@@ -63,7 +63,8 @@ public class ClassController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        List<ClassModel> todayList = classService.retrieveToday();
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId());
         request.setAttribute("todayList", todayList);
         request.setAttribute("totalClass", todayList.size());
         return "Student/classList";
@@ -137,7 +138,6 @@ public class ClassController {
 
             ClassModel classModel = classService.retrieveDetail(body);
 
-
             if(classModel == null) {
                 respMap.put("respCode", "00001");
                 respMap.put("respStatus", "error");
@@ -167,6 +167,7 @@ public class ClassController {
                 return;
             }
 
+            FieldUtility.requiredValidator(body, classRequiredFields());
             if(!classService.insert(body)) {
                 session.setAttribute("error", "Failed to register new class");
             }else {
@@ -184,6 +185,12 @@ public class ClassController {
     public Map<String, Object> generateQR(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
 
             //ClassModel classModel = classService.retrieveDetail(body);
             Map<String, Object> uniqueMap = classService.generateAttendanceUnique(body);
@@ -214,6 +221,12 @@ public class ClassController {
     public Map<String, Object> attendance(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthorized request");
+                return respMap;
+            }
 
             if(attendanceService.checkAttendance(body)) {
                 respMap.put("respCode", "00000");
@@ -240,7 +253,7 @@ public class ClassController {
                 return;
             }
 
-            //FieldUtility.requiredValidator(body, studentRequiredFields());
+            FieldUtility.requiredValidator(body, classRequiredFields());
             if(!classService.update(body)) {
                 throw new Exception("Failed to save data");
             }else {
@@ -298,5 +311,16 @@ public class ClassController {
             respMap.put("respMessage", e.getMessage());
         }
         return respMap;
+    }
+
+    private String [][] classRequiredFields() {
+        String [][] field = {
+                {"class_desc", "Class name is required"},
+                {"venue", "Venue is required"},
+                {"start_time", "Class start time is required"},
+                {"end_time", "Class end time is required"},
+                {"class_date", "Class date is required"}
+        };
+        return field;
     }
 }
