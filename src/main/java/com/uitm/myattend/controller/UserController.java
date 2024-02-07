@@ -249,6 +249,7 @@ public class UserController {
             FieldUtility.requiredValidator(body, profileRequiredFields());
             body.put("uid", Integer.toString(common.getUser().getId()));
             body.put("role", Integer.toString(common.getUser().getRole_id()));
+
             if(!userService.update(body, file)) {
                 throw new Exception("Failed to update profile");
             }else {

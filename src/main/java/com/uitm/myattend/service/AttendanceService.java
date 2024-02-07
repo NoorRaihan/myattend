@@ -1,12 +1,10 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
-import com.uitm.myattend.model.AttendanceModel;
-import com.uitm.myattend.model.ClassModel;
-import com.uitm.myattend.model.StudentModel;
-import com.uitm.myattend.model.UserModel;
+import com.uitm.myattend.model.*;
 import com.uitm.myattend.repository.AttendanceRepository;
 import com.uitm.myattend.utility.FieldUtility;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -23,6 +21,7 @@ public class AttendanceService {
     private final UserService userService;
     private final StudentService studentService;
     private final ClassService classService;
+    private final CourseService courseService;
     private final Environment env;
     private ResourceLoader resourceLoader;
 
@@ -31,13 +30,15 @@ public class AttendanceService {
                              ClassService classService,
                              UserService userService,
                              StudentService studentService,
-                             ResourceLoader resourceLoader) {
+                             ResourceLoader resourceLoader,
+                             CourseService courseService) {
         this.attendanceRepository = attendanceRepository;
         this.userService = userService;
         this.studentService = studentService;
         this.env = env;
         this.classService = classService;
         this.resourceLoader =resourceLoader;
+        this.courseService = courseService;
     }
 
     public boolean insert(AttendanceModel attendance) {
@@ -142,6 +143,38 @@ public class AttendanceService {
         }catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public List<AttendanceModel> retrieveAttended() {
+        try {
+            return Collections.emptyList();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public Map<String, String> attendancePerformance(List<CourseModel> courseList, HttpSession session) {
+        try {
+            CommonModel commonModel = (CommonModel) session.getAttribute("common");
+
+            Map<String, String> attMap = new HashMap<>();
+            if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
+                for(CourseModel course : courseList) {
+                    Map<String, String> perc = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId()).get(0);
+                    attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                }
+            }else{
+                for(CourseModel course : courseList) {
+                    Map<String, String> perc = attendanceRepository.retrievePerformance(course.getId()).get(0);
+                    attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                }
+            }
+            return attMap;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyMap();
         }
     }
 }
