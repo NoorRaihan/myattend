@@ -11,6 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <script src="https://unpkg.com/@barba/core"></script>
     <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
