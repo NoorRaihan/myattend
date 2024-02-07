@@ -12,6 +12,11 @@ $(document).ready(function () {
     $("#profile").addClass("hidden");
     $("#dashboard").removeClass("hidden");
   });
+
+  $(document).on("click", ".prflBtn", function () {
+    var id = $(this).data("id");
+    usrDetails(id);
+  });
 });
 
 function usrDetails(id) {
@@ -26,7 +31,6 @@ function usrDetails(id) {
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
-        $("#editId").val(response.data.id);
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
         $("#gender option[value='" + response.data.gender + "']").prop(

@@ -71,7 +71,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-title justify-between">
                   <h2>User Profile</h2>
                   <button
-                    class="btn btn-sm rounded-full btn-primary"
+                    class="btn btn-sm rounded-full btn-primary prflBtn"
                     onclick="editProfile.showModal()"
                   >
                     Edit Profile
@@ -435,8 +435,7 @@ uri="jakarta.tags.core" %>
     <dialog id="editProfile" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit User</h3>
-        <form action="/user/update" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="uid" id="editId" value="1" />
+        <form action="/user/profile" method="post" enctype="multipart/form-data">
           <div class="flex flex-wrap gap-3">
             <label class="form-control basis-full">
               <div class="label">
