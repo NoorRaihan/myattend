@@ -46,7 +46,6 @@ public class HomeController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
-            //throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         homeService.index(session, request);
@@ -58,7 +57,6 @@ public class HomeController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
-            //throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         if(!authService.authorize(session, FieldUtility.STUDENT_ROLE)) {
@@ -68,7 +66,15 @@ public class HomeController {
     }
 
     @GetMapping("/utility")
-    public String utilityMgt(HttpServletRequest request, HttpServletResponse response) {
+    public String utilityMgt(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+
+        if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         List<RoleModel> roleList = roleService.retrieveAll();
         request.setAttribute("roles", roleList);
         return "Manage/utilities";

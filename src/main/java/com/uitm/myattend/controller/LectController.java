@@ -4,18 +4,21 @@ import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.LecturerService;
+import com.uitm.myattend.utility.FieldUtility;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -36,6 +39,9 @@ public class LectController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
+        }
+        if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         List<LecturerModel> lectList = lecturerService.retrieveAll();
