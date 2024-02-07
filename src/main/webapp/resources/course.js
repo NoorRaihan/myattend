@@ -21,7 +21,9 @@ $(document).ready(function () {
 
   $(document).on("click", ".rmStud", function () {
     var id = $(this).data("id");
+    var cid = $(this).data("cid");
     $("#s_id").val(id);
+    $("#co_id").val(cid);
   });
 });
 
@@ -98,7 +100,7 @@ function courseDetails(id) {
             "</div>" +
             "<div class='relative ml-2 inline-block flex-shrink-0 text-left'>" +
             "<button type='button' class='group relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rmStud' onclick='removeStudent.showModal()' data-id='" +
-            dataItem.user.id +
+            dataItem.user.id + "' data-cid='" + response.data.course.id +
             "'>" +
             "<span class='absolute -inset-1.5'></span>" +
             "<span class='flex h-full w-full items-center justify-center rounded-full'>" +

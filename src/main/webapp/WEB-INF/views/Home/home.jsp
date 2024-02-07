@@ -11,6 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
@@ -47,9 +48,14 @@ uri="jakarta.tags.core" %>
                   </div>
                   <div class="mt-5 flex justify-center sm:mt-0">
                     <a
-                      href="#"
+                      id="profileBtn"
                       class="btn btn-sm btn-primary rounded-full text-white"
-                      >Edit Profile</a
+                      >View Profile</a
+                    >
+                    <a
+                      id="dashboardBtn"
+                      class="btn btn-sm btn-primary rounded-full text-white hidden"
+                      >View Dashboard</a
                     >
                   </div>
                 </div>
@@ -57,51 +63,252 @@ uri="jakarta.tags.core" %>
             </div>
           </section>
           <div
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
+            id="profile"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
           >
-            <c:forEach var="active" items="${activeList}">
-            <a href="/qrscan" class="basis-full">
-              <div
-                id="clsActive"
-                class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
-              >
-                <div class="card-body min-w-full">
-                  <h1 class="card-title z-10">Active Class</h1>
-                  <div class="flex flex-row justify-between z-10">
-                    <div class="flex flex-col">
-                      <p class="text-3xl font-bold">${active.getCourse().getCourse_code()}</p>
-                      <p class="text-xl">${active.getCourse().getCourse_name()}</p>
-                      <p class="text-sm">${active.getFormattedClassDate()} | ${active.getFormStartTime()}  - ${active.getFormEndTime()}</p>
+            <div class="card basis-3/5 bg-white shadow-xl grow">
+              <div class="card-body">
+                <div class="card-title justify-between">
+                  <h2>User Profile</h2>
+                  <button
+                    class="btn btn-sm rounded-full btn-primary"
+                    onclick="editProfile.showModal()"
+                  >
+                    Edit Profile
+                  </button>
+                </div>
+                <p class="mt-4 font-semibold">User Information</p>
+                <div class="flex flex-wrap gap-3">
+                  <label class="form-control basis-full">
+                    <div class="label">
+                      <span class="label-text">Full Name</span>
                     </div>
-                    <div class="flex flex-col">
-                      <button
-                        class="btn btn-success rounded-full z-10 text-white"
-                      >
-                        Register Attendance
-                      </button>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value="${userProfile.getFullname()}"
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Username</span>
                     </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value="${userProfile.getUsername()}"
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">E-Mail</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value="${userProfile.getEmail()}"
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Gender</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value="${userProfile.getGender()}"
+                      disabled
+                    />
+                  </label>
+                  <label class="form-control basis-2/5">
+                    <div class="label">
+                      <span class="label-text">Birthdate</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                      value="${userProfile.getFormatBirthDate()}"
+                      disabled
+                    />
+                  </label>
+                  <!-- if user a student -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Student Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Student ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${studentProfile.getStud_id()}"
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Program</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${studentProfile.getProgram()}"
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Intake</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${studentProfile.getIntake()}"
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Semester</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${studentProfile.getSemester()}"
+                        disabled
+                      />
+                    </label>
                   </div>
-                  <div class="absolute -inset-y-16 -right-10 sm:right-20">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="size-72 fill-slate-200"
-                    >
-                      <path
-                        d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
+                  <!-- if user a lecturer -->
+                  <div class="basis-full flex flex-wrap gap-3">
+                    <p class="mt-4 font-semibold basis-full">
+                      Lecturer Information
+                    </p>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Lecturer ID</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${lecturerProfile.getLect_id()}"
+                        disabled
                       />
-                      <path
-                        d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Supervisor Name</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${lecturerProfile.getSupervisor().getFullname()}"
+                        disabled
                       />
-                      <path
-                        d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Start Date</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${lecturerProfile.getFormatStartDate()}"
+                        disabled
                       />
-                    </svg>
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Qualification</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${lecturerProfile.getQualification()}"
+                        disabled
+                      />
+                    </label>
+                    <label class="form-control basis-2/5">
+                      <div class="label">
+                        <span class="label-text">Salary</span>
+                      </div>
+                      <input
+                        type="text"
+                        class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
+                        value="${lecturerProfile.getSalary()}"
+                        disabled
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
-            </a>
+            </div>
+            <div class="card basis-1/5 bg-white shadow-xl grow">
+              <div class="card-body">
+                <h2 class="card-title">User Stats</h2>
+              </div>
+            </div>
+          </div>
+          <div
+            id="dashboard"
+            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
+          >
+            <c:forEach var="active" items="${activeList}">
+              <a href="/qrscan" class="basis-full">
+                <div
+                  id="clsActive"
+                  class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
+                >
+                  <div class="card-body min-w-full">
+                    <h1 class="card-title z-10">Active Class</h1>
+                    <div class="flex flex-row justify-between z-10">
+                      <div class="flex flex-col">
+                        <p class="text-3xl font-bold">
+                          ${active.getCourse().getCourse_code()}
+                        </p>
+                        <p class="text-xl">
+                          ${active.getCourse().getCourse_name()}
+                        </p>
+                        <p class="text-sm">
+                          ${active.getFormattedClassDate()} |
+                          ${active.getFormStartTime()} -
+                          ${active.getFormEndTime()}
+                        </p>
+                      </div>
+                      <div class="flex flex-col">
+                        <button
+                          class="btn btn-success rounded-full z-10 text-white"
+                        >
+                          Register Attendance
+                        </button>
+                      </div>
+                    </div>
+                    <div class="absolute -inset-y-16 -right-10 sm:right-20">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="size-72 fill-slate-200"
+                      >
+                        <path
+                          d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
+                        />
+                        <path
+                          d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
+                        />
+                        <path
+                          d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </a>
             </c:forEach>
             <div
               id="clsList"
@@ -141,43 +348,43 @@ uri="jakarta.tags.core" %>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
-                    <c:forEach var="today" items="${todayList}">
-                      <tr>
-                        <td
-                          class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
-                        >
-                          ${today.getCourse().getCourse_code()}
-                          <dl class="font-normal lg:hidden">
-                            <dd class="mt-1 truncate text-gray-700">
-                              ${today.getCourse().getCourse_name()}
-                            </dd>
-                            <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                              ${today.getFormattedClassDate()}
-                            </dd>
-                          </dl>
-                        </td>
-                        <td
-                          class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                        >
-                          ${today.getCourse().getCourse_name()}
-                        </td>
-                        <td
-                          class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                        >
-                          ${today.getFormattedClassDate()}
-                        </td>
-                        <td
-                          class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
-                        >
-                          ${today.getFormStartTime()}
-                        </td>
-                        <td
-                          class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
-                        >
-                          ${today.getFormEndTime()}
-                        </td>
-                      </tr>
-                    </c:forEach>
+                      <c:forEach var="today" items="${todayList}">
+                        <tr>
+                          <td
+                            class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                          >
+                            ${today.getCourse().getCourse_code()}
+                            <dl class="font-normal lg:hidden">
+                              <dd class="mt-1 truncate text-gray-700">
+                                ${today.getCourse().getCourse_name()}
+                              </dd>
+                              <dd class="mt-1 truncate text-gray-500 sm:hidden">
+                                ${today.getFormattedClassDate()}
+                              </dd>
+                            </dl>
+                          </td>
+                          <td
+                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                          >
+                            ${today.getCourse().getCourse_name()}
+                          </td>
+                          <td
+                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                          >
+                            ${today.getFormattedClassDate()}
+                          </td>
+                          <td
+                            class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
+                          >
+                            ${today.getFormStartTime()}
+                          </td>
+                          <td
+                            class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
+                          >
+                            ${today.getFormEndTime()}
+                          </td>
+                        </tr>
+                      </c:forEach>
                     </tbody>
                   </table>
                 </div>
@@ -225,6 +432,90 @@ uri="jakarta.tags.core" %>
 
       <%@ include file="drawer.jsp" %>
     </div>
+    <dialog id="editProfile" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Edit User</h3>
+        <form action="/user/update" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="uid" id="editId" value="1" />
+          <div class="flex flex-wrap gap-3">
+            <label class="form-control basis-full">
+              <div class="label">
+                <span class="label-text">Full Name</span>
+              </div>
+              <input
+                type="text"
+                name="fullname"
+                id="fullname"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Username</span>
+              </div>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
+                <span class="label-text">Gender</span>
+              </div>
+              <select
+                name="gender"
+                id="gender"
+                class="select select-primary select-sm select-bordered"
+              >
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Birthdate</span>
+              </div>
+              <input
+                type="date"
+                name="birthdate"
+                id="birthdate"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-2/4 grow">
+              <div class="label">
+                <span class="label-text">Email</span>
+              </div>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-full grow">
+              <div class="label">
+                <span class="label-text">Profile Picture</span>
+              </div>
+              <input
+                type="file"
+                name="dpImage"
+                id="dpImage"
+                class="file-input file-input-primary file-input-sm file-input-bordered file-input-primary"
+              />
+            </label>
+          </div>
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>

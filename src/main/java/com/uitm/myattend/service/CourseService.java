@@ -223,4 +223,19 @@ public class CourseService {
             return Collections.emptyList();
         }
     }
+
+    public boolean unregisterStudent(Map<String, Object> body) {
+        try {
+            int uid = Integer.parseInt((String) body.get("uid"));
+            String cid = (String) body.get("cid");
+
+            if(!courseRepository.deleteCourseStudent(uid, cid)) {
+                throw new Exception("Failed to unregister student : " + uid);
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

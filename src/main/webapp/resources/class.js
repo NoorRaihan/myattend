@@ -175,21 +175,12 @@ function classAttend(id) {
               <div class='-m-1 block flex-1 p-1'>
                 <div class='absolute inset-0' aria-hidden='true'></div>
                 <div class='relative flex min-w-0 flex-1 items-center'>
-                  <span class='relative inline-block flex-shrink-0 mr-3'>
-                    <img
-                      class='h-10 w-10 rounded-full'
-                      src='` +
-            stuData.student.user.profile_pic +
-            `'
-                      alt=''
-                    />
-                  </span>
                   <div class='truncate'>
                     <p class='truncate text-sm font-medium text-gray-900'>` +
             stuData.student.user.fullname +
             `</p>
                     <p class='truncate text-sm text-gray-500'>` +
-            stuData.student.user.id +
+            stuData.student.stud_id +
             `</p>
                   </div>
                 </div>

@@ -47,6 +47,19 @@ public class ClassController {
         return "Lecturer/classes";
     }
 
+    @GetMapping("/list")
+    public String classList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        if(!authService.authenticate(session)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+
+        List<ClassModel> todayList = classService.retrieveToday();
+        request.setAttribute("todayList", todayList);
+        request.setAttribute("totalClass", todayList.size());
+        return "Student/classList";
+    }
+
     @GetMapping("/studentList")
     public String studList(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {

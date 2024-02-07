@@ -274,4 +274,28 @@ public class StudentRepository {
             return false;
         }
     }
+
+    public boolean deleteRegister(int uid, String course) {
+        try {
+            String cond = "stud_id = ? AND course_id = ?";
+            String [] condVal = {
+                    Integer.toString(uid),
+                    course
+            };
+            String [] condType = {
+                    "int",
+                    "varchar"
+            };
+
+            int result = commDB.delete("ma_students", cond, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to execute delete query for student");
+            }
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

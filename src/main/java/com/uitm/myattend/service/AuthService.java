@@ -166,4 +166,13 @@ public class AuthService {
         }
     }
 
+    public boolean authorize(HttpSession session, int roleId) {
+        String sessId = (String) session.getAttribute("sid");
+        Map<String, String> tokenMap = userRepository.retrieveToken(sessId).get(0);
+        Map<String, String> userMap = userRepository.retrieveUserById(tokenMap.get("user_id")).get(0);
+
+        System.out.println("Role: " + userMap.get("role_id") + " Authorized: " + roleId);
+        return Integer.parseInt(userMap.get("role_id")) == roleId;
+    }
+
 }
