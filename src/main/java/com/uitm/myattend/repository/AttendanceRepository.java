@@ -132,4 +132,44 @@ public class AttendanceRepository {
             return Collections.emptyList();
         }
     }
+
+    public List<Map<String, String>> retrievePerformance(String courseId) {
+        try {
+            String sql = "SELECT " +
+                    "ROUND(((SELECT COUNT(a.id) FROM ma_attendances a INNER JOIN ma_classes b ON a.class_id = b.id WHERE b.course_id = ? AND status = 'C') " +
+                    "/ (SELECT COUNT(id) FROM ma_classes WHERE course_id = ?)) * 100, 2) AS \"PERCENTAGE\" FROM DUAL";
+
+            String [] condVal = {courseId, courseId};
+            String [] condType = {"varchar", "varchar"};
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve attendances performance on course : " + courseId);
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrievePerformanceByStudent(String courseId, int uid) {
+        try {
+            String sql = "SELECT " +
+                    "ROUND(((SELECT COUNT(a.id) FROM ma_attendances a INNER JOIN ma_classes b ON a.class_id = b.id WHERE b.course_id = ? AND status = 'C' AND a.stud_id = ?) " +
+                    "/ (SELECT COUNT(id) FROM ma_classes WHERE course_id = ?)) * 100, 2) AS \"PERCENTAGE\" FROM DUAL";
+
+            String [] condVal = {courseId, Integer.toString(uid), courseId};
+            String [] condType = {"varchar", "int", "varchar"};
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve attendances performance on course : " + courseId);
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }

@@ -98,6 +98,17 @@ public class UserController {
         return field;
     }
 
+    private String [][] profileRequiredFields() {
+        String [][] field = {
+                {"fullname", "Fullname is required"},
+                {"username", "Username is required"},
+                {"email", "Email is required"},
+                {"gender", "Gender is required"},
+                {"birthdate", "Birth date is required"}
+        };
+        return field;
+    }
+
     @GetMapping("/detail")
     @ResponseBody
     public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
@@ -234,10 +245,11 @@ public class UserController {
                 return;
             }
 
-
             CommonModel common = (CommonModel) session.getAttribute("common");
-            FieldUtility.requiredValidator(body, userRequiredFields());
-            body.put("uid", common.getUser().getId());
+            FieldUtility.requiredValidator(body, profileRequiredFields());
+            body.put("uid", Integer.toString(common.getUser().getId()));
+            body.put("role", Integer.toString(common.getUser().getRole_id()));
+
             if(!userService.update(body, file)) {
                 throw new Exception("Failed to update profile");
             }else {
@@ -247,6 +259,6 @@ public class UserController {
             session.setAttribute("error", e.getMessage());
             e.printStackTrace();
         }
-        response.sendRedirect("/user");
+        response.sendRedirect("/");
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.http.HttpRequest;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,13 +22,23 @@ public class HomeService {
     private final ResourceLoader resourceLoader;
     private final StudentService studentService;
     private final LecturerService lecturerService;
+    private final AttendanceService attendanceService;
+    private final CourseService courseService;
 
-    public HomeService(UserService userService, ResourceLoader resourceLoader, ClassService classService, StudentService studentService, LecturerService lecturerService) {
+    public HomeService(UserService userService,
+                       ResourceLoader resourceLoader,
+                       ClassService classService,
+                       StudentService studentService,
+                       LecturerService lecturerService,
+                       AttendanceService attendanceService,
+                       CourseService courseService) {
         this.userService = userService;
         this.resourceLoader = resourceLoader;
         this.classService = classService;
         this.studentService = studentService;
         this.lecturerService = lecturerService;
+        this.attendanceService = attendanceService;
+        this.courseService = courseService;
     }
 
     public void index(HttpSession session, HttpServletRequest request) {
@@ -37,15 +49,10 @@ public class HomeService {
             request.setAttribute("userFullname", userObj.getFullname());
             request.setAttribute("userRolename", userObj.getRole().getRole_name());
 
-            Resource resource = resourceLoader.getResource("classpath:");
-            String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
-
-            request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
-
-            List<ClassModel> activeList = classService.retrieveActive();
+            List<ClassModel> activeList = classService.retrieveActive(session);
             request.setAttribute("activeList", activeList);
 
-            List<ClassModel> todayList = classService.retrieveToday();
+            List<ClassModel> todayList = classService.retrieveToday(session);
             request.setAttribute("todayList", todayList);
 
             UserModel userProfile = userService.retrieveUserById(common.getUser().getId());
@@ -64,6 +71,22 @@ public class HomeService {
                 }
                 request.setAttribute("lecturerProfile", lecturerProfile);
             }
+
+            List<CourseModel> courseList = new ArrayList<>();
+            if(common.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
+                courseList = courseService.retrieveCourseByLecturer(common.getUser().getId());
+            }else if(common.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
+                courseList = courseService.retrieveRegisteredCourseStudent(common.getUser().getId());
+            }else if(common.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
+                courseList = courseService.retrieveAll();
+            }
+            request.setAttribute("courses", courseList);
+
+            request.setAttribute("perf", attendanceService.attendancePerformance(courseList,session));
+
+            Resource resource = resourceLoader.getResource("classpath:");
+            String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
+            request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
 
         }catch (Exception e) {
             e.printStackTrace();

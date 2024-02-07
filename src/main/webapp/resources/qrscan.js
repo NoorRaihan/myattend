@@ -67,9 +67,9 @@ const qrCodeSuccessCallback = (decodedText, decodedResult) => {
             style: "width:150px;height:150px",
           });
           $(".teMsg").html("SUCCESS");
-          $(".eMsg").html(
-            "Congratulations! Your attendance has been recorded."
-          );
+          let msg = "Congratulations! " + response.respMessage;
+          $(".eMsg").html(msg);
+          $("#attendMsg").showModal();
         }
       },
       error: function (response) {

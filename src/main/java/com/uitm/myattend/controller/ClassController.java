@@ -9,8 +9,11 @@ import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +43,9 @@ public class ClassController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+        if(!authService.authorize(session, FieldUtility.LECTURER_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
         List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
@@ -53,8 +59,12 @@ public class ClassController {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+        if(!authService.authorize(session, FieldUtility.STUDENT_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
-        List<ClassModel> todayList = classService.retrieveToday();
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId());
         request.setAttribute("todayList", todayList);
         request.setAttribute("totalClass", todayList.size());
         return "Student/classList";
@@ -65,6 +75,10 @@ public class ClassController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
+        }
+
+        if(!authService.authorize(session, FieldUtility.LECTURER_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         CommonModel commonModel = (CommonModel) session.getAttribute("common");

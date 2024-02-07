@@ -6,8 +6,11 @@ import com.uitm.myattend.service.CourseService;
 import com.uitm.myattend.service.StudentService;
 import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -41,6 +42,9 @@ public class StudController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
+        }
+        if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<StudentModel> studList = studentService.retrieveAll();
         request.setAttribute("students", studList);
@@ -167,6 +171,10 @@ public class StudController {
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
+        }
+
+        if(!authService.authorize(session, FieldUtility.STUDENT_ROLE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
