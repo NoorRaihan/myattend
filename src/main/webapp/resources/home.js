@@ -17,7 +17,7 @@ $(document).ready(function () {
 function usrDetails(id) {
   $.ajax({
     method: "GET",
-    url: "/user/detail",
+    url: "/user/profile",
     data: { uid: id },
     dataType: "json",
     success: function (response) {

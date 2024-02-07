@@ -81,8 +81,19 @@ public class LecturerService {
     }
 
     public LecturerModel retrieveDetail(Map<String, Object> body) {
+        return retrieveDetail(body, -1);
+    }
+
+    public LecturerModel retrieveDetail(int uid) {
+        return retrieveDetail(null, uid);
+    }
+
+    public LecturerModel retrieveDetail(Map<String, Object> body, int uid) {
         try {
-            int uid = Integer.parseInt((String) body.get("uid"));
+            if(body != null) {
+                uid = Integer.parseInt((String) body.get("uid"));
+            }
+
             List<Map<String, String>> lectList = lecturerRepository.retrieveDetail(uid);
 
             if(lectList.size() != 1) {

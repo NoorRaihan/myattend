@@ -1,5 +1,6 @@
 package com.uitm.myattend.controller;
 
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.StudentService;
@@ -181,6 +182,66 @@ public class UserController {
                 throw new Exception("Failed to delete user data");
             }else {
                 session.setAttribute("success", "User data successfully deleted");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/user");
+    }
+
+    @GetMapping("/profile")
+    @ResponseBody
+    public Map<String, Object> profile(HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            if(!authService.authenticate(session)) {
+                respMap.put("respCode", "00002");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Unauthenticated request");
+                return respMap;
+            }
+
+
+            CommonModel common = (CommonModel) session.getAttribute("common");
+            UserModel user = userService.retrieveUserById(common.getUser().getId());
+
+            if(user == null) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "User does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+            }
+            respMap.put("data", user);
+        }catch (Exception e) {
+            e.printStackTrace();
+            //session.setAttribute("message", "Internal server error. Please contact admin for futher assistance");
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
+    }
+
+    @PostMapping("/profile")
+    public void profileUpdate(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request ,HttpSession session) throws IOException {
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+
+            CommonModel common = (CommonModel) session.getAttribute("common");
+            FieldUtility.requiredValidator(body, userRequiredFields());
+            body.put("uid", common.getUser().getId());
+            if(!userService.update(body, file)) {
+                throw new Exception("Failed to update profile");
+            }else {
+                session.setAttribute("success", "Profile updated successfully");
             }
         }catch (Exception e) {
             session.setAttribute("error", e.getMessage());

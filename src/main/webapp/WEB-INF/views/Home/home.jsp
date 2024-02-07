@@ -86,7 +86,7 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value=""
+                      value="${userProfile.getFullname()}"
                       disabled
                     />
                   </label>
@@ -97,7 +97,7 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value=""
+                      value="${userProfile.getUsername()}"
                       disabled
                     />
                   </label>
@@ -108,7 +108,7 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value=""
+                      value="${userProfile.getEmail()}"
                       disabled
                     />
                   </label>
@@ -119,7 +119,7 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value=""
+                      value="${userProfile.getGender()}"
                       disabled
                     />
                   </label>
@@ -130,7 +130,7 @@ uri="jakarta.tags.core" %>
                     <input
                       type="text"
                       class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                      value=""
+                      value="${userProfile.getFormatBirthDate()}"
                       disabled
                     />
                   </label>
@@ -146,7 +146,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${studentProfile.getStud_id()}"
                         disabled
                       />
                     </label>
@@ -157,7 +157,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${studentProfile.getProgram()}"
                         disabled
                       />
                     </label>
@@ -168,7 +168,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${studentProfile.getIntake()}"
                         disabled
                       />
                     </label>
@@ -179,7 +179,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${studentProfile.getSemester()}"
                         disabled
                       />
                     </label>
@@ -196,7 +196,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${lecturerProfile.getLect_id()}"
                         disabled
                       />
                     </label>
@@ -207,7 +207,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${lecturerProfile.getSupervisor().getFullname()}"
                         disabled
                       />
                     </label>
@@ -218,7 +218,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${lecturerProfile.getFormatStartDate()}"
                         disabled
                       />
                     </label>
@@ -229,7 +229,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${lecturerProfile.getQualification()}"
                         disabled
                       />
                     </label>
@@ -240,7 +240,7 @@ uri="jakarta.tags.core" %>
                       <input
                         type="text"
                         class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
-                        value=""
+                        value="${lecturerProfile.getSalary()}"
                         disabled
                       />
                     </label>

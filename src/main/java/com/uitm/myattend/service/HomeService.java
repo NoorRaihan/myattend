@@ -1,8 +1,6 @@
 package com.uitm.myattend.service;
 
-import com.uitm.myattend.model.ClassModel;
-import com.uitm.myattend.model.CommonModel;
-import com.uitm.myattend.model.UserModel;
+import com.uitm.myattend.model.*;
 import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,11 +18,15 @@ public class HomeService {
     private final UserService userService;
     private final ClassService classService;
     private final ResourceLoader resourceLoader;
+    private final StudentService studentService;
+    private final LecturerService lecturerService;
 
-    public HomeService(UserService userService, ResourceLoader resourceLoader, ClassService classService) {
+    public HomeService(UserService userService, ResourceLoader resourceLoader, ClassService classService, StudentService studentService, LecturerService lecturerService) {
         this.userService = userService;
         this.resourceLoader = resourceLoader;
         this.classService = classService;
+        this.studentService = studentService;
+        this.lecturerService = lecturerService;
     }
 
     public void index(HttpSession session, HttpServletRequest request) {
@@ -45,6 +47,23 @@ public class HomeService {
 
             List<ClassModel> todayList = classService.retrieveToday();
             request.setAttribute("todayList", todayList);
+
+            UserModel userProfile = userService.retrieveUserById(common.getUser().getId());
+            request.setAttribute("userProfile", userProfile);
+
+            if(userObj.getRole_id() == FieldUtility.STUDENT_ROLE) {
+                StudentModel studentProfile = studentService.retrieveDetail(common.getUser().getId());
+                request.setAttribute("studentProfile", studentProfile);
+            }
+
+            if(userObj.getRole_id() == FieldUtility.LECTURER_ROLE) {
+                LecturerModel lecturerProfile = lecturerService.retrieveDetail(common.getUser().getId());
+                if(lecturerProfile.getSupervisor_id() > 0) {
+                    UserModel svModel = userService.retrieveUserById(lecturerProfile.getSupervisor_id());
+                    lecturerProfile.setSupervisor(svModel);
+                }
+                request.setAttribute("lecturerProfile", lecturerProfile);
+            }
 
         }catch (Exception e) {
             e.printStackTrace();
