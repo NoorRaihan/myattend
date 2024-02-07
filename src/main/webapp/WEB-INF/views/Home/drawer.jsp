@@ -13,7 +13,7 @@
     </div>
     <div class="divider"></div>
     <div class="">
-      <li>
+      <li class="py-2">
         <a href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
         >
       </li>
       <c:if test="${role == 1}">
-        <li>
+        <li class="py-2">
           <a href="/utility">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@
             Utility Management</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/user"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@
             User Management</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/course">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@
             Course Management</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/lecturer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +110,7 @@
             Lecturer Management</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/student">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,7 @@
         </li>
       </c:if>
       <c:if test="${role == 2}">
-        <li>
+        <li class="py-2">
           <a href="/class">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@
             Class Management</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/class/studentList">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +170,7 @@
         </li>
       </c:if>
       <c:if test="${role == 3}">
-        <li>
+        <li class="py-2">
           <a href="/student/register/course">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +187,7 @@
             Course Registeration</a
           >
         </li>
-        <li>
+        <li class="py-2">
           <a href="/class/list">
             <svg
               xmlns="http://www.w3.org/2000/svg"
