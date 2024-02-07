@@ -42,35 +42,19 @@ const qrCodeSuccessCallback = (decodedText, decodedResult) => {
       data: { data: data },
       dataType: "json",
       success: function (response) {
-        if (response.respStatus == "error") {
-          $("#icn").attr({
-            src: "https://cdn.lordicon.com/gzaeqxlp.json",
-            trigger: "in",
-            delay: "500",
-            stroke: "bold",
-            state: "in-reveal",
-            colors: "primary:#e83a30,secondary:#e83a30",
-            style: "width:150px;height:150px",
-          });
-          $(".teMsg").html("ERROR");
-          let msg = "(" + response.respCode + ") " + response.respMessage;
-          $(".eMsg").html(msg);
-          $("#attendMsg").showModal();
-        } else {
-          $("#icn").attr({
-            src: "https://cdn.lordicon.com/cdfdnjgp.json",
-            trigger: "in",
-            delay: "500",
-            stroke: "bold",
-            state: "in-reveal",
-            colors: "primary:#16c72e,secondary:#16c72e",
-            style: "width:150px;height:150px",
-          });
-          $(".teMsg").html("SUCCESS");
-          $(".eMsg").html(
-            "Congratulations! Your attendance has been recorded."
-          );
-        }
+        $("#icn").attr({
+          src: "https://cdn.lordicon.com/cdfdnjgp.json",
+          trigger: "in",
+          delay: "500",
+          stroke: "bold",
+          state: "in-reveal",
+          colors: "primary:#16c72e,secondary:#16c72e",
+          style: "width:150px;height:150px",
+        });
+        $(".teMsg").html("SUCCESS");
+        let msg = "Congratulations! " + response.respMessage;
+        $(".eMsg").html(msg);
+        $("#attendMsg").showModal();
       },
       error: function (response) {
         $("#icn").attr({
