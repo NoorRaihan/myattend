@@ -25,6 +25,8 @@ $(document).ready(function () {
     $("#s_id").val(id);
     $("#co_id").val(cid);
   });
+
+  $("#courseDT").DataTable();
 });
 
 function usrDetails(id) {
@@ -100,7 +102,9 @@ function courseDetails(id) {
             "</div>" +
             "<div class='relative ml-2 inline-block flex-shrink-0 text-left'>" +
             "<button type='button' class='group relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rmStud' onclick='removeStudent.showModal()' data-id='" +
-            dataItem.user.id + "' data-cid='" + response.data.course.id +
+            dataItem.user.id +
+            "' data-cid='" +
+            response.data.course.id +
             "'>" +
             "<span class='absolute -inset-1.5'></span>" +
             "<span class='flex h-full w-full items-center justify-center rounded-full'>" +
@@ -152,13 +156,10 @@ function courseDetails(id) {
             dataItem.formattedClassDate +
             "</p>" +
             "<p class='truncate text-sm text-gray-500'>" +
-            dataItem.formStartTime + " - " + dataItem.formEndTime
-            "</p>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</li>";
+            dataItem.formStartTime +
+            " - " +
+            dataItem.formEndTime;
+          "</p>" + "</div>" + "</div>" + "</div>" + "</div>" + "</li>";
         }
         classList += "</ul>";
         $("#classList").html(classList);
