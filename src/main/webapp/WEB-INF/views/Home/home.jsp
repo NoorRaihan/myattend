@@ -14,6 +14,7 @@ uri="jakarta.tags.core" %>
     <script src="${contextPath}/resources/home.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
+    <c:set var="role" value="${sessionScope.common.getUser().getRole().getId()}" />
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
     <div class="drawer xl:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
@@ -22,13 +23,13 @@ uri="jakarta.tags.core" %>
           <jsp:param name="title" value="Home" />
         </jsp:include>
         <div class="w-auto my-10">
-          <section class="mx-4" aria-labelledby="profile-overview-title">
+          <section class="mx-4 flex flex-wrap items-start gap-5" aria-labelledby="profile-overview-title">
             <div
-              class="overflow-hidden rounded-xl bg-gradient-to-tl from-secondary to-white shadow-lg"
+              class="overflow-hidden rounded-xl bg-gradient-to-tl from-secondary to-white shadow-lg basis-2/5 grow"
             >
               <div class="p-6">
-                <div class="sm:flex sm:items-center sm:justify-between">
-                  <div class="sm:flex sm:space-x-5">
+                <div id="prfl1" class="sm:flex sm:items-center sm:justify-between">
+                  <div id="prfl2" class="sm:flex sm:space-x-5">
                     <div class="flex-shrink-0">
                       <img
                         class="mx-auto size-20 rounded-full"
@@ -36,7 +37,7 @@ uri="jakarta.tags.core" %>
                         alt=""
                       />
                     </div>
-                    <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                    <div id="prfl3" class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                       <p class="text-sm font-medium text-gray-600">Welcome,</p>
                       <p class="text-xl font-bold text-gray-900 sm:text-2xl">
                         ${userFullname}
@@ -61,12 +62,7 @@ uri="jakarta.tags.core" %>
                 </div>
               </div>
             </div>
-          </section>
-          <div
-            id="profile"
-            class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all hidden"
-          >
-            <div class="card basis-3/5 bg-white shadow-xl grow">
+            <div id="profile" class="card basis-2/4 bg-white shadow-xl grow hidden">
               <div class="card-body">
                 <div class="card-title justify-between">
                   <h2>User Profile</h2>
@@ -77,11 +73,11 @@ uri="jakarta.tags.core" %>
                     Edit Profile
                   </button>
                 </div>
-                <p class="mt-4 font-semibold">User Information</p>
+                <p class="mt-4 font-bold">User Information</p>
                 <div class="flex flex-wrap gap-3">
                   <label class="form-control basis-full">
                     <div class="label">
-                      <span class="label-text">Full Name</span>
+                      <span class="label-text font-semibold text-primary">Full Name</span>
                     </div>
                     <input
                       type="text"
@@ -92,7 +88,7 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text">Username</span>
+                      <span class="label-text font-semibold text-primary">Username</span>
                     </div>
                     <input
                       type="text"
@@ -103,7 +99,7 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text">E-Mail</span>
+                      <span class="label-text font-semibold text-primary">E-Mail</span>
                     </div>
                     <input
                       type="text"
@@ -114,7 +110,7 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text">Gender</span>
+                      <span class="label-text font-semibold text-primary">Gender</span>
                     </div>
                     <input
                       type="text"
@@ -125,7 +121,7 @@ uri="jakarta.tags.core" %>
                   </label>
                   <label class="form-control basis-2/5">
                     <div class="label">
-                      <span class="label-text">Birthdate</span>
+                      <span class="label-text font-semibold text-primary">Birthdate</span>
                     </div>
                     <input
                       type="text"
@@ -134,14 +130,15 @@ uri="jakarta.tags.core" %>
                       disabled
                     />
                   </label>
+                  <c:if test="${role == 3}">
                   <!-- if user a student -->
                   <div class="basis-full flex flex-wrap gap-3">
-                    <p class="mt-4 font-semibold basis-full">
+                    <p class="mt-4 font-bold basis-full">
                       Student Information
                     </p>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Student ID</span>
+                        <span class="label-text font-semibold text-primary">Student ID</span>
                       </div>
                       <input
                         type="text"
@@ -152,7 +149,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Program</span>
+                        <span class="label-text font-semibold text-primary">Program</span>
                       </div>
                       <input
                         type="text"
@@ -163,7 +160,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Intake</span>
+                        <span class="label-text font-semibold text-primary">Intake</span>
                       </div>
                       <input
                         type="text"
@@ -174,7 +171,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Semester</span>
+                        <span class="label-text font-semibold text-primary">Semester</span>
                       </div>
                       <input
                         type="text"
@@ -184,14 +181,17 @@ uri="jakarta.tags.core" %>
                       />
                     </label>
                   </div>
+                  </c:if>
+                  <c:if test="${role == 2}">
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
                   <!-- if user a lecturer -->
                   <div class="basis-full flex flex-wrap gap-3">
-                    <p class="mt-4 font-semibold basis-full">
+                    <p class="mt-4 font-bold basis-full">
                       Lecturer Information
                     </p>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Lecturer ID</span>
+                        <span class="label-text font-semibold text-primary">Lecturer ID</span>
                       </div>
                       <input
                         type="text"
@@ -202,7 +202,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Supervisor Name</span>
+                        <span class="label-text font-semibold text-primary">Supervisor Name</span>
                       </div>
                       <input
                         type="text"
@@ -213,7 +213,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Start Date</span>
+                        <span class="label-text font-semibold text-primary">Start Date</span>
                       </div>
                       <input
                         type="text"
@@ -224,7 +224,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Qualification</span>
+                        <span class="label-text font-semibold text-primary">Qualification</span>
                       </div>
                       <input
                         type="text"
@@ -235,7 +235,7 @@ uri="jakarta.tags.core" %>
                     </label>
                     <label class="form-control basis-2/5">
                       <div class="label">
-                        <span class="label-text">Salary</span>
+                        <span class="label-text font-semibold text-primary">Salary</span>
                       </div>
                       <input
                         type="text"
@@ -245,70 +245,123 @@ uri="jakarta.tags.core" %>
                       />
                     </label>
                   </div>
+                  </c:if>
                 </div>
               </div>
             </div>
-            <div class="card basis-1/5 bg-white shadow-xl grow">
-              <div class="card-body">
-                <h2 class="card-title">User Stats</h2>
-              </div>
-            </div>
-          </div>
+          </section>
           <div
             id="dashboard"
             class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
             <c:forEach var="active" items="${activeList}">
-              <a href="/qrscan" class="basis-full">
-                <div
-                  id="clsActive"
-                  class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
-                >
-                  <div class="card-body min-w-full">
-                    <h1 class="card-title z-10">Active Class</h1>
-                    <div class="flex flex-row justify-between z-10">
-                      <div class="flex flex-col">
-                        <p class="text-3xl font-bold">
-                          ${active.getCourse().getCourse_code()}
-                        </p>
-                        <p class="text-xl">
-                          ${active.getCourse().getCourse_name()}
-                        </p>
-                        <p class="text-sm">
-                          ${active.getFormattedClassDate()} |
-                          ${active.getFormStartTime()} -
-                          ${active.getFormEndTime()}
-                        </p>
-                      </div>
-                      <div class="flex flex-col">
-                        <button
-                          class="btn btn-success rounded-full z-10 text-white"
-                        >
-                          Register Attendance
-                        </button>
+              <c:choose>
+                <c:when test="${role == 3}">
+                  <a href="/qrscan" class="basis-full">
+                    <div
+                      id="clsActive"
+                      class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
+                    >
+                      <div class="card-body min-w-full">
+                        <h1 class="card-title z-10">Active Class</h1>
+                        <div class="flex flex-row justify-between z-10">
+                          <div class="flex flex-col">
+                            <p class="text-3xl font-bold">
+                              ${active.getCourse().getCourse_code()}
+                            </p>
+                            <p class="text-xl">
+                              ${active.getCourse().getCourse_name()}
+                            </p>
+                            <p class="text-sm">
+                              ${active.getFormattedClassDate()} |
+                              ${active.getFormStartTime()} -
+                              ${active.getFormEndTime()}
+                            </p>
+                          </div>
+                          <div class="flex flex-col">
+                            <button
+                              class="btn btn-success rounded-full z-10 text-white"
+                            >
+                              Register Attendance
+                            </button>
+                          </div>
+                        </div>
+                        <div class="absolute -inset-y-16 -right-10 sm:right-20">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="size-72 fill-slate-200"
+                          >
+                            <path
+                              d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
+                            />
+                            <path
+                              d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
+                            />
+                            <path
+                              d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
+                            />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                    <div class="absolute -inset-y-16 -right-10 sm:right-20">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="size-72 fill-slate-200"
-                      >
-                        <path
-                          d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
-                        />
-                        <path
-                          d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
-                        />
-                        <path
-                          d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
-                        />
-                      </svg>
+                  </a>
+                </c:when>
+                <c:when test="${role == 2}">
+                  <a class="basis-full" onclick="generateQR('${active.getId()}')">
+                    <div
+                      id="clsActive"
+                      class="card ${active.getCourse().getColorConfig()} shadow-lg overflow-hidden"
+                    >
+                      <div class="card-body min-w-full">
+                        <h1 class="card-title z-10">Active Class</h1>
+                        <div class="flex flex-row justify-between z-10">
+                          <div class="flex flex-col">
+                            <p class="text-3xl font-bold">
+                              ${active.getCourse().getCourse_code()}
+                            </p>
+                            <p class="text-xl">
+                              ${active.getCourse().getCourse_name()}
+                            </p>
+                            <p class="text-sm">
+                              ${active.getFormattedClassDate()} |
+                              ${active.getFormStartTime()} -
+                              ${active.getFormEndTime()}
+                            </p>
+                          </div>
+                          <div class="flex flex-col">
+                            <button
+                              class="btn btn-success rounded-full z-10 text-white qr"
+                              data-id="${active.getId()}"
+                            >
+                              Attendance QR
+                            </button>
+                          </div>
+                        </div>
+                        <div class="absolute -inset-y-16 -right-10 sm:right-20">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="size-72 fill-slate-200"
+                          >
+                            <path
+                              d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z"
+                            />
+                            <path
+                              d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
+                            />
+                            <path
+                              d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
+                </c:when>
+              </c:choose>
             </c:forEach>
             <div
               id="clsList"
@@ -472,7 +525,7 @@ uri="jakarta.tags.core" %>
                 <option value="F">Female</option>
               </select>
             </label>
-            <label class="form-control basis-2/4 grow">
+            <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Birthdate</span>
               </div>
@@ -483,7 +536,7 @@ uri="jakarta.tags.core" %>
                 class="input input-primary input-sm input-bordered"
               />
             </label>
-            <label class="form-control basis-2/4 grow">
+            <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Email</span>
               </div>

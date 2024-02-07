@@ -37,11 +37,6 @@ public class HomeService {
             request.setAttribute("userFullname", userObj.getFullname());
             request.setAttribute("userRolename", userObj.getRole().getRole_name());
 
-            Resource resource = resourceLoader.getResource("classpath:");
-            String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
-
-            request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
-
             List<ClassModel> activeList = classService.retrieveActive();
             request.setAttribute("activeList", activeList);
 
@@ -64,6 +59,11 @@ public class HomeService {
                 }
                 request.setAttribute("lecturerProfile", lecturerProfile);
             }
+
+            Resource resource = resourceLoader.getResource("classpath:");
+            String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
+
+            request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
 
         }catch (Exception e) {
             e.printStackTrace();
