@@ -451,32 +451,21 @@ uri="jakarta.tags.core" %>
               <div class="card-body">
                 <h1 class="card-title">Attendance Perfomance</h1>
                 <div class="flex flex-wrap">
+                <c:forEach var="course" items="${courses}">
                   <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
                     <div
-                      class="radial-progress text-info"
-                      style="--value: 75"
+                      class="radial-progress ${course.getColorConfig()} text-info"
+                      style="--value: ${perf.get(course.getCourse_code())}"
                       role="progressbar"
                     >
-                      75%
+                      ${perf.get(course.getCourse_code())}%
                     </div>
                     <div class="flex flex-col ml-4">
-                      <p class="text-xl font-bold">CSC584</p>
-                      <p class="text-sm">Enterprise Programming</p>
+                      <p class="text-xl font-bold">${course.getCourse_code()}</p>
+                      <p class="text-sm">${course.getCourse_name()}</p>
                     </div>
                   </div>
-                  <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
-                    <div
-                      class="radial-progress text-warning"
-                      style="--value: 50"
-                      role="progressbar"
-                    >
-                      50%
-                    </div>
-                    <div class="flex flex-col ml-4">
-                      <p class="text-xl font-bold">ICT502</p>
-                      <p class="text-sm">Database Engineering</p>
-                    </div>
-                  </div>
+                </c:forEach>
                 </div>
               </div>
             </div>
