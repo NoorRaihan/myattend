@@ -454,7 +454,7 @@ uri="jakarta.tags.core" %>
                 <c:forEach var="course" items="${courses}">
                   <div class="flex flex-row min-w-fit justify-center mt-5 mx-4">
                     <div
-                      class="radial-progress ${course.getColorConfig()} text-info"
+                      class="radial-progress ${course.getColorConfig()} text-transparent bg-clip-text"
                       style="--value: ${perf.get(course.getCourse_code())}"
                       role="progressbar"
                     >

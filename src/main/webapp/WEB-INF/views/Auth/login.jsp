@@ -61,7 +61,7 @@ uri="jakarta.tags.core" %>
                     class="block text-sm font-medium leading-6 text-gray-900"
                     >Password</label
                   >
-                  <div class="mt-2">
+                  <div class="my-2">
                     <input
                       id="password"
                       name="password"
@@ -72,31 +72,8 @@ uri="jakarta.tags.core" %>
                     />
                   </div>
                 </div>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
-                    <input
-                      id="remember_me"
-                      name="remember_me"
-                      type="checkbox"
-                      class="checkbox checkbox-primary"
-                    />
-                    <label
-                      for="remember_me"
-                      class="ml-3 block text-sm leading-6 text-gray-700"
-                      >Remember me</label
-                    >
-                  </div>
 
-                  <div class="text-sm leading-6">
-                    <a
-                      href="/resetPass"
-                      class="font-semibold text-primary"
-                      >Forgot password ?</a
-                    >
-                  </div>
-                </div>
-
-                <div>
+                <div class="mt-4">
                   <button
                     type="submit"
                     value="Login"
