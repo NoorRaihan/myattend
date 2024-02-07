@@ -472,7 +472,7 @@ uri="jakarta.tags.core" %>
                 <option value="F">Female</option>
               </select>
             </label>
-            <label class="form-control basis-2/4 grow">
+            <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Birthdate</span>
               </div>
@@ -483,7 +483,7 @@ uri="jakarta.tags.core" %>
                 class="input input-primary input-sm input-bordered"
               />
             </label>
-            <label class="form-control basis-2/4 grow">
+            <label class="form-control basis-1/4 grow">
               <div class="label">
                 <span class="label-text">Email</span>
               </div>
