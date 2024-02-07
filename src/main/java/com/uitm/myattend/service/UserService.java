@@ -235,6 +235,7 @@ public class UserService {
                     throw new Exception("Failed to save profile image");
                 }
             }
+
             user.setRole_id(Integer.parseInt((String) body.get("role")));
 
             if(!userRepo.update(user)) {
