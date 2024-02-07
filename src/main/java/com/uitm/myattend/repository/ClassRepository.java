@@ -200,11 +200,29 @@ public class ClassRepository {
     }
 
     public List<Map<String, String>> retrieveActive(String currDate, String currTms) {
+        return retrieveActive(currDate, currTms, null, null);
+    }
+
+    public List<Map<String, String>> retrieveActiveStudent(String currDate, String currTms, Integer uid) {
+        return retrieveActive(currDate, currTms, null, uid);
+    }
+
+    public List<Map<String, String>> retrieveActiveLecturer(String currDate, String currTms, Integer uid) {
+        return retrieveActive(currDate, currTms, uid, null);
+    }
+
+    public List<Map<String, String>> retrieveActive(String currDate, String currTms, Integer lect, Integer stud) {
         try {
             String sql = "SELECT a.*, b.* FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
                     "WHERE TO_CHAR(a.START_TIME, 'yyyyMMddHH24MISSff3') <= ? AND ? <= TO_CHAR(a.END_TIME, 'yyyyMMddHH24MISSff3') " +
-                    "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ?";
+                    "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL";
+
+            if(lect != null) {
+                sql += " AND b.user_id = " + lect;
+            }else if(stud != null) {
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+            }
 
             String [] condVal = {
                     currTms,
@@ -230,10 +248,28 @@ public class ClassRepository {
     }
 
     public List<Map<String, String>> retrieveToday(String currDate) {
+        return retrieveToday(currDate, null, null);
+    }
+
+    public List<Map<String, String>> retrieveTodayStudent(String currDate, int uid) {
+        return retrieveToday(currDate, null, uid);
+    }
+
+    public List<Map<String, String>> retrieveTodayLecturer(String currDate, int uid) {
+        return retrieveToday(currDate, uid, null);
+    }
+
+    public List<Map<String, String>> retrieveToday(String currDate, Integer lect, Integer stud) {
         try {
             String sql = "SELECT a.*, b.* FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
-                    "WHERE TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ?";
+                    "WHERE TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL";
+
+            if(lect != null) {
+                sql += " AND b.user_id = " + lect;
+            }else if(stud != null) {
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+            }
 
             String [] condVal = {
                     currDate
@@ -251,6 +287,74 @@ public class ClassRepository {
         }catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    public List<Map<String, String>> retrieveAll(String currDate) {
+        return retrieveAll(currDate, null, null);
+    }
+
+    public List<Map<String, String>> retrieveAllStudent(String currDate, int uid) {
+        return retrieveAll(currDate, null, uid);
+    }
+
+    public List<Map<String, String>> retrieveAllLecturer(String currDate, int uid) {
+        return retrieveAll(currDate, uid, null);
+    }
+
+    public List<Map<String, String>> retrieveAll(String currDate, Integer lect, Integer stud) {
+        try {
+            String sql = "SELECT a.*, b.* FROM ma_classes a " +
+                    "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "WHERE a.deleted_at IS NULL";
+
+            if(lect != null) {
+                sql += " AND b.user_id = " + lect;
+            }else if(stud != null) {
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+            }
+
+            int result = commDB.sqlQuery(sql);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve today class record");
+            }
+            return commDB.getResult();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public boolean changeStatus(String courseid, boolean isDisable) {
+        try {
+            String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+
+            String [] field = {
+                    "deleted_at",
+                    "updated_at"
+            };
+
+            String [] fieldVal = {
+                    isDisable ? currTms : null,
+                    currTms
+            };
+
+            String [] fieldType = {
+                    "timestamp",
+                    "timestamp"
+            };
+
+            String cond = "course_id = ?";
+            String [] condVal = {courseid};
+            String [] condType = {"varchar"};
+            int result = commDB.update("ma_classes", field, fieldVal, fieldType, cond, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to change status class of " + courseid);
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
