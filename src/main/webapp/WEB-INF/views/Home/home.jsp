@@ -313,9 +313,10 @@ uri="jakarta.tags.core" %>
                         <div class="flex flex-row justify-between z-10">
                           <div class="flex flex-col">
                             <p class="text-3xl font-bold">
-                              ${active.getCourse().getCourse_code()}
+                              ${active.getClass_desc()}
                             </p>
                             <p class="text-xl">
+                              ${active.getCourse().getCourse_code()} -
                               ${active.getCourse().getCourse_name()}
                             </p>
                             <p class="text-sm">
@@ -368,9 +369,10 @@ uri="jakarta.tags.core" %>
                         <div class="flex flex-row justify-between z-10">
                           <div class="flex flex-col">
                             <p class="text-3xl font-bold">
-                              ${active.getCourse().getCourse_code()}
+                              ${active.getClass_desc()}
                             </p>
                             <p class="text-xl">
+                              ${active.getCourse().getCourse_code()} -
                               ${active.getCourse().getCourse_name()}
                             </p>
                             <p class="text-sm">
@@ -426,13 +428,13 @@ uri="jakarta.tags.core" %>
                           scope="col"
                           class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                         >
-                          Course Code
+                          Class Name
                         </th>
                         <th
                           scope="col"
                           class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                         >
-                          Course Name
+                          Course Code
                         </th>
                         <th
                           scope="col"
@@ -455,10 +457,10 @@ uri="jakarta.tags.core" %>
                           <td
                             class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
                           >
-                            ${today.getCourse().getCourse_code()}
+                            ${today.getClass_desc()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-                                ${today.getCourse().getCourse_name()}
+                                ${today.getCourse().getCourse_code()}
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
                                 ${today.getFormattedClassDate()}
@@ -468,7 +470,7 @@ uri="jakarta.tags.core" %>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                           >
-                            ${today.getCourse().getCourse_name()}
+                            ${today.getCourse().getCourse_code()}
                           </td>
                           <td
                             class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
