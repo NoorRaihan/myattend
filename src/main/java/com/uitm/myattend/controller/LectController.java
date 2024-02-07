@@ -96,6 +96,7 @@ public class LectController {
                 return;
             }
 
+            FieldUtility.requiredValidator(body, lecturerRequiredFields());
             if(!lecturerService.editLecturer(body)) {
                 throw new Exception("Failed to update lecturer data");
             }else {
@@ -126,5 +127,13 @@ public class LectController {
             session.setAttribute("error", e.getMessage());
         }
         response.sendRedirect("/lecturer");
+    }
+
+    private String [][] lecturerRequiredFields() {
+        return new String[][]{
+                {"startDate", "Lecturer start date is required"},
+                {"qualify", "Lecturer qualification is required"},
+                {"salary", "Lecturer salary is required"}
+        };
     }
 }

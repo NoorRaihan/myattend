@@ -118,7 +118,7 @@ public class HomeController {
                 return;
             }
 
-            //FieldUtility.requiredValidator(body, studentRequiredFields());
+            FieldUtility.requiredValidator(body, roleRequiredFields());
             roleService.update(body);
         }catch (Exception e) {
             e.printStackTrace();
@@ -136,7 +136,7 @@ public class HomeController {
                 return;
             }
 
-            //FieldUtility.requiredValidator(body, studentRequiredFields());
+            FieldUtility.requiredValidator(body, roleRequiredFields());
             roleService.insert(body);
         }catch (Exception e) {
             e.printStackTrace();
@@ -165,4 +165,10 @@ public class HomeController {
         response.sendRedirect("/utility");
     }
 
+    private String [][] roleRequiredFields() {
+        return new String[][]{
+                {"id", "Role id is required"},
+                {"name", "Role name is required"}
+        };
+    }
 }

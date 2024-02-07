@@ -9,6 +9,8 @@ $(document).ready(function () {
     console.log(id);
     $("#deleteId").val(id);
   });
+
+  $("#studentDT").DataTable();
 });
 function studDetails(id) {
   $.ajax({

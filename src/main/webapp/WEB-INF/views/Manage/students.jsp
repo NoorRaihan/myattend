@@ -11,6 +11,9 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css" />
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwindcss.js"></script>
     <script src="${contextPath}/resources/student.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
@@ -34,7 +37,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <h2 class="card-title">Students</h2>
                   <div class="-mx-4 sm:-mx-0">
-                    <table class="min-w-full divide-y divide-gray-300">
+                    <table id="studentDT" class="min-w-full divide-y divide-gray-300 display">
                       <thead>
                         <tr>
                           <th
