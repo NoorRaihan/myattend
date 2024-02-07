@@ -1,12 +1,10 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
-import com.uitm.myattend.model.AttendanceModel;
-import com.uitm.myattend.model.ClassModel;
-import com.uitm.myattend.model.CourseModel;
-import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.model.*;
 import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.utility.FieldUtility;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -168,12 +166,21 @@ public class ClassService {
         }
     }
 
-    public List<ClassModel> retrieveActive() {
+    public List<ClassModel> retrieveActive(HttpSession session) {
         try {
+            CommonModel commonModel = (CommonModel) session.getAttribute("common");
             String currTms = FieldUtility.getCurrentTimestamp();
             String currDate = FieldUtility.getCurrentDate();
 
-            List<Map<String, String>> classList = classRepository.retrieveActive(currDate, currTms);
+            List<Map<String, String>> classList = new ArrayList<>();
+            if(commonModel.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
+                classList = classRepository.retrieveActive(currDate, currTms);
+            }else if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
+                classList = classRepository.retrieveActiveStudent(currDate, currTms, commonModel.getUser().getId());
+            }else if(commonModel.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
+                classList = classRepository.retrieveActiveLecturer(currDate, currTms, commonModel.getUser().getId());
+            }
+
             List<ClassModel> activeList = new ArrayList<>();
             for(Map<String, String> data : classList) {
                 ClassModel obj = (ClassModel) MapperUtility.mapModel(ClassModel.class, data);
@@ -187,11 +194,36 @@ public class ClassService {
         }
     }
 
-    public List<ClassModel> retrieveToday() {
+    public List<ClassModel> retrieveToday(HttpSession session) {
+        try {
+            CommonModel commonModel = (CommonModel) session.getAttribute("common");
+            String currDate = FieldUtility.getCurrentDate();
+
+            List<Map<String, String>> classList = new ArrayList<>();
+            if(commonModel.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
+                classList = classRepository.retrieveToday(currDate);
+            }else if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
+                classList = classRepository.retrieveTodayStudent(currDate, commonModel.getUser().getId());
+            }else if(commonModel.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
+                classList = classRepository.retrieveTodayLecturer(currDate, commonModel.getUser().getId());
+            }
+
+            List<ClassModel> activeList = new ArrayList<>();
+            for(Map<String, String> data : classList) {
+                activeList.add((ClassModel) MapperUtility.mapModel(ClassModel.class, data));
+            }
+            return activeList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<ClassModel> retrieveAll(int uid) {
         try {
             String currDate = FieldUtility.getCurrentDate();
 
-            List<Map<String, String>> classList = classRepository.retrieveToday(currDate);
+            List<Map<String, String>> classList = classRepository.retrieveAllStudent(currDate, uid);
             List<ClassModel> activeList = new ArrayList<>();
             for(Map<String, String> data : classList) {
                 activeList.add((ClassModel) MapperUtility.mapModel(ClassModel.class, data));

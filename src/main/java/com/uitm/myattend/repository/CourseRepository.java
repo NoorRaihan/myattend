@@ -35,7 +35,7 @@ public class CourseRepository {
         try {
             String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
                     "LEFT JOIN ma_users b ON a.user_id = b.id " +
-                    "WHERE a.user_id = ?";
+                    "WHERE a.user_id = ? AND a.deleted_at IS NULL";
 
             String [] condval = {
                     Integer.toString(uid)

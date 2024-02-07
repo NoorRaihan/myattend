@@ -63,7 +63,8 @@ public class ClassController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        List<ClassModel> todayList = classService.retrieveToday();
+        CommonModel commonModel = (CommonModel) session.getAttribute("common");
+        List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId());
         request.setAttribute("todayList", todayList);
         request.setAttribute("totalClass", todayList.size());
         return "Student/classList";
