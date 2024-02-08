@@ -1,6 +1,7 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.RoleModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.UserRepository;
@@ -8,6 +9,7 @@ import com.uitm.myattend.utility.FieldUtility;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.io.TikaInputStream;
@@ -211,6 +213,10 @@ public class UserService {
     }
 
     public boolean update(Map<String, Object> body, MultipartFile file) {
+        return update(body, file, null);
+    }
+
+    public boolean update(Map<String, Object> body, MultipartFile file, HttpSession session) {
         try {
             UserModel user = new UserModel();
             String bday = FieldUtility.getFormatted((String) body.get("birthdate"), "yyyy-MM-dd", "yyyyMMdd");
@@ -241,6 +247,13 @@ public class UserService {
             if(!userRepo.update(user)) {
                 throw new Exception("Failed to update user info");
             }
+
+            if(session != null) {
+                UserModel userModel = retrieveUserById(Integer.parseInt(uid));
+                CommonModel commonModel = (CommonModel) session.getAttribute("common");
+                commonModel.setUser(userModel);
+            }
+
             return true;
         }catch (Exception e) {
             e.printStackTrace();
