@@ -11,7 +11,10 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css"
+    />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <script src="${contextPath}/resources/dataTables.tailwindcss.js"></script>
     <script src="${contextPath}/resources/lecturer.js"></script>
@@ -37,7 +40,10 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <h2 class="card-title">Lecturers</h2>
                   <div class="-mx-4 sm:-mx-0">
-                    <table id="lecturerDT" class="min-w-full divide-y divide-gray-300 display">
+                    <table
+                      id="lecturerDT"
+                      class="min-w-full divide-y divide-gray-300 display"
+                    >
                       <thead>
                         <tr>
                           <th
@@ -98,7 +104,9 @@ uri="jakarta.tags.core" %>
                               <dl class="font-normal lg:hidden">
                                 <dd class="mt-1 truncate text-gray-700">
                                   <c:choose>
-                                    <c:when test="${lecturer.getLect_id() == -1}">
+                                    <c:when
+                                      test="${lecturer.getLect_id() == -1}"
+                                    >
                                       No data yet
                                     </c:when>
                                     <c:otherwise>
@@ -116,10 +124,12 @@ uri="jakarta.tags.core" %>
                             <c:choose>
                               <c:when test="${lecturer.getLect_id() == -1}">
                                 <td
-                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell" colspan="4"
+                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell text-center"
+                                  colspan="5"
                                 >
                                   No data yet
                                 </td>
+                                <td class="hidden"></td>
                                 <td class="hidden"></td>
                                 <td class="hidden"></td>
                                 <td class="hidden"></td>
@@ -261,7 +271,8 @@ uri="jakarta.tags.core" %>
                 type="text"
                 name="fullname"
                 id="fullname"
-                class="input input-primary input-sm input-bordered" disabled
+                class="input input-primary input-sm input-bordered"
+                disabled
               />
             </label>
             <label class="form-control basis-2/4 grow">

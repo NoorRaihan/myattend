@@ -564,6 +564,16 @@ uri="jakarta.tags.core" %>
             </label>
             <label class="form-control basis-1/4 grow">
               <div class="label">
+                <span class="label-text">New Password</span>
+              </div>
+              <input
+                type="password"
+                name="password"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+            <label class="form-control basis-1/4 grow">
+              <div class="label">
                 <span class="label-text">Gender</span>
               </div>
               <select
