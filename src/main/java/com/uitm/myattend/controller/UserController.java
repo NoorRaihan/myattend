@@ -250,7 +250,7 @@ public class UserController {
             body.put("uid", Integer.toString(common.getUser().getId()));
             body.put("role", Integer.toString(common.getUser().getRole_id()));
 
-            if(!userService.update(body, file)) {
+            if(!userService.update(body, file, session)) {
                 throw new Exception("Failed to update profile");
             }else {
                 session.setAttribute("success", "Profile updated successfully");
