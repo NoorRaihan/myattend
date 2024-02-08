@@ -528,7 +528,28 @@ uri="jakarta.tags.core" %>
           </div>
         </div>
       </div>
-
+        <div id="alert" class="toast toast-top toast-end z-50 hidden">
+          <div class="alert alert-warning">
+            <span id="alertMsg">Error</span>
+          </div>
+        </div>
+        <div id="succ" class="toast toast-top toast-end z-50 hidden">
+          <div class="alert alert-success">
+            <span id="succMsg">Success</span>
+          </div>
+        </div>
+        <script>
+          let error = "${sessionScope.error}";
+          if (error != "") {
+            $("#alertMsg").html(error);
+            $("#alert").show().delay(3000).fadeOut();
+          }
+          let succ = "${sessionScope.success}";
+          if (succ != "") {
+            $("#succMsg").html(succ);
+            $("#succ").show().delay(3000).fadeOut();
+          }
+        </script>
       <%@ include file="drawer.jsp" %>
     </div>
     <dialog id="editProfile" class="modal">
