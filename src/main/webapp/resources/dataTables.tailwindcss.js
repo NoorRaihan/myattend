@@ -36,14 +36,14 @@ $.extend(DataTable.ext.classes, {
       enabled: "btn",
       notEnabled: "btn btn-disabled text-gray-300",
     },
-    table: "dataTable min-w-full text-sm align-middle whitespace-nowrap",
+    table: "dataTable",
     thead: {
-      row: "border-b border-gray-100 dark:border-gray-700/50",
+      row: "border-b border-gray-100",
       cell: "px-3 py-4 text-gray-900 font-semibold text-left",
     },
     tbody: {
       row: "even:bg-neutral",
-      cell: "p-3",
+      cell: "",
     },
     tfoot: {
       row: "even:bg-gray-50",
