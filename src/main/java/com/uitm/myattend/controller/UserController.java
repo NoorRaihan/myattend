@@ -72,6 +72,12 @@ public class UserController {
             }
 
             FieldUtility.requiredValidator(body, userRequiredFields());
+
+            CommonModel common = (CommonModel) session.getAttribute("common");
+            if(userService.retrieveUserByEmail((String) body.get("email")) != null) {
+                throw new Exception("Email already exists");
+            }
+
             UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("success", "New user successfully added");
@@ -165,6 +171,13 @@ public class UserController {
 
             FieldUtility.requiredValidator(body, userRequiredFields());
 
+            CommonModel common = (CommonModel) session.getAttribute("common");
+            if(!body.get("email").equals(common.getUser().getEmail())) {
+                if(userService.retrieveUserByEmail((String) body.get("email")) != null) {
+                    throw new Exception("Email already exists");
+                }
+            }
+
             if(!userService.update(body, file)) {
                 throw new Exception("Failed to update user data");
             }else {
@@ -249,6 +262,12 @@ public class UserController {
             FieldUtility.requiredValidator(body, profileRequiredFields());
             body.put("uid", Integer.toString(common.getUser().getId()));
             body.put("role", Integer.toString(common.getUser().getRole_id()));
+
+            if(!body.get("email").equals(common.getUser().getEmail())) {
+                if(userService.retrieveUserByEmail((String) body.get("email")) != null) {
+                    throw new Exception("Email already exists");
+                }
+            }
 
             if(!userService.update(body, file, session)) {
                 throw new Exception("Failed to update profile");
