@@ -137,10 +137,11 @@ public class AttendanceRepository {
         try {
             String sql = "SELECT " +
                     "ROUND(((SELECT COUNT(a.id) FROM ma_attendances a INNER JOIN ma_classes b ON a.class_id = b.id WHERE b.course_id = ? AND status = 'C') " +
-                    "/ (SELECT COUNT(id) FROM ma_classes WHERE course_id = ?)) * 100, 2) AS \"PERCENTAGE\" FROM DUAL";
+                    "/ ((SELECT count(stud_id) FROM ma_courses_students WHERE course_id = ?) * (SELECT COUNT(id) FROM ma_classes WHERE course_id = ?))) " +
+                    "* 100, 2) AS \"PERCENTAGE\" FROM DUAL";
 
-            String [] condVal = {courseId, courseId};
-            String [] condType = {"varchar", "varchar"};
+            String [] condVal = {courseId,courseId,courseId};
+            String [] condType = {"varchar", "varchar", "varchar"};
 
             int result = commDB.sqlQuery(sql, condVal, condType);
             if(result <= 0) {
