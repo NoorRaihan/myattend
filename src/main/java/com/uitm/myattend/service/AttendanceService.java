@@ -162,13 +162,23 @@ public class AttendanceService {
             Map<String, String> attMap = new HashMap<>();
             if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
                 for(CourseModel course : courseList) {
-                    Map<String, String> perc = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId()).get(0);
-                    attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId());
+                    if(!perfList.isEmpty()) {
+                        Map<String, String> perc = perfList.get(0);
+                        attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                    }else{
+                        attMap.put(course.getCourse_code(), "0");
+                    }
                 }
             }else{
                 for(CourseModel course : courseList) {
-                    Map<String, String> perc = attendanceRepository.retrievePerformance(course.getId()).get(0);
-                    attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformance(course.getId());
+                    if(!perfList.isEmpty()) {
+                        Map<String, String> perc = attendanceRepository.retrievePerformance(course.getId()).get(0);
+                        attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
+                    }else{
+                        attMap.put(course.getCourse_code(), "0");
+                    }
                 }
             }
             return attMap;
