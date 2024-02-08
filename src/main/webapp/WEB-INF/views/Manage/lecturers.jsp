@@ -13,7 +13,7 @@ uri="jakarta.tags.core" %>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css" />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwindcss.js"></script>
+    <script src="${contextPath}/resources/dataTables.tailwindcss.js"></script>
     <script src="${contextPath}/resources/lecturer.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
@@ -97,40 +97,62 @@ uri="jakarta.tags.core" %>
                               ${lecturer.getUser().getFullname()}
                               <dl class="font-normal lg:hidden">
                                 <dd class="mt-1 truncate text-gray-700">
-                                  ${lecturer.getLect_id()}
+                                  <c:choose>
+                                    <c:when test="${lecturer.getLect_id() == -1}">
+                                      No data yet
+                                    </c:when>
+                                    <c:otherwise>
+                                      ${lecturer.getLect_id()}
+                                    </c:otherwise>
+                                  </c:choose>
                                 </dd>
                                 <dd
                                   class="mt-1 truncate text-gray-500 sm:hidden"
                                 >
-                                  ${lecturer.getStart_date()}
+                                  ${lecturer.getQualification()}
                                 </dd>
                               </dl>
                             </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                            >
-                              ${lecturer.getLect_id()}
-                            </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                            >
-                              ${lecturer.getStart_date()}
-                            </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                            >
-                              ${lecturer.getQualification()}
-                            </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                            >
-                              ${lecturer.getSalaryDecimal()}
-                            </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                            >
-                              ${lecturer.getSupervisor().getFullname()}
-                            </td>
+                            <c:choose>
+                              <c:when test="${lecturer.getLect_id() == -1}">
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell" colspan="4"
+                                >
+                                  No data yet
+                                </td>
+                                <td class="hidden"></td>
+                                <td class="hidden"></td>
+                                <td class="hidden"></td>
+                                <td class="hidden"></td>
+                              </c:when>
+                              <c:otherwise>
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                                >
+                                  ${lecturer.getLect_id()}
+                                </td>
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                                >
+                                  ${lecturer.getFormatStartDate()}
+                                </td>
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                                >
+                                  ${lecturer.getQualification()}
+                                </td>
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                                >
+                                  ${lecturer.getSalaryDecimal()}
+                                </td>
+                                <td
+                                  class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                                >
+                                  ${lecturer.getSupervisor().getFullname()}
+                                </td>
+                              </c:otherwise>
+                            </c:choose>
                             <td
                               class="px-3 py-4 text-right text-sm text-gray-500"
                             >

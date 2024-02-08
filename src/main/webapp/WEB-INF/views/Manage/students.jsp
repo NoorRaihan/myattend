@@ -13,7 +13,7 @@ uri="jakarta.tags.core" %>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css" />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwindcss.js"></script>
+    <script src="${contextPath}/resources/dataTables.tailwindcss.js"></script>
     <script src="${contextPath}/resources/student.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
@@ -37,7 +37,7 @@ uri="jakarta.tags.core" %>
                 <div class="card-body">
                   <h2 class="card-title">Students</h2>
                   <div class="-mx-4 sm:-mx-0">
-                    <table id="studentDT" class="min-w-full divide-y divide-gray-300 display">
+                    <table id="studentDT" class="min-w-full divide-y divide-gray-300">
                       <thead>
                         <tr>
                           <th
@@ -91,37 +91,55 @@ uri="jakarta.tags.core" %>
                             ${student.getUser().getFullname()}
                             <dl class="font-normal lg:hidden">
                               <dd class="mt-1 truncate text-gray-700">
-
-                                ${student.getStud_id()}
-
+                                <c:choose>
+                                  <c:when test="${student.getStud_id() == -1}">
+                                    No data yet
+                                  </c:when>
+                                  <c:otherwise>
+                                    ${student.getStud_id()}
+                                  </c:otherwise>
+                                </c:choose>
                               </dd>
                               <dd class="mt-1 truncate text-gray-500 sm:hidden">
                                 ${student.getProgram()}
                               </dd>
                             </dl>
                           </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-
-                            ${student.getStud_id()}
-
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${student.getProgram()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                          >
-                            ${student.getIntake()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                          >
-                            ${student.getSemester()}
-                          </td>
+                          <c:choose>
+                            <c:when test="${student.getStud_id() == -1}">
+                              <td
+                                class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell text-center" colspan="4"
+                              >
+                                No data yet
+                              </td>
+                              <td class="hidden"></td>
+                              <td class="hidden"></td>
+                              <td class="hidden"></td>
+                              <td class="hidden"></td>
+                            </c:when>
+                            <c:otherwise>
+                              <td
+                                class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                              >
+                                ${student.getStud_id()}
+                              </td>
+                              <td
+                                class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                              >
+                                ${student.getProgram()}
+                              </td>
+                              <td
+                                class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                              >
+                                ${student.getIntake()}
+                              </td>
+                              <td
+                                class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                              >
+                                ${student.getSemester()}
+                              </td>
+                            </c:otherwise>
+                          </c:choose>
                           <td
                             class="px-3 py-4 text-right text-sm text-gray-500"
                           >

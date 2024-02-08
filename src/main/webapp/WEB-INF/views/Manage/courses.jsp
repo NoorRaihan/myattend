@@ -13,7 +13,7 @@ uri="jakarta.tags.core" %>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css" />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwindcss.js"></script>
+    <script src="${contextPath}/resources/dataTables.tailwindcss.js"></script>
     <script src="${contextPath}/resources/course.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
