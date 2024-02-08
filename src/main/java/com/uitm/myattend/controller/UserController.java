@@ -74,7 +74,7 @@ public class UserController {
             FieldUtility.requiredValidator(body, userRequiredFields());
             UserModel user = userService.insert(body, file);
             if(user != null) {
-                session.setAttribute("message", "New user successfully added");
+                session.setAttribute("success", "New user successfully added");
             }else{
                 session.setAttribute("error", "Internal server error. Please contact admin for futher assistance");
             }
