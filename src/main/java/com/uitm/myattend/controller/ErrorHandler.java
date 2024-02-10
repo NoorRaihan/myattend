@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+//controler to override the default whitelable error
 @Controller
 public class ErrorHandler implements ErrorController {
 
@@ -18,6 +19,7 @@ public class ErrorHandler implements ErrorController {
         if(status != null) {
             int errCode = Integer.parseInt(status.toString());
 
+            //redirect the error to custom page
             if(errCode == HttpStatus.NOT_FOUND.value()) {
                 return "Error/error404";
             }else if(errCode == HttpStatus.FORBIDDEN.value()){

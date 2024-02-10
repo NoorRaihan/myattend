@@ -353,7 +353,7 @@ uri="jakarta.tags.core" %>
         <p class="py-4">
           Do you really want to delete this lecturer's information ?
         </p>
-        <form action="" method="post">
+        <form action="/lecturer/delete" method="post">
           <input type="hidden" name="uid" id="uid" value="1" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-error text-white">

@@ -34,6 +34,7 @@ public class LectController {
         this.authService = authService;
     }
 
+    //serve the lecturer management
     @GetMapping("")
     public String lecturer (HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -44,14 +45,15 @@ public class LectController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        List<LecturerModel> lectList = lecturerService.retrieveAll();
-        List<LecturerModel> svList = lecturerService.retrieveSV();
+        List<LecturerModel> lectList = lecturerService.retrieveAll(); //retrieve all lect detail
+        List<LecturerModel> svList = lecturerService.retrieveSV(); //retrieve sv list for dropdown
         request.setAttribute("lecturers", lectList);
         request.setAttribute("lecturerSv", svList);
         request.setAttribute("totalLecturer", lectList.size());
         return "Manage/lecturers";
     }
 
+    //API for lecturer detail for AJAX
     @GetMapping("/detail")
     @ResponseBody
     public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
@@ -88,6 +90,7 @@ public class LectController {
         return respMap;
     }
 
+    //serve for lecturer update
     @PostMapping("/update")
     public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -109,7 +112,9 @@ public class LectController {
         response.sendRedirect("/lecturer");
     }
 
-    @PostMapping
+
+    //serve for lecturer delete
+    @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
             if(!authService.authenticate(session)) {
@@ -129,6 +134,7 @@ public class LectController {
         response.sendRedirect("/lecturer");
     }
 
+    //handle require field for lecturer
     private String [][] lecturerRequiredFields() {
         return new String[][]{
                 {"startDate", "Lecturer start date is required"},

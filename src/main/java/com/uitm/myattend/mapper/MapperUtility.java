@@ -2,14 +2,13 @@ package com.uitm.myattend.mapper;
 
 import com.uitm.myattend.model.*;
 import com.uitm.myattend.utility.FieldUtility;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 public class MapperUtility {
 
+    //generic function to map from database to the class model automatically
     public static Object mapModel(Class<?> modelClass, Map<String, String> data) throws Exception{
         String className = modelClass.getSimpleName();
         Object obj = null;
@@ -18,6 +17,7 @@ public class MapperUtility {
         TreeMap<String, String> tempMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         tempMap.putAll(data);
 
+        //check for which class to map
         switch(className.toUpperCase()) {
             case "USERMODEL" -> obj = userMapper(tempMap);
             case "LECTURERMODEL" -> obj = lecturerMapper(tempMap);
@@ -32,6 +32,7 @@ public class MapperUtility {
         return obj;
     }
 
+    //map the user data from db to model
     private static UserModel userMapper(TreeMap<String, String> data) {
         UserModel userObj = new UserModel();
 
@@ -58,6 +59,7 @@ public class MapperUtility {
         return userObj;
     }
 
+    //map role from db to object
     private static RoleModel roleMapper(TreeMap<String, String> data) {
         RoleModel roleObj = new RoleModel();
         roleObj.setId(data.get("ID"));
@@ -65,6 +67,7 @@ public class MapperUtility {
         return roleObj;
     }
 
+    //map from db to lecturer object
     private static LecturerModel lecturerMapper(TreeMap<String, String> data) {
         LecturerModel lectObj = new LecturerModel();
         lectObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
@@ -80,6 +83,7 @@ public class MapperUtility {
         return lectObj;
     }
 
+    //map from db to student mapping
     private static StudentModel studentMapper(TreeMap<String, String> data) {
         StudentModel studObj = new StudentModel();
         studObj.setUser_id(Integer.parseInt(data.get("USER_ID") == null ? "-1" : data.get("USER_ID")));
@@ -93,6 +97,7 @@ public class MapperUtility {
         return studObj;
     }
 
+    //map from db to course mapping
     private static CourseModel courseModel(TreeMap<String, String> data) {
         CourseModel courseObj = new CourseModel();
 
@@ -117,6 +122,7 @@ public class MapperUtility {
         return courseObj;
     }
 
+    //convert from db to class model
     private static ClassModel classModel(TreeMap<String, String> data) {
         ClassModel classObj = new ClassModel();
 
@@ -136,6 +142,7 @@ public class MapperUtility {
         return classObj;
     }
 
+    //convert from db to attendance model
     private static AttendanceModel attendanceModel(TreeMap<String, String> data) {
         AttendanceModel attendanceModel = new AttendanceModel();
 
