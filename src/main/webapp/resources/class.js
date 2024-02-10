@@ -82,7 +82,85 @@ function loadClsList(id) {
         $("#alert").show().delay(5000).fadeOut();
       } else {
         // Generate the HTML for the class list based on the retrieved data
-        // ...
+        var classList;
+        if (response.data.classes.length == 0) {
+          classList = `<div class="w-full text-center justify-center py-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="mx-auto size-12 text-gray-400"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m3 3 1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 0 1 1.743-1.342 48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664 19.5 19.5"
+            />
+          </svg>
+          <h3 class="mt-2 text-sm font-semibold text-gray-400">
+            No classes found. Please add a new class.
+          </h3>
+        </div>`;
+        } else {
+          classList = "<table class='min-w-full divide-y divide-gray-300'>";
+          classList +=
+            "<thead><tr><th scope='col' class='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0'>Class</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell'>Date</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell'>Time</th><th scope='col' class='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>Venue</th></tr></thead>";
+          classList += "<tbody class='divide-y divide-gray-200 bg-white'>";
+          for (var dataItem of response.data.classes) {
+            classList +=
+              "<tr class='cursor-pointer classF' data-cid='" +
+              dataItem.id +
+              "'>" +
+              "<td class='w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0'>" +
+              dataItem.class_desc +
+              "<dl class='font-normal lg:hidden'>" +
+              "<dd class='mt-1 truncate text-gray-700'>" +
+              dataItem.formattedClassDate +
+              "</dd>" +
+              "<dd class='mt-1 truncate text-gray-500 sm:hidden'>" +
+              dataItem.formStartTime +
+              " - " +
+              dataItem.formEndTime +
+              "</dd>" +
+              "</dl>" +
+              "</td>" +
+              "<td class='hidden px-3 py-4 text-sm text-gray-500 lg:table-cell'>" +
+              dataItem.formattedClassDate +
+              "</td>" +
+              "<td class='hidden px-3 py-4 text-sm text-gray-500 sm:table-cell'>" +
+              dataItem.formStartTime +
+              " - " +
+              dataItem.formEndTime +
+              "</td>" +
+              "<td class='px-3 py-4 text-nowrap text-sm text-gray-500'>" +
+              dataItem.venue +
+              "</td>" +
+              "<td class='py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0'>" +
+              "<div class='dropdown dropdown-left dropdown-hover'>" +
+              "<div tabindex='0' role='button' class='btn btn-ghost btn-xs'>" +
+              "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='size-6'>" +
+              "<path fill-rule='evenodd' d='M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z' clip-rule='evenodd'/>" +
+              "</svg>" +
+              "</div>" +
+              "<ul tabindex='0' class='dropdown-content z-[1] menu p-2 shadow-lg bg-neutral rounded-box w-fit'>" +
+              "<li><label for='detail-drawer' data-id='" +
+              dataItem.id +
+              "' class='font-bold qr'>Attendance QR</label></li>" +
+              "<li><a onclick='editClass.showModal()' data-id='" +
+              dataItem.id +
+              "' class='font-bold edit'>Edit</a></li>" +
+              "<li><a onclick='deleteClass.showModal()' class='text-red-600 font-bold delete' data-id='" +
+              dataItem.id +
+              "'>Delete</a></li>" +
+              "</ul>" +
+              "</div>" +
+              "</td>" +
+              "</tr>";
+          }
+          classList += "</tbody></table>";
+        }
         // Populate the #classList element with the generated class list
         $("#classList").html(classList);
       }
