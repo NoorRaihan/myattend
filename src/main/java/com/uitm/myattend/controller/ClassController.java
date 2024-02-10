@@ -37,61 +37,77 @@ public class ClassController {
         this.attendanceService = attendanceService;
     }
 
+    //index for class management page
     @GetMapping("")
     public String classMgt(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        //authentication validation -> kick the user if not log in or missing session
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+
+        //authorize the page only for lecturer access
         if(!authService.authorize(session, FieldUtility.LECTURER_ROLE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
+        //retrieving the common model to get the user session
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
-        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
-        request.setAttribute("courses", courseList);
+        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId()); //get the course list
+        request.setAttribute("courses", courseList); //send the request to the front
         return "Lecturer/classes";
     }
 
+    //class listing page controller
     @GetMapping("/list")
     public String classList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        //authentication validation -> kick the user if not log in or missing session
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
+        //authorize the page only for student access only
         if(!authService.authorize(session, FieldUtility.STUDENT_ROLE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
+        //retrieving the common model to get the user session
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
-        List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId());
+        List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId()); //retrieve today class
         request.setAttribute("todayList", todayList);
         request.setAttribute("totalClass", todayList.size());
         return "Student/classList";
     }
 
+    //handle student list by course
     @GetMapping("/studentList")
     public String studList(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        //authentication validation -> kick the user if not log in or missing session
         if(!authService.authenticate(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return null;
         }
-
+        //authorize the page only for lecturer access only
         if(!authService.authorize(session, FieldUtility.LECTURER_ROLE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
+        //get common object from session
         CommonModel commonModel = (CommonModel) session.getAttribute("common");
-        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
+        List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId()); //retrieve the course by lecturer
         request.setAttribute("courses", courseList);
         return "Lecturer/studentList";
     }
 
+
+    //API for get class by course -> return JSON format
     @GetMapping("/course")
     @ResponseBody
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+
+            //authenticate request
             if(!authService.authenticate(session)) {
                 respMap.put("respCode", "00002");
                 respMap.put("respStatus", "error");
@@ -99,9 +115,11 @@ public class ClassController {
                 return respMap;
             }
 
+            //retrieve all class based on course with course detaul
             List<ClassModel> classList = classService.retrieveByCourse(body);
             CourseModel courseModel = courseService.retrieveDetail(body);
 
+            //error handling
             if(classList == null || courseModel == null) {
                 respMap.put("respCode", "00001");
                 respMap.put("respStatus", "error");
@@ -112,6 +130,7 @@ public class ClassController {
                 respMap.put("respMessage", "successfully retrieved");
             }
 
+            //response hashmap to return as json
             Map<String, Object> tempMap = new HashMap<>();
             tempMap.put("course", courseModel);
             tempMap.put("classes", classList);
@@ -126,18 +145,22 @@ public class ClassController {
         return respMap;
     }
 
+    //API to retrieve class detaul return JSON format
     @GetMapping("/detail")
     @ResponseBody
     public Map<String, Object> retrieveDetail(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         Map<String, Object> respMap = new HashMap<>();
         try {
+
+            //authorize the request
             if(!authService.authenticate(session)) {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return null;
             }
 
+            //retrieve the detail
             ClassModel classModel = classService.retrieveDetail(body);
-
+            //error handling
             if(classModel == null) {
                 respMap.put("respCode", "00001");
                 respMap.put("respStatus", "error");

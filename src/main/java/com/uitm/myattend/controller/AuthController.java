@@ -21,11 +21,13 @@ public class AuthController {
         this.authService = authService;
     }
 
+    //handle login page
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         return "Auth/login";
     }
 
+    //send post request process for login
     @PostMapping("/login")
     public void authLogin(@RequestParam Map<String, Object> body, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         try {
@@ -40,6 +42,7 @@ public class AuthController {
         response.sendRedirect(request.getContextPath() + "/");
     }
 
+    //send post request for logout
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         try {
@@ -52,10 +55,5 @@ public class AuthController {
             return;
         }
         response.sendRedirect(request.getContextPath() + "/login");
-    }
-
-    @GetMapping("/error2")
-    public String error() {
-        return "Error/error403";
     }
 }

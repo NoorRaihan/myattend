@@ -124,12 +124,16 @@ public class LecturerRepository {
                     "timestamp"
             };
 
+            //send supervisor id if supervisor id need to be inserted
             if(lecturer.getSupervisor_id() != -1) {
+                List<String> tempField = new ArrayList<>(Arrays.asList(field));
                 List<String> tempVal = new ArrayList<>(Arrays.asList(fieldVal));
                 List<String> tempType = new ArrayList<>(Arrays.asList(fieldType));
+                tempField.add("supervisor_id");
                 tempVal.add(Integer.toString(lecturer.getSupervisor_id()));
                 tempType.add("int");
 
+                field = tempField.toArray(String[]::new);
                 fieldVal = tempVal.toArray(String[]::new);
                 fieldType = tempType.toArray(String[]::new);
             }
