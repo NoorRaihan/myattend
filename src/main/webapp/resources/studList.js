@@ -1,3 +1,4 @@
+// a function to fetch student list using an AJAX GET request and view the list of students in the specified course
 function loadStudList(id) {
   $.ajax({
     method: "GET",

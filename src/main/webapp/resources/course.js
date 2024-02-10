@@ -1,46 +1,71 @@
+// Wait for the document to be fully loaded
 $(document).ready(function () {
+  // Attach a click event to elements with class "edit"
   $(document).on("click", ".edit", function () {
+    // Get the data-id attribute of the clicked element
     var id = $(this).data("id");
+    // Call the usrDetails function with the retrieved id
     usrDetails(id);
   });
 
+  // Attach a click event to elements with class "disable"
   $(document).on("click", ".disable", function () {
+    // Get the data-id attribute of the clicked element
     var id = $(this).data("id");
+    // Set the value of the elements with ids "disable_id" and "delete_id" to the retrieved id
     $("#disable_id").val(id);
     $("#delete_id").val(id);
   });
+
+  // Attach a click event to elements with class "enable"
   $(document).on("click", ".enable", function () {
+    // Get the data-id attribute of the clicked element
     var id = $(this).data("id");
+    // Set the value of the element with id "enable_id" to the retrieved id
     $("#enable_id").val(id);
   });
 
+  // Attach a click event to elements with class "dtl"
   $(document).on("click", ".dtl", function () {
+    // Get the data-id attribute of the clicked element
     var id = $(this).data("id");
+    // Call the courseDetails function with the retrieved id
     courseDetails(id);
   });
 
+  // Attach a click event to elements with class "rmStud"
   $(document).on("click", ".rmStud", function () {
+    // Get the data-id and data-cid attributes of the clicked element
     var id = $(this).data("id");
     var cid = $(this).data("cid");
+    // Set the value of the elements with ids "s_id" and "co_id" to the retrieved ids
     $("#s_id").val(id);
     $("#co_id").val(cid);
   });
 
+  // Initialize the DataTable for the element with id "courseDT"
   $("#courseDT").DataTable();
 });
 
+// This function makes an AJAX request to retrieve user details based on the provided 'id' parameter
 function usrDetails(id) {
+  // Send a GET request to the "/course/detail" endpoint with the 'id' parameter
   $.ajax({
     method: "GET",
     url: "/course/detail",
     data: { id: id },
     dataType: "json",
+    // If the request is successful, execute the following function
     success: function (response) {
+      // Check if the response status is "error"
       if (response.respStatus == "error") {
+        // Construct an error message using the response code and message
         let msg = "(" + response.respCode + ") " + response.respMessage;
+        // Display the error message in the designated element, show it, and then hide it after 5 seconds
         $("#alertMsg").html(msg);
         $("#alert").show().delay(5000).fadeOut();
       } else {
+        // If the response status is not "error", populate the form fields with the retrieved data
         $("#c_id").val(response.data.id);
         $("#c_code").val(response.data.course_code);
         $("#c_name").val(response.data.course_name);
@@ -55,14 +80,18 @@ function usrDetails(id) {
         );
       }
     },
+    // If the request encounters an error, execute the following function
     error: function (response) {
+      // Construct an error message using the response code and message
       let msg = "(" + response.respCode + ") " + response.respMessage;
+      // Display the error message in the designated element, show it, and then hide it after 5 seconds
       $("#alertMsg").html(msg);
       $("#alert").show().delay(5000).fadeOut();
     },
   });
 }
 
+// a function to fetch course details using an AJAX GET request and view it on the course details sidebar
 function courseDetails(id) {
   $.ajax({
     method: "GET",
