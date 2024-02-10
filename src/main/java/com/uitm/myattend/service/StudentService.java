@@ -23,6 +23,7 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
+    //retrieve all student
     public List<StudentModel> retrieveAll() {
         try {
             List<Map<String, String>> studList = studentRepository.retrieve();
@@ -38,6 +39,7 @@ public class StudentService {
         }
     }
 
+    //retrieve student detail
     public StudentModel retrieveDetail(int uid) {
         try {
             List<Map<String, String>> studList = studentRepository.retrieveDetail(uid);
@@ -54,6 +56,7 @@ public class StudentService {
         }
     }
 
+    //insert new student
     public boolean insert(Map<String, Object> body) {
         try {
             StudentModel student = new StudentModel();
@@ -76,6 +79,7 @@ public class StudentService {
         }
     }
 
+    //update studet data
     public boolean update(Map<String, Object> body) {
         try {
             StudentModel student = new StudentModel();
@@ -96,11 +100,15 @@ public class StudentService {
         }
     }
 
+    //edit student data
     public boolean editStudent(Map<String, Object> body) {
         try {
+
+            //retrieve raw user data
             int uid = Integer.parseInt((String) body.get("uid"));
             List<Map<String, String>> studentList = studentRepository.retrieveRaw(uid, null);
 
+            //error handling
             if(studentList == null) {
                 throw new Exception("Retrieve data error on student!");
             }
@@ -109,11 +117,12 @@ public class StudentService {
                 throw new Exception("Data error multiple rows on student!");
             }
 
+            //if data not existed yet since the listing using right join to user table then need to insert into student table
             boolean flag = false;
             if(studentList.isEmpty()) {
                 flag = insert(body);
             }else {
-                flag = update(body);
+                flag = update(body); //update the student info instead if the data already in student table
             }
 
             if(!flag) {
@@ -127,6 +136,7 @@ public class StudentService {
         }
     }
 
+    //delete student data
     public boolean delete(Map<String, Object> body) {
         try {
             int uid = Integer.parseInt((String) body.get("uid"));
@@ -159,6 +169,7 @@ public class StudentService {
         }
     }
 
+    //retrieve the student detail with course
     public StudentModel retrieveDetailByCourse(String cid, int uid) {
         try {
             List<Map<String, String>> studentList = studentRepository.retrieveDetailByCourse(cid, uid);

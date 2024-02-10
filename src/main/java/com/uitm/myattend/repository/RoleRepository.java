@@ -18,6 +18,7 @@ public class RoleRepository {
         this.commDB = commDB;
     }
 
+    //insert role into database
     public boolean insert(RoleModel roleModel) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
@@ -54,6 +55,7 @@ public class RoleRepository {
         }
     }
 
+    //retrieve role detail
     public List<Map<String, String>> retrieve(int roleId) {
         try {
             String [] field = {
@@ -78,6 +80,7 @@ public class RoleRepository {
         }
     }
 
+    //retrieve all role
     public List<Map<String, String>> retrieveAll() {
         try {
             String [] field = {
@@ -98,6 +101,7 @@ public class RoleRepository {
         }
     }
 
+    //update role detail
     public boolean update(RoleModel roleModel, int roleId) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
@@ -136,6 +140,7 @@ public class RoleRepository {
         }
     }
 
+    //delete role
     public boolean delete(int roleId) {
         try {
             String cond = "id = ?";

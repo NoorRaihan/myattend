@@ -29,13 +29,16 @@ public class CourseService {
         this.classRepository = classRepository;
     }
 
+    //retrieve all courses
     public List<CourseModel> retrieveAll() {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieve();
 
+            //map the hashmap to its model using custom mapper function
             List<CourseModel> courseModelList = new ArrayList<>();
             for(Map<String, String> course : courseList) {
                 CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
+                //retrieve exact color value from color.properties
                 courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
                 courseModelList.add(courseObj);
             }
@@ -46,6 +49,7 @@ public class CourseService {
         }
     }
 
+    //handle new course insertion
     public boolean insert(Map<String, Object> body) {
         try {
             CourseModel course = new CourseModel();
@@ -55,7 +59,7 @@ public class CourseService {
             course.setCourse_name((String) body.get("c_name"));
 
             String colorId = (String) body.get("c_color");
-
+            //check if selected color is actually exists in color.properties
             if(env.getProperty("color." + colorId.toUpperCase()) == null) {
                 throw new Exception("Failed to retrieve color properties");
             }
@@ -75,6 +79,7 @@ public class CourseService {
         }
     }
 
+    //retrieve course detail
     public CourseModel retrieveDetail(Map<String, Object> body) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveDetail((String) body.get("id"));
@@ -82,6 +87,7 @@ public class CourseService {
                 throw new Exception("Course data retrieve error occured! CourseList size: " + courseList.size());
             }
 
+            //retrieve color properties from properties file
             Map<String, String> course = courseList.get(0);
             CourseModel courseObj =  (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
             courseObj.setColorConfig(env.getProperty("color." + courseObj.getColor()));
@@ -92,6 +98,7 @@ public class CourseService {
         }
     }
 
+    //update course data
     public boolean update(Map<String, Object> body) {
         try {
             CourseModel course = new CourseModel();
@@ -121,6 +128,7 @@ public class CourseService {
         }
     }
 
+    //delete course data
     public boolean delete(Map<String, Object> body) {
         try {
             String id = (String) body.get("id");
@@ -136,6 +144,7 @@ public class CourseService {
         }
     }
 
+    //change status such as disable or enable courses
     public boolean changeStatus(Map<String, Object> body, boolean isDisable) {
         try {
             String cid = (String) body.get("id");
@@ -157,6 +166,7 @@ public class CourseService {
         }
     }
 
+    //register student to its selected course
     public boolean registerStudent(Map<String, Object> body, boolean isRegister) {
         try {
             int uid = Integer.parseInt((String) body.get("uid"));
@@ -180,6 +190,7 @@ public class CourseService {
         }
     }
 
+    //retrieve available/enabled course for student to enroll
     public List<CourseModel> retrieveAvailableCourseStudent(int uid) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveAvailableCourse(uid);
@@ -196,6 +207,7 @@ public class CourseService {
         }
     }
 
+    //retrieve registed course/enrolled course of specific user
     public List<CourseModel> retrieveRegisteredCourseStudent(int uid) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveRegisteredStudentCourse(uid);
@@ -213,6 +225,7 @@ public class CourseService {
         }
     }
 
+    //retrieve course assigned to specific lecturer
     public List<CourseModel> retrieveCourseByLecturer(int uid) {
         try {
             List<Map<String, String>> courseList = courseRepository.retrieveByLecturer(uid);
@@ -230,6 +243,7 @@ public class CourseService {
         }
     }
 
+    //remove/unenrolled student from the course
     public boolean unregisterStudent(Map<String, Object> body) {
         try {
             int uid = Integer.parseInt((String) body.get("uid"));

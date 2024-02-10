@@ -41,6 +41,7 @@ public class AttendanceService {
         this.courseService = courseService;
     }
 
+    //insert new attendance
     public boolean insert(AttendanceModel attendance) {
         try {
 
@@ -55,6 +56,8 @@ public class AttendanceService {
         }
     }
 
+    //main function to check the attendance when student scan the qr
+    //the pattern: myattend.{encryptedBASE64}.sessionID
     public boolean checkAttendance(Map<String, Object> body) throws Exception{
         String data = ((String) body.get("data"));
         String [] dataArr = data.split("\\.");
@@ -63,10 +66,12 @@ public class AttendanceService {
             throw new Exception("Invalid request! Insufficient parameter");
         }
 
+        //get the data
         String ind = dataArr[0];
         String b64 = dataArr[1];
         String sessId = dataArr[2];
 
+        //check for the session validility
         String tmp = userService.retrieveToken(sessId).get(0).get("user_id");
 
         if(tmp == null) {
@@ -79,9 +84,11 @@ public class AttendanceService {
             throw new Exception("Invalid indicator");
         }
 
+        //retrieve the private key to process decryption
         String decrypted = FieldUtility.decryptStringBase64(env.getProperty("app.key"), b64);
         String [] decryptArr = decrypted.split("\\.");
         System.out.println("Decrypted BASE64: " + decrypted);
+        //corrupted decryption means the data has been tampered with other key or no key at all
         if(decryptArr.length != 2) {
             throw new Exception("Invalid request");
         }
@@ -97,19 +104,23 @@ public class AttendanceService {
             throw new Exception("Invalid class id!");
         }
 
+        //retrieve the student info to check the enrollment
         StudentModel studentModel = studentService.retrieveDetailByCourse(classModel.getCourse_id(), uid);
         if(studentModel == null) {
             throw new Exception("Student does not enroll in the course");
         }
 
+        //conversion of timestamp
         long currTms = Long.parseLong(FieldUtility.getCurrentTimestamp());
         long classStart = Long.parseLong(FieldUtility.getFormatted(classModel.getStart_time(), "yyyy-MM-dd h:m:s", "yyyyMMddHHmmssSSS"));
         long classEnd = Long.parseLong(FieldUtility.getFormatted(classModel.getEnd_time(), "yyyy-MM-dd h:m:s", "yyyyMMddHHmmssSSS"));
 
+        //validate the class if not started yet
         if(currTms < classStart) {
             throw new Exception("Class has not started yet");
         }
 
+        //validate if the class has ended
         if(currTms > classEnd) {
             throw new Exception("Class attendance already expired");
         }
@@ -126,6 +137,7 @@ public class AttendanceService {
         return true;
     }
 
+    //list attendance based on class id
     public List<AttendanceModel> retrieveAttendance(Map<String, Object> body) {
         try {
             String classId = (String) body.get("id");
@@ -146,20 +158,23 @@ public class AttendanceService {
         }
     }
 
-    public List<AttendanceModel> retrieveAttended() {
-        try {
-            return Collections.emptyList();
-        }catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-    }
+//    //testing function only
+//    public List<AttendanceModel> retrieveAttended() {
+//        try {
+//            return Collections.emptyList();
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            return Collections.emptyList();
+//        }
+//    }
 
+    //calculate attendance performance based on course
     public Map<String, String> attendancePerformance(List<CourseModel> courseList, HttpSession session) {
         try {
             CommonModel commonModel = (CommonModel) session.getAttribute("common");
 
             Map<String, String> attMap = new HashMap<>();
+            //if user is student then run performance calculation for student
             if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
                 for(CourseModel course : courseList) {
                     List<Map<String, String>> perfList = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId());
@@ -170,7 +185,7 @@ public class AttendanceService {
                         attMap.put(course.getCourse_code(), "0");
                     }
                 }
-            }else{
+            }else{ //if lect or admin, run the generic attendance performance calculation
                 for(CourseModel course : courseList) {
                     List<Map<String, String>> perfList = attendanceRepository.retrievePerformance(course.getId());
                     if(!perfList.isEmpty()) {
