@@ -12,8 +12,10 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.sql.*;
 import java.util.*;
 
+// CORE CUSTOM FRAMEWORK HANDLING TO STANDARDIZE SECURITY MEASURE AND SQL HANDLING FOR ALL SQL
+
 @Repository
-@RequestScope
+@RequestScope //initiate new instance for new request
 public class DBRepository {
 
     private final JdbcTemplate dbTemplate;
@@ -24,17 +26,7 @@ public class DBRepository {
         this.dbTemplate = dbTemplate;
     }
 
-    public Connection getConnection() throws SQLException {
-        return dbTemplate.getDataSource().getConnection();
-    }
-
-    public void closeConnection() throws SQLException {
-        dbTemplate
-                .getDataSource()
-                .getConnection()
-                .close();
-    }
-
+    //get result from custom query if have any list
     public List<Map<String, String>> getResult() {
         if(!result.isEmpty()) {
             return result;
@@ -55,11 +47,13 @@ public class DBRepository {
         return sqlQuery(query, null, null);
     }
 
+    //handle custom sql query to override standard method
     public int sqlQuery(String query, String [] condval, String [] condtype) {
         ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
         try {
             System.out.println("Sql: " + query);
+            //check for select statement onlu
             if(query.split(" ")[0].equalsIgnoreCase("select")) {
                 dbTemplate.query(query, prepareSQLStatement(null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
@@ -68,7 +62,7 @@ public class DBRepository {
                         result = new ArrayList<Map<String, String>>();
 
                         setColumnLabel(rs);
-
+                        //send and map the result to result variable
                         while(rs.next()) {
                             temp = new HashMap<String, String>();
                             for(String key : columnLabel) {
@@ -80,7 +74,7 @@ public class DBRepository {
                     }
                 });
             }else{
-                return this.dbTemplate.update(query);
+                return this.dbTemplate.update(query); //for custom INSERT, UPDATE, DELETE
             }
 
             return 1;
@@ -99,11 +93,13 @@ public class DBRepository {
         return select(table, field, cond, null, null);
     }
 
+    //handle select statement by only pass field, condition and value and type of the value
     public List<Map<String, String>> select(String table, String [] field, String cond, String [] condval, String [] condtype) {
         List<Map<String, String>> data = new ArrayList<>();
         try {
+            //build the select query
             String query = buildSelectQuery(table, field, cond);
-
+            //handle select statement for select with condiion
             if(condval != null && condval.length > 0) {
                 dbTemplate.query(query, prepareSQLStatement(null, null, condval, condtype), new ResultSetExtractor<HashMap<String, String>>() {
                     @Override
@@ -121,7 +117,7 @@ public class DBRepository {
                         return temp;
                     }
                 });
-            }else{
+            }else{ //handle for select without condition to avoid any unnecessary trigger
                 dbTemplate.query(query,
                         new ResultSetExtractor<HashMap<String, String>>() {
                             @Override
@@ -142,7 +138,6 @@ public class DBRepository {
                         });
             }
         }catch (Exception e) {
-            //writeLog("Select statement error on " + table + ": " + e.getMessage(), "ERROR");
             System.err.println("ERRORS: " + e.getMessage());
             return Collections.<Map<String, String>>emptyList();
         }
@@ -153,8 +148,10 @@ public class DBRepository {
         return insert(table, fields, values, datatype, Collections.emptyMap());
     }
 
+    //handle data insertion into database
     public int insert(String table, String [] fields, String [] values, String [] datatype, Map<String, String> sqlFunction) {
         try {
+            //build insert query
             String query = buildInsertQuery(table, fields, sqlFunction);
 
             return this.dbTemplate.update(query, prepareSQLStatement(fields, values, datatype));
@@ -168,8 +165,10 @@ public class DBRepository {
         return update(table, fields, values, datatype, cond, condval, condtype, Collections.emptyMap());
     }
 
+    //handle update sql statement
     public int update(String table, String [] fields, String [] values, String [] datatype, String cond, String [] condval, String [] condtype, Map<String, String> sqlFunction) {
         try {
+            //build update query
             String query = buildUpdateQuery(table, fields, cond, sqlFunction);
 
             if(query == null) {
@@ -182,34 +181,25 @@ public class DBRepository {
         }
     }
 
+    //handle delete statement
     public int delete(String table, String cond, String [] values, String [] datatype) {
         try {
+            //build delete query
             String query = buildDeleteQuery(table, cond);
 
             if(query == null) {
                 throw new Exception("Invalid query");
             }
 
-            return this.dbTemplate.update(query, new PreparedStatementSetter() {
-                @Override
-                public void setValues(PreparedStatement ps) throws SQLException {
-                    for(int i=0; i<values.length; i++) {
-                        if(datatype[i].equalsIgnoreCase("varchar")) {
-                            ps.setString(i+1, values[i]);
-                        }else if(datatype[i].equalsIgnoreCase("decimal")) {
-                            ps.setDouble(i+1, Double.parseDouble(values[i]));
-                        }else if(datatype[i].equalsIgnoreCase("int")) {
-                            ps.setInt(i+1, Integer.parseInt(values[i]));
-                        }
-                    }
-                }
-            });
+            //handle delete query
+            return this.dbTemplate.update(query, prepareSQLStatement(null, null, values, datatype));
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             return -1;
         }
     }
 
+    //build delete query
     private String buildDeleteQuery(String table, String cond) {
         try {
             if(cond == null) {
@@ -224,6 +214,7 @@ public class DBRepository {
         }
     }
 
+    //build update query
     public String buildUpdateQuery(String table, String [] field, String cond, Map<String, String> sqlFunction) {
         try {
             String query = "update " + table + " set";
@@ -249,6 +240,7 @@ public class DBRepository {
 
     }
 
+    //build insert query
     private String buildInsertQuery(String table, String[] field, Map<String, String> sqlFunction) {
         try{
             String query = "insert into " + table + " $field values($value)";
@@ -273,6 +265,7 @@ public class DBRepository {
         }
     }
 
+    //build the select query to its standard for prepare statement
     private String buildSelectQuery(String table, String [] field, String cond) {
         try {
             String query = "select ";
@@ -302,12 +295,15 @@ public class DBRepository {
         return prepareSQLStatement(values, datatype, null, null);
     }
 
+    //handle prepare statement custom configuration for generic usage
     private PreparedStatementSetter prepareSQLStatement(String [] values, String [] datatype, String [] condval, String [] condtype) {
         PreparedStatementSetter prepSetter =  (ps) -> {
             try {
+                //set up the prepare statement for main field, mainly for update and insertion
                 if(values != null && values.length > 0) {
                     System.out.println("Field Value: " + Arrays.toString(values));
                     for(int i=0; i<values.length; i++) {
+                        //handle its own datatype to proper handling
                         switch (datatype[i].toUpperCase()) {
                             case "VARCHAR" -> ps.setString(i+1, values[i]);
                             case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(values[i]));
@@ -320,12 +316,13 @@ public class DBRepository {
                     }
                 }
 
+                //set up the prepare statement for condition field to its datatype
                 if(condval != null && condval.length > 0) {
                     System.out.println("Cond Value: " + Arrays.toString(condval));
                     int counter = values == null ? 0 : values.length;
                     for(int i=counter; i<counter + condval.length; i++) {
                         int y = i-counter;
-
+                        //handle for conditiion datatype
                         switch (condtype[y].toUpperCase()) {
                             case "VARCHAR" -> ps.setString(i+1, condval[y]);
                             case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(condval[y]));
@@ -348,6 +345,7 @@ public class DBRepository {
         return prepSetter;
     }
 
+    //set the retrieved column label for each sql retrieve process
     private void setColumnLabel(ResultSet rs) {
         try {
             columnLabel = new ArrayList<String>();

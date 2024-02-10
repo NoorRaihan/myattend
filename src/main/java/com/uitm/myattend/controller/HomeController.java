@@ -48,10 +48,11 @@ public class HomeController {
             return null;
         }
 
-        homeService.index(session, request);
+        homeService.index(session, request); //serve all informations to the front
         return "Home/home";
     }
 
+    //for qr scanning
     @GetMapping("/qrscan")
     public String qrscan(HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -59,12 +60,14 @@ public class HomeController {
             return null;
         }
 
+        //authorize only student can access the page
         if(!authService.authorize(session, FieldUtility.STUDENT_ROLE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         return "Home/qrscan";
     }
 
+    //serve as maintainance page
     @GetMapping("/utility")
     public String utilityMgt(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -75,18 +78,19 @@ public class HomeController {
         if(!authService.authorize(session, FieldUtility.ADMIN_ROLE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        List<RoleModel> roleList = roleService.retrieveAll();
+        List<RoleModel> roleList = roleService.retrieveAll(); //retrieve all role
         request.setAttribute("roles", roleList);
         return "Manage/utilities";
     }
 
+    //API to retrieve role detaul
     @GetMapping("/utility/detail")
     @ResponseBody
     public Map<String, Object> utilityDetail(@RequestParam Map<String, Object> body, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> respMap = new HashMap<>();
         try {
             int id = Integer.parseInt((String) body.get("id"));
-            RoleModel role = roleService.retrieve(id);
+            RoleModel role = roleService.retrieve(id); //retrieve role by id
 
             if(role == null) {
                 respMap.put("respCode", "00001");
@@ -109,6 +113,7 @@ public class HomeController {
         return respMap;
     }
 
+    //update the role
     @PostMapping("/role/update")
     public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -127,6 +132,7 @@ public class HomeController {
         response.sendRedirect("/utility");
     }
 
+    //create new roe
     @PostMapping("/role/create")
     public void create(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -145,6 +151,7 @@ public class HomeController {
         response.sendRedirect("/utility");
     }
 
+    //delete role
     @PostMapping("/role/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -165,6 +172,7 @@ public class HomeController {
         response.sendRedirect("/utility");
     }
 
+    //handle all require field for role
     private String [][] roleRequiredFields() {
         return new String[][]{
                 {"id", "Role id is required"},
