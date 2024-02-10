@@ -4,6 +4,10 @@
         <title>Test Page</title>
     </head>
     <body>
-        <p>Hello</p>
+        <form action="login" method="POST">
+            <input name="username" placeholder="username"/>
+            <input name="password" placeholder="password" />
+            <input type="submit" value="submit"/>
+        </form>
     </body>
 </html>
