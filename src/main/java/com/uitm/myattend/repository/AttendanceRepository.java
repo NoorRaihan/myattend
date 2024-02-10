@@ -18,6 +18,7 @@ public class AttendanceRepository {
         this.commDB = commDB;
     }
 
+    //insert new attendance
     public boolean insert(AttendanceModel attendanceModel) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
@@ -65,6 +66,7 @@ public class AttendanceRepository {
         }
     }
 
+    //update the attendance mainly for status update
     public boolean update(String classId, int uid, String status) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
@@ -112,6 +114,7 @@ public class AttendanceRepository {
         }
     }
 
+    //to retrieve the attendance will all data by joining few tables together
     public List<Map<String, String>> retrieveAttendance(String classId) {
         try {
             String sql = "SELECT a.id, a.class_id, a.attend_date, a.attend_time, a.status, b.*, c.*, c.id AS \"UID\" FROM ma_attendances a " +
@@ -133,6 +136,7 @@ public class AttendanceRepository {
         }
     }
 
+    //sql to calculate the percentage of attendance performance for each course
     public List<Map<String, String>> retrievePerformance(String courseId) {
         try {
             String sql = "SELECT " +
@@ -154,6 +158,7 @@ public class AttendanceRepository {
         }
     }
 
+    //sql to calculate the percentage of attendance performance for each course specific to the student itself
     public List<Map<String, String>> retrievePerformanceByStudent(String courseId, int uid) {
         try {
             String sql = "SELECT " +

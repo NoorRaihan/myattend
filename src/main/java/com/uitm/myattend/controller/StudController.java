@@ -37,6 +37,7 @@ public class StudController {
         this.authService = authService;
     }
 
+    //handle index page for student
     @GetMapping("")
     public String index(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -53,6 +54,7 @@ public class StudController {
     }
 
 
+    //API to retrieve student detail
     @GetMapping("/detail")
     @ResponseBody
     public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
@@ -86,6 +88,7 @@ public class StudController {
         return respMap;
     }
 
+    //handle student data update
     @PostMapping("/update")
     public void update(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -95,6 +98,7 @@ public class StudController {
                 return;
             }
 
+            //validate required field before proceed the real process
             FieldUtility.requiredValidator(body, studentRequiredFields());
             if(!studentService.editStudent(body)) {
                 throw new Exception("Failed to update student data");
@@ -107,6 +111,7 @@ public class StudController {
         response.sendRedirect("/student");
     }
 
+    //handle delete proces of student data
     @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -127,6 +132,7 @@ public class StudController {
         response.sendRedirect("/student");
     }
 
+    //API to retrieve student enrolled in specific course
     @GetMapping("/course")
     @ResponseBody
     public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body, HttpSession session) {
@@ -166,6 +172,7 @@ public class StudController {
         return respMap;
     }
 
+    //handle page to retrieve course registration page
     @GetMapping("/register/course")
     public String regCourse(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -187,7 +194,7 @@ public class StudController {
         return "Student/courseReg";
     }
 
-
+    //handle POST request to register course
     @PostMapping("/register/course")
     public void registerCourse(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -218,6 +225,7 @@ public class StudController {
         response.sendRedirect("/student/register/course");
     }
 
+    //required field for student
     private String[][] studentRequiredFields() {
         return new String[][] {
                 {"program", "Program is required"},

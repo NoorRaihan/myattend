@@ -23,6 +23,7 @@ public class ClassService {
         this.courseService = courseService;
     }
 
+    //retrieve class list by course
     public List<ClassModel> retrieveByCourse(Map<String, Object> body) {
         try {
 
@@ -40,6 +41,7 @@ public class ClassService {
         }
     }
 
+    //retrieve class detail
     public ClassModel retrieveDetail(Map<String, Object> body) {
         try {
 
@@ -62,11 +64,13 @@ public class ClassService {
         }
     }
 
+    //insert new class
     public boolean insert(Map<String, Object> body) {
         String uuid = UUID.randomUUID().toString();
         boolean created = false;
         try {
             ClassModel classModel = new ClassModel();
+            //format conversion from front to backend standard
             String classDate = FieldUtility.getFormatted((String) body.get("class_date"), "yyyy-MM-dd", "yyyyMMdd");
             String startTime = classDate + ((String) body.get("start_time")).replace(":", "") + "00000";
             String endTime = classDate + ((String) body.get("end_time")).replace(":", "") + "00000";
@@ -111,12 +115,18 @@ public class ClassService {
         }
     }
 
+    //generate unique id for each qr
     public Map<String, Object> generateAttendanceUnique(Map<String, Object> body) {
         try {
             String encrypted;
             Map<String, Object> respMap = new HashMap<>();
+            //retrieve class detail
             ClassModel classModel = retrieveDetail(body);
+            //generate the pattern
+            //pattern : {classID}.{currentTimestamp}
             String buildURL = classModel.getId() + "." + FieldUtility.getCurrentTimestamp();
+            //encrypted the original pattern and build new pattern
+            //pattern: myattend.{encryptedBASE64}
             encrypted = "myattend" + "." + FieldUtility.encryptStringBase64(env.getProperty("app.key"),buildURL);
             respMap.put("class", classModel);
             respMap.put("attendanceURL", encrypted);
@@ -128,6 +138,7 @@ public class ClassService {
         }
     }
 
+    //update the class data
     public boolean update(Map<String, Object> body) {
         try {
             ClassModel classModel = new ClassModel();
@@ -153,6 +164,7 @@ public class ClassService {
         }
     }
 
+    //delete class data
     public boolean delete(Map<String, Object> body) {
         try {
             String id = (String) body.get("id");
@@ -166,6 +178,7 @@ public class ClassService {
         }
     }
 
+    //retrieve active class
     public List<ClassModel> retrieveActive(HttpSession session) {
         try {
             CommonModel commonModel = (CommonModel) session.getAttribute("common");
@@ -194,6 +207,7 @@ public class ClassService {
         }
     }
 
+    //retrieve today class
     public List<ClassModel> retrieveToday(HttpSession session) {
         try {
             CommonModel commonModel = (CommonModel) session.getAttribute("common");
@@ -219,6 +233,7 @@ public class ClassService {
         }
     }
 
+    //retrieve all classes
     public List<ClassModel> retrieveAll(int uid) {
         try {
             String currDate = FieldUtility.getCurrentDate();

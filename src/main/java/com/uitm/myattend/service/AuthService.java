@@ -35,8 +35,11 @@ public class AuthService {
         this.common = common;
         this.userRepository = userRepository;
     }
+
+    //authenticate process to ensure the user logged in
     public boolean authenticate(HttpSession session) {
         try {
+            //check for the token
             if(!validateToken()) {
                 return false;
             }
@@ -51,13 +54,17 @@ public class AuthService {
 
     public boolean validateToken() {
         try {
+            //if common model not initiate in the session then kick the user
             if(common.getToken() == null) {
                 return false;
             }
 
+            //check for the token
             List<Map<String, String>> tokenData = userService.retrieveToken(common.getToken());
+            //check if the token is still valid or not 1 is valid and 0 is not valid
             if(tokenData != null && !tokenData.isEmpty() && Integer.parseInt(tokenData.get(0).get("valid")) != 0) {
                 if(common.getUser() == null) {
+                    //inititiate the common model if the session still valid but user session is missing
                     UserModel userObj = userService.retrieveUserById(Integer.parseInt(tokenData.get(0).get("user_id")));
                     common.setUser(userObj);
                 }
@@ -67,11 +74,6 @@ public class AuthService {
         }catch (Exception e) {
             return false;
         }
-    }
-
-    public boolean forbiddenValidator(HttpSession session, int roleid) {
-        CommonModel common = (CommonModel) session.getAttribute("common");
-        return roleid == common.getUser().getRole_id();
     }
 
 //    public boolean register(Map<String, Object> body) {
@@ -105,6 +107,7 @@ public class AuthService {
 //        }
 //    }
 
+    //login main function
     public boolean login(Map<String, Object> body, HttpSession session) {
         try {
             String username = (String)body.get("username");
@@ -116,6 +119,7 @@ public class AuthService {
                 throw new Exception("Password cannot be empty");
             }
 
+            //retrieve user info based on email
             UserModel userObj = userService.retrieveUserByEmail(username);
 
             if(userObj == null) {
@@ -127,12 +131,12 @@ public class AuthService {
                 throw new Exception("Incorrect password");
             }
 
-            //initiate session toDO
+            //initiate session/token
             String token = userService.initToken(userObj.getId());
             if(token == null) {
                 throw new Exception("Failed to initiate user session");
             }
-
+            //initiate common model
             common.setToken(token);
             common.setUser(userObj);
             session.setAttribute("sid", token);
@@ -153,9 +157,12 @@ public class AuthService {
                 int uid = common.getUser().getId();
                 String token = common.getToken();
 
+                //set session as invalid
                 if(!userRepository.updateToken(token, uid, 0)) {
                     throw new Exception("Failed to invalidate session token");
                 }
+
+                //invalidate session
                 session.invalidate();
             }
 
