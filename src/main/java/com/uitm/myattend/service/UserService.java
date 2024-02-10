@@ -190,6 +190,7 @@ public class UserService {
         }
     }
 
+    //initiate user token session
     public String initToken(int uid) {
         try {
             //init token
@@ -216,6 +217,7 @@ public class UserService {
         return update(body, file, null);
     }
 
+    //update user data
     public boolean update(Map<String, Object> body, MultipartFile file, HttpSession session) {
         try {
             UserModel user = new UserModel();
@@ -235,6 +237,7 @@ public class UserService {
             user.setGender((String) body.get("gender"));
             user.setBirth_date(bday);
 
+            //only execute if image file passed
             if(file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                 user.setProfile_pic(env.getProperty("app.imagefolder") + uid + ".png");
                 if(!fileHandler(file, (String) body.get("uid"))) {
@@ -261,21 +264,30 @@ public class UserService {
         }
     }
 
+    //main function for file handle on profile image file
     public boolean fileHandler(MultipartFile file, String uid) {
         try {
+            //retrieve default path for image folder
             String location = env.getProperty("app.imagefolder");
+            //set new name based on user id
             String newFilename = uid + ".png";
+            //retrieve the classpath resources
             Resource resource = resourceLoader.getResource("classpath:");
+            //replace target folder with image folder
             String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", location);
             Path realPath = Paths.get(fullPath + newFilename);
 
+            //read the file input stream
             InputStream fileInputStream = file.getInputStream();
+            //get the content type
             String contentType = getContentType(file.getBytes(), newFilename);
 
+            //throw error if image not in png
             if(!contentType.equals("image/png")) {
                 throw new Exception("Invalid image format");
             }
 
+            //save the file
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, realPath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -287,6 +299,7 @@ public class UserService {
         }
     }
 
+    //get the content type of the image file itself using apache Tika
     public String getContentType(byte[] fileBytes, String filename) throws IOException {
         TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
         Detector detector = tikaConfig.getDetector();

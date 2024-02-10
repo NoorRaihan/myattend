@@ -43,26 +43,32 @@ public class HomeService {
 
     public void index(HttpSession session, HttpServletRequest request) {
         try {
+            //retrieve user info
             CommonModel common = (CommonModel) session.getAttribute("common");
             UserModel userObj = userService.retrieveUserById(common.getUser().getId());
 
             request.setAttribute("userFullname", userObj.getFullname());
             request.setAttribute("userRolename", userObj.getRole().getRole_name());
 
+            //retrieve current active class
             List<ClassModel> activeList = classService.retrieveActive(session);
             request.setAttribute("activeList", activeList);
 
+            //retrieve today class list
             List<ClassModel> todayList = classService.retrieveToday(session);
             request.setAttribute("todayList", todayList);
 
+            //retrieve user profile info
             UserModel userProfile = userService.retrieveUserById(common.getUser().getId());
             request.setAttribute("userProfile", userProfile);
 
+            //if student then retrieve student profile too
             if(userObj.getRole_id() == FieldUtility.STUDENT_ROLE) {
                 StudentModel studentProfile = studentService.retrieveDetail(common.getUser().getId());
                 request.setAttribute("studentProfile", studentProfile);
             }
 
+            //if lecturer then retrieve lecturer profile too
             if(userObj.getRole_id() == FieldUtility.LECTURER_ROLE) {
                 LecturerModel lecturerProfile = lecturerService.retrieveDetail(common.getUser().getId());
                 if(lecturerProfile.getSupervisor_id() > 0) {
@@ -72,6 +78,7 @@ public class HomeService {
                 request.setAttribute("lecturerProfile", lecturerProfile);
             }
 
+            //retrieve courses based on user role
             List<CourseModel> courseList = new ArrayList<>();
             if(common.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
                 courseList = courseService.retrieveCourseByLecturer(common.getUser().getId());
@@ -82,8 +89,10 @@ public class HomeService {
             }
             request.setAttribute("courses", courseList);
 
+            //get attendance performance for each course
             request.setAttribute("perf", attendanceService.attendancePerformance(courseList,session));
 
+            //retrieve user profile image as base64
             Resource resource = resourceLoader.getResource("classpath:");
             String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
             request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));

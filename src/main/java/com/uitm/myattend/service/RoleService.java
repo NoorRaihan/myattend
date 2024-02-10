@@ -19,6 +19,7 @@ public class RoleService {
         this.roleRepo = roleRepo;
     }
 
+    //retrieve role detail
     public RoleModel retrieve(int roleId) {
         try {
             List<Map<String, String>> roleList = roleRepo.retrieve(roleId);
@@ -38,6 +39,7 @@ public class RoleService {
         }
     }
 
+    //retrieve all role list
     public List<RoleModel> retrieveAll() {
         try {
             List<Map<String, String>> roleList = roleRepo.retrieveAll();
@@ -52,11 +54,13 @@ public class RoleService {
         }
     }
 
+    //insert new role
     public void insert(Map<String, Object> body) throws Exception{
         RoleModel roleModel = new RoleModel();
         roleModel.setId((String) body.get("id"));
         roleModel.setRole_name((String) body.get("name"));
 
+        //avoid any duplicate role
         if(!roleRepo.retrieve(Integer.parseInt(roleModel.getId())).isEmpty()) {
             throw new Exception("Role id already existed");
         }
@@ -66,6 +70,7 @@ public class RoleService {
         }
     }
 
+    //update role data
     public boolean update(Map<String, Object> body) throws Exception{
         RoleModel roleModel = new RoleModel();
         roleModel.setId((String) body.get("id"));
@@ -84,10 +89,12 @@ public class RoleService {
         return true;
     }
 
+    //delete role data
     public boolean delete(Map<String, Object> body) {
         try {
             int roleId = Integer.parseInt((String) body.get("id"));
 
+            //prevent admin from being deleted to ensure system availbiity and not corrupt
             if(roleId == FieldUtility.ADMIN_ROLE) {
                 throw new Exception("Admin can't be deleted");
             }

@@ -37,6 +37,7 @@ public class UserController {
         this.authService = authService;
     }
 
+    //retrieve all user in index user page
     @GetMapping("")
     public String index(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         if(!authService.authenticate(session)) {
@@ -59,6 +60,7 @@ public class UserController {
         return "User/create";
     }
 
+    //handle post request to save user data
     @PostMapping("/create")
     public void store(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -71,13 +73,16 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
 
+            //check for required field using generic function
             FieldUtility.requiredValidator(body, userRequiredFields());
 
             CommonModel common = (CommonModel) session.getAttribute("common");
+            //check if the email already existed/taken or not
             if(userService.retrieveUserByEmail((String) body.get("email")) != null) {
                 throw new Exception("Email already exists");
             }
 
+            //process the field
             UserModel user = userService.insert(body, file);
             if(user != null) {
                 session.setAttribute("success", "New user successfully added");
@@ -91,6 +96,7 @@ public class UserController {
         }
     }
 
+    //common required field for user data
     private String [][] userRequiredFields() {
         String [][] field = {
                 {"fullname", "Fullname is required"},
@@ -104,6 +110,7 @@ public class UserController {
         return field;
     }
 
+    //required field for profile
     private String [][] profileRequiredFields() {
         String [][] field = {
                 {"fullname", "Fullname is required"},
@@ -115,6 +122,7 @@ public class UserController {
         return field;
     }
 
+    //API to retrieve user detail
     @GetMapping("/detail")
     @ResponseBody
     public Map<String, Object> show(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
@@ -157,6 +165,7 @@ public class UserController {
         return respMap;
     }
 
+    //handle user update request
     @PostMapping("/update")
     public void update(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request ,HttpSession session) throws IOException {
         try {
@@ -172,6 +181,7 @@ public class UserController {
             FieldUtility.requiredValidator(body, userRequiredFields());
 
             CommonModel common = (CommonModel) session.getAttribute("common");
+            //check for exisiting email and if same with old just ignore otherwise do checking
             if(!body.get("email").equals(common.getUser().getEmail())) {
                 if(userService.retrieveUserByEmail((String) body.get("email")) != null) {
                     throw new Exception("Email already exists");
@@ -190,6 +200,7 @@ public class UserController {
         response.sendRedirect("/user");
     }
 
+    //handle deletion process of user
     @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
         try {
@@ -214,6 +225,8 @@ public class UserController {
         response.sendRedirect("/user");
     }
 
+
+    //API to retrieve user profile
     @GetMapping("/profile")
     @ResponseBody
     public Map<String, Object> profile(HttpServletResponse response, HttpServletRequest request, HttpSession session) {
@@ -250,6 +263,7 @@ public class UserController {
         return respMap;
     }
 
+    //handle user profile update -> same as user update just the user id will pull for the session itself.
     @PostMapping("/profile")
     public void profileUpdate(@RequestParam Map<String, Object> body, @RequestParam("dpImage") MultipartFile file, HttpServletResponse response, HttpServletRequest request ,HttpSession session) throws IOException {
         try {

@@ -87,6 +87,7 @@ public class StudentRepository {
         }
     }
 
+    //retrieve student detail with course enrolled
     public List<Map<String, String>> retrieveDetailByCourse(String cid, int uid) {
         try {
             String sql = "SELECT c.*, b.* FROM ma_courses_students a " +
@@ -115,6 +116,7 @@ public class StudentRepository {
         }
     }
 
+    //retrieve only from student table to get raw data
     public List<Map<String, String>> retrieveRaw(Integer uid, Integer studId) {
         try {
             String [] field = {

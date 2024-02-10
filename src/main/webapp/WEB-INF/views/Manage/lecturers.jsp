@@ -133,7 +133,6 @@ uri="jakarta.tags.core" %>
                                 <td class="hidden"></td>
                                 <td class="hidden"></td>
                                 <td class="hidden"></td>
-                                <td class="hidden"></td>
                               </c:when>
                               <c:otherwise>
                                 <td

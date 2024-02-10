@@ -25,6 +25,7 @@ public class LecturerService {
         this.userService = userService;
     }
 
+    //retrieve all lecturers
     public List<LecturerModel> retrieveAll() {
         try {
             List<Map<String, String>> lectList = lecturerRepository.retrieve();
@@ -45,6 +46,7 @@ public class LecturerService {
         }
     }
 
+    //retrieve sv list
     public List<LecturerModel> retrieveSV() {
         try {
             List<Map<String, String>> lectList = lecturerRepository.retrieveSV();
@@ -150,8 +152,10 @@ public class LecturerService {
         }
     }
 
+    //edit lecturer since the listing usng right join query the data might shows but not in lecturer tables
     public boolean editLecturer(Map<String, Object> body) {
         try {
+            //retrieve raw data of lecturer
             int uid = Integer.parseInt((String) body.get("uid"));
             List<Map<String, String>> lecturerList = lecturerRepository.retrieveRaw(uid, null);
 
@@ -163,6 +167,7 @@ public class LecturerService {
                 throw new Exception("Data error multiple rows on lecturer!");
             }
 
+            //if no data in lecturer table proceed insert new one, if exists just update the data
             boolean flag = false;
             if(lecturerList.isEmpty()) {
                 flag = insert(body);
@@ -181,6 +186,7 @@ public class LecturerService {
         }
     }
 
+    //delete the lecturer data
     public boolean delete(Map<String, Object> body) {
         try {
             int uid = Integer.parseInt((String) body.get("uid"));

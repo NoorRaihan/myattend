@@ -14,6 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 public class DataSourceConfig {
 
+    //data source config for hikari
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource")
@@ -24,6 +25,7 @@ public class DataSourceConfig {
                 build();
     }
 
+    //jdbc template bean init
     @Bean
     public JdbcTemplate db(HikariDataSource hikariDataSource) {
         return new JdbcTemplate(hikariDataSource);

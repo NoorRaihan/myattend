@@ -15,6 +15,7 @@ public class UserRepository {
         this.commDB = commDB;
     }
 
+    //retrieve all user
     public List<Map<String, String>> retrieveAllUser() {
         List<Map<String, String>> data = new ArrayList<>();
         try {
@@ -34,6 +35,7 @@ public class UserRepository {
         return data;
     }
 
+    //retrieve user info with tokens and roles
     public List<Map<String, String>> retrieveUserInfo(String uid) {
         List<Map<String, String>> data = new ArrayList<>();
         try {
@@ -67,6 +69,7 @@ public class UserRepository {
         return retrieveUser("", email, "");
     }
 
+    //retrieve user details only
     public List<Map<String, String>> retrieveUser(String username, String email, String uid) {
         try {
             String [] field = {
@@ -116,6 +119,7 @@ public class UserRepository {
         }
     }
 
+    //retrieve user token info
     public List<Map<String, String>> retrieveToken(String tokenId) {
         try {
             String [] field = {
@@ -144,6 +148,7 @@ public class UserRepository {
         }
     }
 
+    //insert new token for logged in user
     public boolean insertToken(String token, int uid) {
         try {
             String [] field = {
@@ -176,6 +181,7 @@ public class UserRepository {
         }
     }
 
+    //update token once logout
     public boolean updateToken(String token, int uid, int status) {
         try {
             String [] field = {
@@ -221,7 +227,7 @@ public class UserRepository {
         }
     }
 
-
+    //insert new user data
     public boolean insert(UserModel user) {
         try {
             String [] field = {
@@ -265,8 +271,9 @@ public class UserRepository {
                     "timestamp"
             };
 
+            //send sql function to the framework
             Map<String, String> sqlFunction  = new HashMap<>();
-            sqlFunction.put("id", "uidseq.NEXTVAL");
+            sqlFunction.put("id", "uidseq.NEXTVAL"); //send uidseq oracle sequencer to retrieve user id sequence
 
             int row = commDB.insert("ma_users", field, fieldVal, fieldType, sqlFunction);
             if(row <= 0) {
@@ -279,6 +286,7 @@ public class UserRepository {
         }
     }
 
+    //delete user data
     public boolean delete(int uid) {
         try {
             String cond = "id = ?";
@@ -298,6 +306,7 @@ public class UserRepository {
         }
     }
 
+    //update user data
     public boolean update(UserModel userModel) {
         try {
             String [] field = {
