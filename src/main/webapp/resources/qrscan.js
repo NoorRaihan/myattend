@@ -143,9 +143,13 @@ const qrCodeSuccessCallback = (decodedText, decodedResult) => {
 // Define configuration options for the QR code scanning
 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
-// Make the QR scanner prefer the rear-facing camera
-html5QrCode.start(
-  { facingMode: { exact: "environment" } },
-  config,
-  qrCodeSuccessCallback
-);
+// Start the QR scanner with the rear-facing camera preferred
+$(document).ready(function () {
+  setTimeout(function () {
+    html5QrCode.start(
+      { facingMode: { exact: "environment" } },
+      config,
+      qrCodeSuccessCallback
+    );
+  }, 1000); // Add 1s delay since it loads too early on Chrome Mobile
+});
