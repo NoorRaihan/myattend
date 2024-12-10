@@ -7,6 +7,7 @@ import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -15,12 +16,14 @@ public class ClassService {
 
     private final ClassRepository classRepository;
     private final CourseService courseService;
+    private final AttendanceService attendanceService;
     private final Environment env;
 
-    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService) {
+    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService, AttendanceService attendanceService) {
         this.classRepository = classRepository;
         this.env = env;
         this.courseService = courseService;
+        this.attendanceService = attendanceService;
     }
 
     //retrieve class list by course
@@ -42,6 +45,7 @@ public class ClassService {
     }
 
     //retrieve class detail
+    @Transactional
     public ClassModel retrieveDetail(Map<String, Object> body) {
         try {
 
@@ -64,10 +68,10 @@ public class ClassService {
         }
     }
 
+    @Transactional
     //insert new class
     public boolean insert(Map<String, Object> body) {
         String uuid = UUID.randomUUID().toString();
-        boolean created = false;
         try {
             ClassModel classModel = new ClassModel();
             //format conversion from front to backend standard
@@ -86,34 +90,15 @@ public class ClassService {
             if(!classRepository.insert(classModel)) {
                 throw new Exception("Failed to register a new class");
             }
-            // attendance auto process will handle by sql trigger event not by program
-//            created = true;
-//            Map<String, Object> tempMap = new HashMap<>();
-//            tempMap.put("id", body.get("cid"));
-//
-//            List<StudentModel> studentList = studentService.retrieveByCourse(tempMap);
-//
-//            for(StudentModel student : studentList) {
-//                AttendanceModel attendanceModel = new AttendanceModel();
-//                attendanceModel.setId(UUID.randomUUID().toString());
-//                attendanceModel.setClass_id(uuid);
-//                attendanceModel.setStud_id(student.getUser_id());
-//                attendanceModel.setStatus("AB");
-//
-//                if(!attendanceService.insert(attendanceModel)) {
-//                    throw new Exception("Failed to process attendance");
-//                }
-//            }
+            attendanceService.registerAttendance(Objects.requireNonNull(body.get("course_id")).toString(), classModel.getId());
+
             return true;
         }catch (Exception e) {
-            //delete class -> will cascade to delete all attendance
-            if(created) {
-                classRepository.delete(uuid);
-            }
-            e.printStackTrace();
-            return false;
+            //delete class -> will cascade to delete all attendanc
+            throw new RuntimeException(e);
         }
     }
+
 
     //generate unique id for each qr
     public Map<String, Object> generateAttendanceUnique(Map<String, Object> body) {
