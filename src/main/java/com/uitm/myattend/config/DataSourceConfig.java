@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -31,4 +32,8 @@ public class DataSourceConfig {
         return new JdbcTemplate(hikariDataSource);
     }
 
+    @Bean
+    public PlatformTransactionManager transactionManager(HikariDataSource hikariDataSource) {
+        return new DataSourceTransactionManager(hikariDataSource);
+    }
 }

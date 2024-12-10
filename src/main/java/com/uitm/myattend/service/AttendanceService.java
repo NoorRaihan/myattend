@@ -5,6 +5,8 @@ import com.uitm.myattend.model.*;
 import com.uitm.myattend.repository.AttendanceRepository;
 import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -27,7 +29,7 @@ public class AttendanceService {
 
     public AttendanceService(AttendanceRepository attendanceRepository,
                              Environment env,
-                             ClassService classService,
+                             @Lazy ClassService classService,
                              UserService userService,
                              StudentService studentService,
                              ResourceLoader resourceLoader,
@@ -41,18 +43,22 @@ public class AttendanceService {
         this.courseService = courseService;
     }
 
-    //insert new attendance
-    public boolean insert(AttendanceModel attendance) {
-        try {
 
-            if(!attendanceRepository.insert(attendance)) {
-                throw new Exception("Failed to process an attendance");
+    public void registerAttendance(String cid, String classId) throws Exception {
+        Map<String, Object> tempMap = new HashMap<>();
+        tempMap.put("id", cid);
+        List<StudentModel> studentList = studentService.retrieveByCourse(tempMap);
+
+        for(StudentModel student : studentList) {
+            AttendanceModel attendanceModel = new AttendanceModel();
+            attendanceModel.setId(UUID.randomUUID().toString());
+            attendanceModel.setClass_id(classId);
+            attendanceModel.setStud_id(student.getUser_id());
+            attendanceModel.setStatus("AB");
+
+            if(!attendanceRepository.insert(attendanceModel)) {
+                throw new Exception("Failed to process attendance");
             }
-
-            return true;
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
     }
 

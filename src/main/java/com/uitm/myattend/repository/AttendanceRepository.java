@@ -38,6 +38,7 @@ public class AttendanceRepository {
                     attendanceModel.getId(),
                     attendanceModel.getClass_id(),
                     Integer.toString(attendanceModel.getStud_id()),
+                    attendanceModel.getStatus(),
                     attendanceModel.getAttend_date(),
                     attendanceModel.getAttend_time(),
                     currTms,
@@ -49,10 +50,10 @@ public class AttendanceRepository {
                     "varchar",
                     "int",
                     "varchar",
-                    "varchar",
-                    "varchar",
-                    "varchar",
-                    "varchar"
+                    "date",
+                    "timestamp",
+                    "timestamp",
+                    "timestamp"
             };
 
             int result = commDB.insert("ma_attendances", field, fieldVal, fieldType);
