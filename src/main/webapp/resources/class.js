@@ -314,7 +314,7 @@ function generateQR(id) {
         console.log(details.attendanceURL);
 
         // Create a print-friendly window
-        var printWindow = window.open("", "_blank");
+        var printWindow = window.open("", "_top", "width=800,height=600");
         printWindow.document.open();
         printWindow.document.write('<html data-theme="light">');
         printWindow.document.write(
