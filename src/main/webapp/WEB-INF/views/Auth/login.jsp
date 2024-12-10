@@ -20,14 +20,14 @@ uri="jakarta.tags.core" %>
         <div class="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <img
-              class="h-10 w-auto"
-              src="https://seeklogo.com/images/U/UITM-logo-20DC2B3831-seeklogo.com.png"
+              class="h-20 w-auto"
+              src="${contextPath}/resources/img/MJJ.png"
               alt="UiTM"
             />
             <h2
-              class="mt-8 text-2xl font-bold leading-7 tracking-tight text-gray-900"
+              class="mt-5 text-2xl font-bold leading-7 tracking-tight text-gray-900"
             >
-              Welcome to myAttend+
+              Welcome to ClassHive
             </h2>
             <p class="mt-2 text-sm leading-6 text-gray-500">
               Please login to continue
