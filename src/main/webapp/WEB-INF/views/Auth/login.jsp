@@ -20,7 +20,7 @@ uri="jakarta.tags.core" %>
         <div class="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <img
-              class="h-15 w-auto"
+              class="h-16 w-auto"
               src="${contextPath}/resources/img/MJJ.png"
               alt="ClassHive"
             />
