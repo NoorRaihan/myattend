@@ -421,7 +421,7 @@ uri="jakarta.tags.core" %>
                     <div class="text-center">
                       <h3 class="text-lg font-semibold">Session</h3>
                       <h4 class="text-xl font-bold text-primary">
-                        2014/2
+                        ${activeSession}
                       </h4>
                     </div>
                   </div>

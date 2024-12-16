@@ -97,6 +97,8 @@ public class HomeService {
             String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
             request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
 
+            request.setAttribute("activeSession", common.getSessionModel().getSessionName());
+
         }catch (Exception e) {
             e.printStackTrace();
         }

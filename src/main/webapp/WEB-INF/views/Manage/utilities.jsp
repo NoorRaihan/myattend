@@ -169,16 +169,26 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
+                        <c:forEach var="session" items="${sessions}">
                           <tr>
                             <td
                               class="w-full max-w-0 py-4 px-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none"
                             >
-                              2024/2
-                              <p class="text-xs font-normal italic text-gray-400">Oct 2024 - Feb 2025</p>
+                              ${session.getSessionName()}
+                              <p class="text-xs font-normal italic text-gray-400">${session.getId()}</p>
                             </td>
-                            <td class="px-3 py-4 text-sm text-gray-500">
-                              <div class="badge badge-success text-white">Active</div>
-                            </td>
+                              <c:choose>
+                                <c:when test="${session.isUsed()}">
+                                  <td class="px-3 py-4 text-sm text-gray-500">
+                                    <div class="badge badge-success text-white">Active</div>
+                                  </td>
+                                </c:when>
+                                <c:otherwise>
+                                  <td class="px-3 py-4 text-sm text-gray-500">
+                                    <div class="badge badge-neutral">Disabled</div>
+                                  </td>
+                                </c:otherwise>
+                                </c:choose>
                             <td
                               class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
                             >
@@ -208,17 +218,31 @@ uri="jakarta.tags.core" %>
                                   class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-max"
                                 >
                                   <li>
-                                    <a
-                                      onclick="setSession.showModal()"
-                                      data-id=""
-                                      class="sessionSet"
-                                      >Set Active</a
-                                    >
+                                    <c:choose>
+                                      <c:when test="${session.isUsed()}">
+                                        <a
+                                            onclick="setSessionDisable.showModal()"
+                                            data-id="${session.getId()}"
+                                            class="sessionSetDisable"
+                                            >Set Disable</a
+                                          >
+                                      </c:when>
+                                      <c:otherwise>
+                                        <a
+                                            onclick="setSession.showModal()"
+                                            data-id="${session.getId()}"
+                                            class="sessionSet"
+                                            >Set Active</a
+                                          >
+                                      </c:otherwise>
+                                    </c:choose>
+                                    
                                   </li>
                                   <li>
                                     <a
                                       onclick="editSession.showModal()"
-                                      data-id=""
+                                      data-id="${session.getId()}"
+                                      data-name="${session.getSessionName()}"
                                       class="sessionEdit"
                                       >Edit</a
                                     >
@@ -227,7 +251,7 @@ uri="jakarta.tags.core" %>
                                     <a
                                       onclick="deleteSession.showModal()"
                                       class="text-red-600 sessionDelete"
-                                      data-id=""
+                                      data-id="${session.getId()}"
                                       >Delete</a
                                     >
                                   </li>
@@ -235,6 +259,7 @@ uri="jakarta.tags.core" %>
                               </div>
                             </td>
                           </tr>
+                        </c:forEach>
                         <!-- More session... -->
                       </tbody>
                     </table>
@@ -377,7 +402,7 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Add New Session</h3>
         <form
           id="sessionAdd"
-          action=""
+          action="/session/create"
           method="post"
         >
           <div class="grid grid-cols-2 gap-3">
@@ -387,7 +412,7 @@ uri="jakarta.tags.core" %>
               </div>
               <input
                 type="text"
-                name="session"
+                name="session_name"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
@@ -408,7 +433,7 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Edit Session</h3>
         <form
           id="sessionEdit"
-          action=""
+          action="/session/update"
           method="post"
         >
           <div class="grid grid-cols-2 gap-3">
@@ -424,7 +449,7 @@ uri="jakarta.tags.core" %>
               />
             </label>
           </div>
-          <input type="hidden" name="sessionid" id="sessionid" value="" />
+          <input type="hidden" name="session_id" id="session_id" value="" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-primary">Save</button>
           </div>
@@ -439,8 +464,29 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Set Session</h3>
         <p class="py-4">Do you really want to set this session as active ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="sessionid" id="sessionSetId" value="" />
+        <form action="/session/activate" method="post">
+          <input type="hidden" name="session_id" id="session_id2" value="" />
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
+              No
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="setSessionDisable" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Set Session</h3>
+        <p class="py-4">Do you really want to deactivate this session ?</p>
+        <form action="/session/disable" method="post">
+          <input type="hidden" name="session_id" id="session_id3" value="" />
           <div class="modal-action">
             <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
               No

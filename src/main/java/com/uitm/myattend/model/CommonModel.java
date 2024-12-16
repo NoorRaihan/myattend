@@ -12,6 +12,15 @@ public class CommonModel {
     private String token;
     private UserModel userModel;
     private String profilePicture;
+    private SemesterSessionModel sessionModel;
+
+    public void setSessionModel(SemesterSessionModel sessionModel) {
+        this.sessionModel = sessionModel;
+    }
+
+    public SemesterSessionModel getSessionModel() {
+        return sessionModel;
+    }
 
     public String getProfilePicture() {
         return profilePicture;
