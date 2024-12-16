@@ -209,7 +209,7 @@ uri="jakarta.tags.core" %>
                                 >
                                   <li>
                                     <a
-                                      onclick=""
+                                      onclick="setSession.showModal()"
                                       data-id=""
                                       class="sessionSet"
                                       >Set Active</a
@@ -391,26 +391,6 @@ uri="jakarta.tags.core" %>
                 class="input input-primary input-sm input-bordered"
               />
             </label>
-            <label class="form-control col-span-2 md:col-span-1">
-                <div class="label">
-                  <span class="label-text">Session Start</span>
-                </div>
-                <input
-                  type="month"
-                  name="start_month"
-                  class="input input-primary input-sm input-bordered"
-                />
-            </label>
-            <label class="form-control col-span-2 md:col-span-1">
-                <div class="label">
-                  <span class="label-text">Session End</span>
-                </div>
-                <input
-                  type="month"
-                  name="end_month"
-                  class="input input-primary input-sm input-bordered"
-                />
-            </label>
           </div>
 
           <div class="modal-action">
@@ -443,32 +423,31 @@ uri="jakarta.tags.core" %>
                 class="input input-primary input-sm input-bordered"
               />
             </label>
-            <label class="form-control col-span-2 md:col-span-1">
-                <div class="label">
-                  <span class="label-text">Session Start</span>
-                </div>
-                <input
-                  type="month"
-                  name="start_month"
-                  id="start_month"
-                  class="input input-primary input-sm input-bordered"
-                />
-            </label>
-            <label class="form-control col-span-2 md:col-span-1">
-                <div class="label">
-                  <span class="label-text">Session End</span>
-                </div>
-                <input
-                  type="month"
-                  name="end_month"
-                  id="end_month"
-                  class="input input-primary input-sm input-bordered"
-                />
-            </label>
           </div>
           <input type="hidden" name="sessionid" id="sessionid" value="" />
           <div class="modal-action">
             <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="setSession" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Set Session</h3>
+        <p class="py-4">Do you really want to set this session as active ?</p>
+        <form action="" method="post">
+          <input type="hidden" name="sessionid" id="sessionSetId" value="" />
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
+              No
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary">
+              Yes
+            </button>
           </div>
         </form>
       </div>
