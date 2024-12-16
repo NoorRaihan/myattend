@@ -13,7 +13,19 @@ $(document).ready(function () {
 
   $(document).on("click", ".sessionSet", function () {
     let id = $(this).data("id");
-    $("#sessionSetId").val(id);
+    $("#session_id2").val(id);
+  });
+
+  $(document).on("click", ".sessionSetDisable", function () {
+    let id = $(this).data("id");
+    $("#session_id3").val(id);
+  });
+
+  $(document).on("click", ".sessionEdit", function () {
+    let id = $(this).data("id");
+    let name = $(this).data("name");
+    $("#session_id").val(id);
+    $("#session_name").val(name);
   });
 });
 
@@ -46,3 +58,4 @@ function roleDetails(id) {
     },
   });
 }
+

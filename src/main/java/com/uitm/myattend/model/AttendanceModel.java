@@ -14,7 +14,6 @@ public class AttendanceModel {
     private String attend_date;
     private String attend_time;
     private String status;
-
     public StudentModel getStudent() {
         return student;
     }

@@ -2,7 +2,6 @@ package com.uitm.myattend.repository;
 
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.utility.FieldUtility;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

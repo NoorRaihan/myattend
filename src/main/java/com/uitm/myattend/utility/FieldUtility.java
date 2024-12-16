@@ -74,6 +74,11 @@ public class FieldUtility {
         return Objects.requireNonNullElse(str, "");
     }
 
+    //check null field to return empty string
+    public static String checkNull(Object str) {
+        return Objects.requireNonNullElse((String) str, "");
+    }
+
     //check null date to return empty date
     public static String checkNullDate(String str) {
         return Objects.requireNonNullElse(str, "0000-00-00 00:00:00");

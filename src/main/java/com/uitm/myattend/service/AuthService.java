@@ -2,6 +2,7 @@ package com.uitm.myattend.service;
 
 import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.LecturerModel;
+import com.uitm.myattend.model.SemesterSessionModel;
 import com.uitm.myattend.model.UserModel;
 import com.uitm.myattend.repository.UserRepository;
 import com.uitm.myattend.utility.FieldUtility;
@@ -24,16 +25,19 @@ public class AuthService {
     private final UserService userService;
     private CommonModel common;
     private final UserRepository userRepository;
+    private final SemesterSessionService sessionService;
 
     @Autowired
     public AuthService(PasswordEncoder passwordEncoder,
                        UserService userService,
                        CommonModel common,
-                       UserRepository userRepository) {
+                       UserRepository userRepository,
+                       SemesterSessionService sessionService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.common = common;
         this.userRepository = userRepository;
+        this.sessionService = sessionService;
     }
 
     //authenticate process to ensure the user logged in
@@ -136,9 +140,13 @@ public class AuthService {
             if(token == null) {
                 throw new Exception("Failed to initiate user session");
             }
+
+            SemesterSessionModel semesterSession = sessionService.getActiveSemester();
+
             //initiate common model
             common.setToken(token);
             common.setUser(userObj);
+            common.setSessionModel(semesterSession);
             session.setAttribute("sid", token);
             session.setAttribute("common", common);
 

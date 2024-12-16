@@ -1,10 +1,12 @@
 package com.uitm.myattend.controller;
 
 import com.uitm.myattend.model.RoleModel;
+import com.uitm.myattend.model.SemesterSessionModel;
 import com.uitm.myattend.service.AttendanceService;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.HomeService;
 import com.uitm.myattend.service.RoleService;
+import com.uitm.myattend.service.SemesterSessionService;
 import com.uitm.myattend.utility.FieldUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,11 +34,13 @@ public class HomeController {
     private final AuthService authService;
     private final HomeService homeService;
     private final RoleService roleService;
+    private final SemesterSessionService sessionService;
 
-    public HomeController(AuthService authService, HomeService homeService, RoleService roleService) {
+    public HomeController(AuthService authService, HomeService homeService, RoleService roleService, SemesterSessionService sessionService) {
         this.authService = authService;
         this.homeService = homeService;
         this.roleService = roleService;
+        this.sessionService = sessionService;
     }
 
     @GetMapping("/")
@@ -80,6 +84,9 @@ public class HomeController {
         }
         List<RoleModel> roleList = roleService.retrieveAll(); //retrieve all role
         request.setAttribute("roles", roleList);
+
+        List<SemesterSessionModel> sessionList = sessionService.retrieveAll(); //retrieve all sessions
+        request.setAttribute("sessions", sessionList);
         return "Manage/utilities";
     }
 
