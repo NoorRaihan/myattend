@@ -357,8 +357,9 @@ uri="jakarta.tags.core" %>
                 </c:when>
                 <c:when test="${role == 2}">
                   <a
-                    class="basis-full"
-                    onclick="generateQR('${active.getId()}')"
+                    class="basis-full qr"
+                    onclick='qrModal.showModal()'
+                    data-id="${active.getId()}"
                   >
                     <div
                       id="clsActive"
@@ -673,6 +674,24 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+
+    <dialog id="qrModal" class="modal">
+      <div class="modal-box">
+        <h3 class="text-2xl font-bold text-center" id="qrTitle"></h3>
+        <p class="mt-2 text-lg font-semibold text-center" id="qrDate"></p>
+        <p class="font-semibold text-center" id="qrTime"></p>
+        <p class="text-center" id="qrVenue"></p>
+        <div class="mt-4 flex justify-center items-center">
+          <img class="w-3/5" id="qrImage" alt="QR Code" />
+        </div>
+        <div class="modal-action justify-center">
+          <form method="dialog">
+            <button class="btn btn-sm btn-primary" id="qrDone">Done</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
