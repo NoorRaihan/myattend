@@ -12,7 +12,7 @@ uri="jakarta.tags.core" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
-    <script src="${contextPath}/resources/assignment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hugerte@1.0.4/hugerte.min.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
@@ -27,29 +27,25 @@ uri="jakarta.tags.core" %>
           <jsp:param name="title" value="Assignment Management" />
         </jsp:include>
         <div class="w-auto my-10">
-          <section
+          <form
+            action = ""
+            method = "get"
             class="flex ml-2 overflow-x-auto scrollbar-hide"
             aria-labelledby="profile-overview-title"
           >
             <c:forEach var="course" items="${courses}">
-              <div
-                id="course"
-                class="cursor-pointer"
-                onclick="loadClsList('${course.getId()}'); $('.newCls').removeClass('hidden'); $('#panelAttend').addClass('hidden'); $('#c_id').val('${course.getId()}');"
-              >
-                <div
-                  class="mx-2 card ${course.getColorConfig()} shadow-lg hover:shadow-2xl overflow-hidden w-72 flex-shrink-0"
-                >
+              <button type="submit" id="course" name="course" value="${course.getId()}">
+                <div class="mx-2 card ${course.getColorConfig()} shadow-lg hover:shadow-2xl overflow-hidden w-72 flex-shrink-0">
                   <div class="card-body">
                     <div class="flex flex-row justify-between z-10">
                       <div class="flex flex-col">
-                        <p class="text-2xl font-bold">
+                        <p class="text-2xl font-bold text-left">
                           ${course.getCourse_code()}
                         </p>
-                        <p class="text-lg font-semibold">
+                        <p class="text-lg font-semibold text-left">
                           ${course.getCourse_name()}
                         </p>
-                        <p class="text-sm">
+                        <p class="text-sm text-left">
                           ${course.getCredit_hour()} Credit Hours
                         </p>
                       </div>
@@ -74,9 +70,9 @@ uri="jakarta.tags.core" %>
                     </div>
                   </div>
                 </div>
-              </div>
+              </button>
             </c:forEach>
-          </section>
+          </form>
           <div
             class="flex flex-wrap mt-4 mx-4 gap-5 items-start transition-all"
           >
@@ -85,40 +81,67 @@ uri="jakarta.tags.core" %>
               class="card card-compact md:basis-2/4 basis-full bg-white shadow-lg grow transition-all"
             >
               <div class="card-body">
-                <div class="card-title justify-between">
+                <!-- if $_GET["id"] != null, show this (buang 'hidden') -->
+                <div class="card-title justify-between hidden">
                   <h1>Assignments</h1>
-                  <button
-                    class="btn btn-sm btn-primary hidden newCls"
-                    onclick="newClass.showModal(); classAdd.reset();"
-                  >
+                  <button class="btn btn-sm btn-primary" id="newAssBtn">
                     New Assignment
                   </button>
                 </div>
-                <div id="classList" class="-mx-4 sm:-mx-0">
-                  <div class="w-full text-center justify-center py-10">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="mx-auto size-12 text-gray-400"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
-                      />
+
+                <table class="table-auto min-w-full divide-y divide-gray-300 hidden">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">Title</th>
+                      <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 hidden md:table-cell">Start</th>
+                      <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 hidden md:table-cell">End</th>
+                      <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="assList" class="divide-y divide-gray-200 bg-white">
+                    <!-- loop kat sini -->
+                    <tr>
+                      <td class="w-full max-w-0 py-4 px-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
+                        Assignment 1
+                        <p class="text-xs font-normal italic text-gray-400 md:hidden">01-04-2022 - 30-04-2022</p>
+                      </td>
+                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">01-04-2022</td>
+                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">30-04-2022</td>
+                      <td class="py-4 px-3 text-right text-sm font-medium align-middle flex justify-end gap-2">
+                        <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 editAss" data-id="">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                          </svg>
+                          <span class="hidden md:inline">Edit</span>
+                        </button>
+                        <button class="btn btn-sm btn-ghost text-error px-1 md:px-2 deleteAss" data-id="">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="hidden md:inline">Delete</span>
+                        </button>
+                      </td>
+                    </tr>
+                    <!-- end loop -->
+                  </tbody>
+                </table>
+
+                <!-- else, show this -->
+                <div class="w-full text-center justify-center py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 text-gray-400 mx-auto">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
                     </svg>
                     <h3 class="mt-2 text-sm font-semibold text-gray-400">
                       Please select a course to view assignments
                     </h3>
-                  </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
+
         <div id="alert" class="toast toast-top toast-end z-50 hidden">
           <div class="alert alert-warning">
             <span id="alertMsg">Error</span>
@@ -140,75 +163,113 @@ uri="jakarta.tags.core" %>
             $("#succMsg").html(succ);
             $("#succ").show().delay(3000).fadeOut();
           }
+
+          $(document).ready(function() {
+
+            // add n edit assignment ----------------------------------------------------------------------------
+            const modal = document.getElementById('addAss');
+
+            $('#newAssBtn').on('click', function() {
+              modal.showModal();
+              hugerte.init({
+                selector: '#ass_desc',
+                ui_mode: 'split'
+              });
+            });
+
+            $('.editAss').on('click', function() {
+              let id = $(this).data('id');
+              $('#ass_id').val(id);
+              $.ajax({
+                type: 'POST',
+                url: '',
+                data: {
+                  id: id
+                },
+                success: function(data) {
+                  $('#ass_title').val(data.title);
+                  $('#ass_desc').val(data.description);
+                  $('#ass_deadline').val(data.deadline);
+                  $('#ass_id').val(data.id);
+                }
+              });
+
+              modal.showModal();
+              hugerte.init({
+                selector: '#ass_desc',
+                ui_mode: 'split'
+              });
+            });
+
+            modal.addEventListener('close', (event) => {
+              $('#assAdd')[0].reset();
+              hugerte.remove('#ass_desc');
+            });
+
+            // delete assignment -------------------------------------------------------------------------------
+            $('.deleteAss').on('click', function() {
+              let id = $(this).data('id');
+              $('#del_id').val(id);
+              $('#deleteAss')[0].showModal();
+            });
+          });
         </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>
     </div>
-    <dialog id="newClass" class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">Add New Assignment</h3>
-        <form id="classAdd" action="" method="post">
-          <input
-            type="hidden"
-            name="course_id"
-            id="c_id"
-            value="7f12b098-35e2-4e4e-bca3-27d74412d73b"
-          />
-          <div class="flex flex-wrap gap-3">
-            <label class="form-control basis-1/4 grow">
+
+    <dialog id="addAss" class="modal">
+      <div class="modal-box max-w-4xl">
+        <h3 class="font-bold text-lg mb-2">Add New Assignment</h3>
+        <form id="assAdd" action="" method="post">
+          <div class="grid grid-cols-5 gap-3 items-end">
+            <label class="form-control col-span-5">
               <div class="label">
-                <span class="label-text">Class Name/Description</span>
+                <span class="label-text">Assignment Title</span>
               </div>
               <input
                 type="text"
-                name="class_desc"
+                id="ass_title"
+                name="ass_title"
                 class="input input-primary input-sm input-bordered"
               />
             </label>
-            <label class="form-control basis-1/4 grow">
+            <label class="form-control md:col-span-2 col-span-5">
               <div class="label">
-                <span class="label-text">Date</span>
+                <span class="label-text">Date & Time Start</span>
               </div>
-              <input
-                type="date"
-                name="class_date"
-                class="input input-primary input-sm input-bordered"
-              />
+              <input type="datetime-local" id="ass_start" name="ass_start" class="input input-primary input-sm input-bordered"/>
             </label>
-            <label class="form-control basis-1/4 grow">
+            <label class="form-control md:col-span-2 col-span-5">
               <div class="label">
-                <span class="label-text">Start Time</span>
+                <span class="label-text">Date & Time End</span>
               </div>
-              <input
-                type="time"
-                name="start_time"
-                class="input input-primary input-sm input-bordered"
-              />
+              <input type="datetime-local" id="ass_end" name="ass_end" class="input input-primary input-sm input-bordered"/>
             </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">End Time</span>
+            <label class="form-control md:col-span-1 col-span-5">
+              <div class="label cursor-pointer">
+                <span class="label-text">Allow Late</span>
+                <input type="checkbox" id="ass_late" name="ass_late" class="toggle toggle-primary"/>
               </div>
-              <input
-                type="time"
-                name="end_time"
-                class="input input-primary input-sm input-bordered"
-              />
             </label>
-            <label class="form-control basis-1/4 grow">
+            <label class="form-control col-span-5">
               <div class="label">
-                <span class="label-text">Venue</span>
+                <span class="label-text">Description</span>
               </div>
-              <input
-                type="text"
-                name="venue"
-                class="input input-primary input-sm input-bordered"
-              />
+              <textarea name="ass_desc" id="ass_desc" class="textarea textarea-primary textarea-bordered" rows="4"></textarea>
+            </label>
+            <label class="form-control md:col-span-2 col-span-5">
+              <div class="label">
+                <span class="label-text">Attachments</span>
+              </div>
+              <input type="file" name="ass_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
           </div>
           <div class="modal-action">
-            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+            <input type="hidden" name="ass_id" id="ass_id" />
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addAss.close()">Cancel</button>
+            <button type="submit" class="btn btn-sm btn-primary" id="saveAss" name="action" value="add">Save</button>
           </div>
         </form>
       </div>
@@ -217,112 +278,21 @@ uri="jakarta.tags.core" %>
       </form>
     </dialog>
 
-    <dialog id="editClass" class="modal">
+    <dialog id="deleteAss" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Edit Class</h3>
-        <form id="classEdt" action="/class/update" method="post">
-          <input type="hidden" name="cid" id="c_id" value="1" />
-          <input type="hidden" name="id" id="cls_id" value="1" />
-          <div class="flex flex-wrap gap-3">
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Class Name/Description</span>
-              </div>
-              <input
-                type="text"
-                id="cls_desc"
-                name="class_desc"
-                class="input input-primary input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Date</span>
-              </div>
-              <input
-                type="date"
-                id="cls_date"
-                name="class_date"
-                class="input input-primary input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Start Time</span>
-              </div>
-              <input
-                type="time"
-                id="cls_sTime"
-                name="start_time"
-                class="input input-primary input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">End Time</span>
-              </div>
-              <input
-                type="time"
-                id="cls_eTime"
-                name="end_time"
-                class="input input-primary input-sm input-bordered"
-              />
-            </label>
-            <label class="form-control basis-1/4 grow">
-              <div class="label">
-                <span class="label-text">Venue</span>
-              </div>
-              <input
-                type="text"
-                id="cls_venue"
-                name="venue"
-                class="input input-primary input-sm input-bordered"
-              />
-            </label>
-          </div>
+        <h3 class="font-bold text-lg">Delete Assignment</h3>
+        <p class="py-4">Do you really want to delete this assignment ?</p>
+        <form action="" method="post">
+          <input type="hidden" name="ass_id" id="del_id"/>
           <div class="modal-action">
-            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+            <button type="button" class="btn btn-sm btn-ghost text-error" onclick="deleteAss.close()">No</button>
+            <button type="submit" class="btn btn-sm btn-error text-white">Yes</button>
           </div>
         </form>
       </div>
       <form method="dialog" class="modal-backdrop">
         <button>close</button>
       </form>
-    </dialog>
-
-    <dialog id="deleteClass" class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">Delete Class</h3>
-        <p class="py-4">Do you really want to delete this class ?</p>
-        <form action="/class/delete" method="post">
-          <input type="hidden" name="id" id="del_id" value="1" />
-          <div class="modal-action">
-            <button type="submit" class="btn btn-sm btn-error text-white">
-              Yes
-            </button>
-          </div>
-        </form>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
-
-    <dialog id="qrModal" class="modal">
-      <div class="modal-box">
-        <h3 class="text-2xl font-bold text-center" id="qrTitle"></h3>
-        <p class="mt-2 text-lg font-semibold text-center" id="qrDate"></p>
-        <p class="font-semibold text-center" id="qrTime"></p>
-        <p class="text-center" id="qrVenue"></p>
-        <div class="mt-4 flex justify-center items-center">
-          <img class="w-3/5" id="qrImage" alt="QR Code" />
-        </div>
-        <div class="modal-action justify-center">
-          <form method="dialog">
-            <button class="btn btn-sm btn-primary" id="qrDone">Done</button>
-          </form>
-        </div>
-      </div>
     </dialog>
 
     <c:remove var="error" scope="session" />
