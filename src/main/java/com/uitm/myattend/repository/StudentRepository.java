@@ -60,18 +60,20 @@ public class StudentRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveByCourse(String cid) {
+    public List<Map<String, String>> retrieveByCourse(String cid, String sessionId) {
         try {
             String sql = "SELECT c.*, b.* FROM ma_courses_students a " +
                     "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
                     "INNER JOIN ma_users c ON b.user_id = c.id " +
-                    "WHERE a.course_id = ?";
+                    "WHERE a.course_id = ? AND a.session_id = ?";
 
             String [] condVal = {
-                    cid
+                    cid,
+                    sessionId
             };
 
             String [] condType = {
+                    "varchar",
                     "varchar"
             };
 
@@ -87,21 +89,23 @@ public class StudentRepository {
     }
 
     //retrieve student detail with course enrolled
-    public List<Map<String, String>> retrieveDetailByCourse(String cid, int uid) {
+    public List<Map<String, String>> retrieveDetailByCourse(String cid, int uid, String sessionId) {
         try {
             String sql = "SELECT c.*, b.* FROM ma_courses_students a " +
                     "INNER JOIN ma_students b ON a.stud_id = b.user_id " +
                     "INNER JOIN ma_users c ON b.user_id = c.id " +
-                    "WHERE a.course_id = ? AND a.stud_id = ?";
+                    "WHERE a.course_id = ? AND a.stud_id = ? AND a.session_id = ?";
 
             String [] condVal = {
                     cid,
-                    Integer.toString(uid)
+                    Integer.toString(uid),
+                    sessionId
             };
 
             String [] condType = {
                     "varchar",
-                    "int"
+                    "int",
+                    "varchar"
             };
 
             int result = commDB.sqlQuery(sql, condVal, condType);
