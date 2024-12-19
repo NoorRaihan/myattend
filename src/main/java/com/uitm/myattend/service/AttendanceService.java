@@ -25,6 +25,7 @@ public class AttendanceService {
     private final ClassService classService;
     private final CourseService courseService;
     private final Environment env;
+    private final CommonModel commonModel;
     private ResourceLoader resourceLoader;
 
     public AttendanceService(AttendanceRepository attendanceRepository,
@@ -33,7 +34,8 @@ public class AttendanceService {
                              UserService userService,
                              StudentService studentService,
                              ResourceLoader resourceLoader,
-                             CourseService courseService) {
+                             CourseService courseService,
+                             CommonModel commonModel) {
         this.attendanceRepository = attendanceRepository;
         this.userService = userService;
         this.studentService = studentService;
@@ -41,6 +43,7 @@ public class AttendanceService {
         this.classService = classService;
         this.resourceLoader =resourceLoader;
         this.courseService = courseService;
+        this.commonModel = commonModel;
     }
 
 
@@ -56,7 +59,7 @@ public class AttendanceService {
             attendanceModel.setStud_id(student.getUser_id());
             attendanceModel.setStatus("AB");
 
-            if(!attendanceRepository.insert(attendanceModel)) {
+            if(!attendanceRepository.insert(attendanceModel, commonModel.getSessionModel().getId())) {
                 throw new Exception("Failed to process attendance");
             }
         }
@@ -136,8 +139,14 @@ public class AttendanceService {
             throw new Exception("Qr ID has expired");
         }
 
+        AttendanceModel attendanceModel = new AttendanceModel();
+        attendanceModel.setClass_id(classId);
+        attendanceModel.setStud_id(studentModel.getStud_id());
+        attendanceModel.setStudent(studentModel);
+        attendanceModel.setStatus("C");
+
         //mark as attend the class
-        if(!attendanceRepository.update(classId, uid, "C")) {
+        if(!attendanceRepository.update(attendanceModel, commonModel.getSessionModel().getId(), true)) {
             throw new Exception("Failed to update the attendance");
         }
         return true;
@@ -147,7 +156,7 @@ public class AttendanceService {
     public List<AttendanceModel> retrieveAttendance(Map<String, Object> body) {
         try {
             String classId = (String) body.get("id");
-            List<Map<String, String>> attList =  attendanceRepository.retrieveAttendance(classId);
+            List<Map<String, String>> attList =  attendanceRepository.retrieveAttendance(classId, commonModel.getSessionModel().getId());
 
             List<AttendanceModel> attModelList = new ArrayList<>();
             for(Map<String, String> data : attList) {
@@ -183,7 +192,7 @@ public class AttendanceService {
             //if user is student then run performance calculation for student
             if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
                 for(CourseModel course : courseList) {
-                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId());
+                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformanceByStudent(course.getId(), commonModel.getUser().getId(), commonModel.getSessionModel().getId());
                     if(!perfList.isEmpty()) {
                         Map<String, String> perc = perfList.get(0);
                         attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
@@ -193,9 +202,9 @@ public class AttendanceService {
                 }
             }else{ //if lect or admin, run the generic attendance performance calculation
                 for(CourseModel course : courseList) {
-                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformance(course.getId());
+                    List<Map<String, String>> perfList = attendanceRepository.retrievePerformance(course.getId(), commonModel.getSessionModel().getId());
                     if(!perfList.isEmpty()) {
-                        Map<String, String> perc = attendanceRepository.retrievePerformance(course.getId()).get(0);
+                        Map<String, String> perc = attendanceRepository.retrievePerformance(course.getId(), commonModel.getSessionModel().getId()).get(0);
                         attMap.put(course.getCourse_code(), perc.get("PERCENTAGE"));
                     }else{
                         attMap.put(course.getCourse_code(), "0");
