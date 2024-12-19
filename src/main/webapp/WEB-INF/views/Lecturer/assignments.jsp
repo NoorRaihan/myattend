@@ -170,6 +170,7 @@ uri="jakarta.tags.core" %>
             const modal = document.getElementById('addAss');
 
             $('#newAssBtn').on('click', function() {
+              $('#saveAss').val('add');
               modal.showModal();
               hugerte.init({
                 selector: '#ass_desc',
@@ -180,6 +181,7 @@ uri="jakarta.tags.core" %>
             $('.editAss').on('click', function() {
               let id = $(this).data('id');
               $('#ass_id').val(id);
+              $('#saveAss').val('edit');
               $.ajax({
                 type: 'POST',
                 url: '',
