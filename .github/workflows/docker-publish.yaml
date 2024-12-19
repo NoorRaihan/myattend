@@ -8,7 +8,7 @@ on:
     branches:
       - '**'
     tags:
-      - 'v*-uat'
+      - 'v*'
   #pull_request:
     #branches: [ "master" ]
 
