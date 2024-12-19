@@ -1,13 +1,11 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
-import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.repository.ClassRepository;
 import com.uitm.myattend.repository.CourseRepository;
-import com.uitm.myattend.utility.FieldUtility;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +17,15 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final StudentService studentService;
     private final ClassRepository classRepository;
+    private final CommonModel commonModel;
     private final Environment env;
 
-    @Autowired
-    public CourseService(CourseRepository courseRepository, StudentService studentService, Environment env, ClassRepository classRepository) {
+    public CourseService(CourseRepository courseRepository, StudentService studentService, Environment env, ClassRepository classRepository, CommonModel commonModel) {
         this.courseRepository = courseRepository;
         this.studentService = studentService;
         this.env = env;
         this.classRepository = classRepository;
+        this.commonModel = commonModel;
     }
 
     //retrieve all courses
@@ -179,7 +178,7 @@ public class CourseService {
 
             boolean result;
             if(isRegister) {
-                result = courseRepository.registerCourseStudent(uid, cid);
+                result = courseRepository.registerCourseStudent(uid, cid, commonModel.getSessionModel().getId());
             }else {
                 result = courseRepository.deleteCourseStudent(uid, cid);
             }
@@ -193,7 +192,7 @@ public class CourseService {
     //retrieve available/enabled course for student to enroll
     public List<CourseModel> retrieveAvailableCourseStudent(int uid) {
         try {
-            List<Map<String, String>> courseList = courseRepository.retrieveAvailableCourse(uid);
+            List<Map<String, String>> courseList = courseRepository.retrieveAvailableCourse(uid, commonModel.getSessionModel().getId());
             List<CourseModel> courseModelList = new ArrayList<>();
             for(Map<String, String> course : courseList) {
                 CourseModel courseObj = (CourseModel) MapperUtility.mapModel(CourseModel.class, course);
@@ -210,7 +209,7 @@ public class CourseService {
     //retrieve registed course/enrolled course of specific user
     public List<CourseModel> retrieveRegisteredCourseStudent(int uid) {
         try {
-            List<Map<String, String>> courseList = courseRepository.retrieveRegisteredStudentCourse(uid);
+            List<Map<String, String>> courseList = courseRepository.retrieveRegisteredStudentCourse(uid, commonModel.getSessionModel().getId());
 
             List<CourseModel> courseModelList = new ArrayList<>();
             for(Map<String, String> course : courseList) {

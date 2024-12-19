@@ -568,6 +568,7 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+
     <dialog id="editCourse" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Course</h3>

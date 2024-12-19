@@ -78,16 +78,9 @@ public class HomeService {
                 request.setAttribute("lecturerProfile", lecturerProfile);
             }
 
-            //retrieve courses based on user role
-            List<CourseModel> courseList = new ArrayList<>();
-            if(common.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
-                courseList = courseService.retrieveCourseByLecturer(common.getUser().getId());
-            }else if(common.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
-                courseList = courseService.retrieveRegisteredCourseStudent(common.getUser().getId());
-            }else if(common.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
-                courseList = courseService.retrieveAll();
-            }
+            List<CourseModel> courseList = retrieveCourse(common);
             request.setAttribute("courses", courseList);
+            request.setAttribute("totalCourse", courseList.size());
 
             //get attendance performance for each course
             request.setAttribute("perf", attendanceService.attendancePerformance(courseList,session));
@@ -97,8 +90,23 @@ public class HomeService {
             String fullPath = Paths.get(resource.getFile().toPath().toUri()).getParent().toString().replace("/target", userObj.getProfile_pic());
             request.setAttribute("profilePicture", FieldUtility.encodeFileBase64(fullPath));
 
+            request.setAttribute("activeSession", common.getSessionModel().getSessionName());
+
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<CourseModel> retrieveCourse(CommonModel common) throws Exception {
+        //retrieve courses based on user role
+        List<CourseModel> courseList = new ArrayList<>();
+        if(common.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
+            courseList = courseService.retrieveCourseByLecturer(common.getUser().getId());
+        }else if(common.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
+            courseList = courseService.retrieveRegisteredCourseStudent(common.getUser().getId());
+        }else if(common.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
+            courseList = courseService.retrieveAll();
+        }
+        return courseList;
     }
 }
