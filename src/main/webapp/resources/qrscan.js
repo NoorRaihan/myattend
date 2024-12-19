@@ -145,11 +145,11 @@ const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
 // Start the QR scanner with the rear-facing camera preferred
 $(document).ready(function () {
-  setTimeout(function () {
+  if ($("#qrscan").length > 0) {
     html5QrCode.start(
       { facingMode: { exact: "environment" } },
       config,
       qrCodeSuccessCallback
     );
-  }, 1000); // Add 1s delay since it loads too early on Chrome Mobile
+  }
 });
