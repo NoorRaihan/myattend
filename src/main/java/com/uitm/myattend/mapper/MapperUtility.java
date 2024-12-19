@@ -26,6 +26,7 @@ public class MapperUtility {
             case "CLASSMODEL" -> obj = classModel(tempMap);
             case "ATTENDANCEMODEL" -> obj = attendanceModel(tempMap);
             case "ROLEMODEL" -> obj = roleMapper(tempMap);
+            case "SEMESTERSESSIONMODEL" -> obj = semesterSessionModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -164,5 +165,14 @@ public class MapperUtility {
         }
 
         return attendanceModel;
+    }
+
+    private static SemesterSessionModel semesterSessionModel(TreeMap<String, String> data) {
+        SemesterSessionModel semesterSessionModel = new SemesterSessionModel();
+        semesterSessionModel.setId(data.get("ID"));
+        semesterSessionModel.setSessionName(data.get("SESSION_NAME"));
+        semesterSessionModel.setUsed(FieldUtility.checkNull(data.get("SESSION_USED")).equals("Y"));
+
+        return semesterSessionModel;
     }
 }

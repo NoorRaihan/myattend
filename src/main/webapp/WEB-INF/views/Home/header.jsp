@@ -18,8 +18,8 @@
         ></path>
       </svg>
     </label>
-    <div class="mx-2 text-white lg:mx-6">
-      <div class="text-sm breadcrumbs">
+    <div class="mx-2 text-white lg:mx-6 max-w-32 lg:max-w-none">
+      <div class="text-sm breadcrumbs text-ellipsis">
         <ul>
           <li><a href="/">Home</a></li>
           ${param.menu}
@@ -31,17 +31,9 @@
   <div class="navbar-end mr-4">
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost text-white">
-        Theme
-        <svg
-          width="12px"
-          height="12px"
-          class="h-2 w-2 fill-current opacity-60 inline-block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 2048 2048"
-        >
-          <path
-            d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
-          ></path>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+          <path fill-rule="evenodd" d="M2.25 4.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875V17.25a4.5 4.5 0 1 1-9 0V4.125Zm4.5 14.25a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+          <path d="M10.719 21.75h9.156c1.036 0 1.875-.84 1.875-1.875v-5.25c0-1.036-.84-1.875-1.875-1.875h-.14l-8.742 8.743c-.09.089-.18.175-.274.257ZM12.738 17.625l6.474-6.474a1.875 1.875 0 0 0 0-2.651L15.5 4.787a1.875 1.875 0 0 0-2.651 0l-.1.099V17.25c0 .126-.003.251-.01.375Z" />
         </svg>
       </div>
       <ul
@@ -112,7 +104,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        Logout
+        <span class="ml-1 hidden md:block">Logout</span>
       </button>
     </form>
   </div>

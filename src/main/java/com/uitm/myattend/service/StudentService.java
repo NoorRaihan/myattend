@@ -1,6 +1,7 @@
 package com.uitm.myattend.service;
 
 import com.uitm.myattend.mapper.MapperUtility;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.LecturerModel;
 import com.uitm.myattend.model.StudentModel;
 import com.uitm.myattend.model.UserModel;
@@ -18,9 +19,11 @@ import java.util.Map;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final CommonModel commonModel;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, CommonModel commonModel) {
         this.studentRepository = studentRepository;
+        this.commonModel = commonModel;
     }
 
     //retrieve all student
@@ -156,7 +159,7 @@ public class StudentService {
         try {
 
             String cid = (String) body.get("id");
-            List<Map<String, String>> studentList = studentRepository.retrieveByCourse(cid);
+            List<Map<String, String>> studentList = studentRepository.retrieveByCourse(cid, commonModel.getSessionModel().getId());
 
             List<StudentModel> studModelList = new ArrayList<>();
             for(Map<String, String> studMap : studentList) {
@@ -172,7 +175,7 @@ public class StudentService {
     //retrieve the student detail with course
     public StudentModel retrieveDetailByCourse(String cid, int uid) {
         try {
-            List<Map<String, String>> studentList = studentRepository.retrieveDetailByCourse(cid, uid);
+            List<Map<String, String>> studentList = studentRepository.retrieveDetailByCourse(cid, uid, commonModel.getSessionModel().getId());
 
             if(studentList.isEmpty()) {
                 return null;

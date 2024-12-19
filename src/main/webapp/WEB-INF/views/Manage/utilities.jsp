@@ -21,15 +21,15 @@ uri="jakarta.tags.core" %>
         <jsp:include page="../Home/header.jsp">
           <jsp:param
             name="menu"
-            value='<li class="sm:hidden">Admin Menu</li><li>Utility Management</li>'
+            value='<li class="sm:text-ellipsis">Admin Menu</li><li class="sm:text-ellipsis">Utility Management</li>'
           />
           <jsp:param name="title" value="Utility Management" />
         </jsp:include>
-        <div class="w-auto my-10">
+
           <div
-            class="flex flex-wrap-reverse mx-4 gap-5 items-end transition-all"
+            class="flex flex-wrap my-10 mx-4 gap-5 transition-all"
           >
-            <div class="basis-2/5">
+            <div class="md:basis-2/5 basis-full flex-grow">
               <div class="card card-compact bg-base-100 shadow-xl">
                 <div class="card-body">
                   <div class="card-title justify-between">
@@ -47,7 +47,7 @@ uri="jakarta.tags.core" %>
                         <tr>
                           <th
                             scope="col"
-                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            class="py-3.5 px-3 md:text-left text-center text-sm font-semibold text-gray-900"
                           >
                             Role ID
                           </th>
@@ -69,7 +69,7 @@ uri="jakarta.tags.core" %>
                         <c:forEach var="role" items="${roles}">
                           <tr>
                             <td
-                              class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                              class="py-4 px-3 text-sm font-medium text-gray-900 w-auto md:text-left text-center"
                             >
                               ${role.getId()}
                             </td>
@@ -132,8 +132,143 @@ uri="jakarta.tags.core" %>
                 </div>
               </div>
             </div>
+            <div class="md:basis-2/5 basis-full flex-grow">
+              <div class="card card-compact bg-base-100 shadow-xl">
+                <div class="card-body">
+                  <div class="card-title justify-between">
+                    <h1>Session Management</h1>
+                    <button
+                      class="btn btn-sm btn-primary"
+                      onclick="newSession.showModal(); sessionAdd.reset();"
+                    >
+                      New Session
+                    </button>
+                  </div>
+                  <div class="-mx-4 sm:-mx-0">
+                    <table class="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Session
+                          </th>
+                          <th
+                            scope="col"
+                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Status
+                          </th>
+                          <th
+                            scope="col"
+                            class="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                          >
+                            <span class="sr-only">Edit</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                        <c:forEach var="session" items="${sessions}">
+                          <tr>
+                            <td
+                              class="w-full max-w-0 py-4 px-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none"
+                            >
+                              ${session.getSessionName()}
+                              <p class="text-xs font-normal italic text-gray-400">${session.getId()}</p>
+                            </td>
+                              <c:choose>
+                                <c:when test="${session.isUsed()}">
+                                  <td class="px-3 py-4 text-sm text-gray-500">
+                                    <div class="badge badge-success text-white">Active</div>
+                                  </td>
+                                </c:when>
+                                <c:otherwise>
+                                  <td class="px-3 py-4 text-sm text-gray-500">
+                                    <div class="badge badge-neutral">Disabled</div>
+                                  </td>
+                                </c:otherwise>
+                                </c:choose>
+                            <td
+                              class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+                            >
+                              <div
+                                class="dropdown dropdown-left dropdown-hover"
+                              >
+                                <div
+                                  tabindex="0"
+                                  role="button"
+                                  class="btn btn-ghost btn-xs"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="size-6"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                <ul
+                                  tabindex="0"
+                                  class="dropdown-content z-[1] menu p-2 shadow-lg bg-slate-100 rounded-box w-max"
+                                >
+                                  <li>
+                                    <c:choose>
+                                      <c:when test="${session.isUsed()}">
+                                        <a
+                                            onclick="setSessionDisable.showModal()"
+                                            data-id="${session.getId()}"
+                                            class="sessionSetDisable"
+                                            >Set Disable</a
+                                          >
+                                      </c:when>
+                                      <c:otherwise>
+                                        <a
+                                            onclick="setSession.showModal()"
+                                            data-id="${session.getId()}"
+                                            class="sessionSet"
+                                            >Set Active</a
+                                          >
+                                      </c:otherwise>
+                                    </c:choose>
+                                    
+                                  </li>
+                                  <li>
+                                    <a
+                                      onclick="editSession.showModal()"
+                                      data-id="${session.getId()}"
+                                      data-name="${session.getSessionName()}"
+                                      class="sessionEdit"
+                                      >Edit</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      onclick="deleteSession.showModal()"
+                                      class="text-red-600 sessionDelete"
+                                      data-id="${session.getId()}"
+                                      >Delete</a
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                        </c:forEach>
+                        <!-- More session... -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+
         <div id="alert" class="toast toast-top toast-end z-50 hidden">
           <div class="alert alert-warning">
             <span id="alertMsg">Error</span>
@@ -200,6 +335,7 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+
     <dialog id="editRole" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Edit Role</h3>
@@ -238,6 +374,7 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+
     <dialog id="deleteRole" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Role</h3>
@@ -245,6 +382,136 @@ uri="jakarta.tags.core" %>
         <form action="/role/delete" method="post">
           <input type="hidden" name="id" id="roleid" value="1" />
           <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-red-600" onclick="deleteRole.close()">
+              No
+            </button>
+            <button type="submit" class="btn btn-sm btn-error text-white">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+
+    <dialog id="newSession" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Add New Session</h3>
+        <form
+          id="sessionAdd"
+          action="/session/create"
+          method="post"
+        >
+          <div class="grid grid-cols-2 gap-3">
+            <label class="form-control col-span-2">
+              <div class="label">
+                <span class="label-text">Session Name</span>
+              </div>
+              <input
+                type="text"
+                name="session_name"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+          </div>
+
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="editSession" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Edit Session</h3>
+        <form
+          id="sessionEdit"
+          action="/session/update"
+          method="post"
+        >
+          <div class="grid grid-cols-2 gap-3">
+            <label class="form-control col-span-2">
+              <div class="label">
+                <span class="label-text">Session Name</span>
+              </div>
+              <input
+                type="text"
+                name="session_name"
+                id="session_name"
+                class="input input-primary input-sm input-bordered"
+              />
+            </label>
+          </div>
+          <input type="hidden" name="session_id" id="session_id" value="" />
+          <div class="modal-action">
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="setSession" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Set Session</h3>
+        <p class="py-4">Do you really want to set this session as active ?</p>
+        <form action="/session/activate" method="post">
+          <input type="hidden" name="session_id" id="session_id2" value="" />
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
+              No
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="setSessionDisable" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Set Session</h3>
+        <p class="py-4">Do you really want to deactivate this session ?</p>
+        <form action="/session/disable" method="post">
+          <input type="hidden" name="session_id" id="session_id3" value="" />
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
+              No
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="deleteSession" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Delete Session</h3>
+        <p class="py-4">Do you really want to delete this session ?</p>
+        <form action="/session/delete" method="post">
+          <input type="hidden" name="sessionid" id="sessionid" value="" />
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-red-600" onclick="deleteSession.close()">
+              No
+            </button>
             <button type="submit" class="btn btn-sm btn-error text-white">
               Yes
             </button>

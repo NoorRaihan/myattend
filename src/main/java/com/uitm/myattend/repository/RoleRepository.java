@@ -4,7 +4,6 @@ import com.uitm.myattend.model.RoleModel;
 import com.uitm.myattend.utility.FieldUtility;
 import org.springframework.stereotype.Repository;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

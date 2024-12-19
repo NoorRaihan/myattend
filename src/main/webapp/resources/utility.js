@@ -1,14 +1,31 @@
 $(document).ready(function () {
   $(document).on("click", ".roleEdit", function () {
     // When "roleEdit" button is clicked, get the id from the data attribute and call roleDetails function with the id
-    var id = $(this).data("id");
+    let id = $(this).data("id");
     roleDetails(id);
   });
 
   $(document).on("click", ".roleDelete", function () {
     // When "roleDelete" button is clicked, get the id from the data attribute and set it to the input field with id "roleid"
-    var id = $(this).data("id");
+    let id = $(this).data("id");
     $("#roleid").val(id);
+  });
+
+  $(document).on("click", ".sessionSet", function () {
+    let id = $(this).data("id");
+    $("#session_id2").val(id);
+  });
+
+  $(document).on("click", ".sessionSetDisable", function () {
+    let id = $(this).data("id");
+    $("#session_id3").val(id);
+  });
+
+  $(document).on("click", ".sessionEdit", function () {
+    let id = $(this).data("id");
+    let name = $(this).data("name");
+    $("#session_id").val(id);
+    $("#session_name").val(name);
   });
 });
 
@@ -41,3 +58,4 @@ function roleDetails(id) {
     },
   });
 }
+

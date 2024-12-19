@@ -304,6 +304,20 @@ public class DBRepository {
                     System.out.println("Field Value: " + Arrays.toString(values));
                     for(int i=0; i<values.length; i++) {
                         //handle its own datatype to proper handling
+                        int nullType;
+                        switch (datatype[i].toUpperCase()) {
+                            case "VARCHAR" -> nullType = Types.VARCHAR;
+                            case "DECIMAL" -> nullType = Types.DOUBLE;
+                            case "INT" -> nullType = Types.INTEGER;
+                            case "TIMESTAMP" -> nullType = Types.TIMESTAMP;
+                            case "DATE" -> nullType = Types.DATE;
+                            default -> throw new Exception("Invalid datatype on value " + values[i] + " with datatype :" + datatype[i]);
+                        }
+
+                        if(values[i] == null) {
+                            ps.setNull(i+1, nullType);
+                        }
+                        
                         switch (datatype[i].toUpperCase()) {
                             case "VARCHAR" -> ps.setString(i+1, values[i]);
                             case "DECIMAL" -> ps.setDouble(i+1, Double.parseDouble(values[i]));

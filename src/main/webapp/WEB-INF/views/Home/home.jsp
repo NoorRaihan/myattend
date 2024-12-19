@@ -357,8 +357,9 @@ uri="jakarta.tags.core" %>
                 </c:when>
                 <c:when test="${role == 2}">
                   <a
-                    class="basis-full"
-                    onclick="generateQR('${active.getId()}')"
+                    class="basis-full qr"
+                    onclick='qrModal.showModal()'
+                    data-id="${active.getId()}"
                   >
                     <div
                       id="clsActive"
@@ -414,83 +415,107 @@ uri="jakarta.tags.core" %>
                 </c:when>
               </c:choose>
             </c:forEach>
-            <div
-              id="clsList"
-              class="card card-compact md:basis-2/4 basis-full bg-white shadow-lg grow transition-all"
-            >
-              <div class="card-body">
-                <h1 class="card-title">Classes List</h1>
-                <div class="-mx-4 sm:-mx-0">
-                  <table class="min-w-full divide-y divide-gray-300">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                        >
-                          Class Name
-                        </th>
-                        <th
-                          scope="col"
-                          class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-                        >
-                          Course Code
-                        </th>
-                        <th
-                          scope="col"
-                          class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
-                        >
-                          Date
-                        </th>
-                        <th
-                          scope="col"
-                          colspan="2"
-                          class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
-                        >
-                          Time
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                      <c:forEach var="today" items="${todayList}">
+            <div class="md:basis-2/4 basis-full grow transition-all">
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="card card-compact bg-white shadow-lg">
+                  <div class="card-body">
+                    <div class="text-center">
+                      <h3 class="text-lg font-semibold">Session</h3>
+                      <h4 class="text-xl font-bold text-primary">
+                        ${activeSession}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="card card-compact bg-white shadow-lg">
+                  <div class="card-body">
+                    <div class="text-center">
+                      <h3 class="text-lg font-semibold">Total Registered Course</h3>
+                      <h4 class="text-xl font-bold text-primary">
+                        ${totalCourse}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="clsList"
+                class="card card-compact bg-white shadow-lg"
+              >
+                <div class="card-body">
+                  <h1 class="card-title">Classes List</h1>
+                  <div class="-mx-4 sm:-mx-0">
+                    <table class="min-w-full divide-y divide-gray-300">
+                      <thead>
                         <tr>
-                          <td
-                            class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                          <th
+                            scope="col"
+                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                           >
-                            ${today.getClass_desc()}
-                            <dl class="font-normal lg:hidden">
-                              <dd class="mt-1 truncate text-gray-700">
-                                ${today.getCourse().getCourse_code()}
-                              </dd>
-                              <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                                ${today.getFormattedClassDate()}
-                              </dd>
-                            </dl>
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            Class Name
+                          </th>
+                          <th
+                            scope="col"
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                           >
-                            ${today.getCourse().getCourse_code()}
-                          </td>
-                          <td
-                            class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            Course Code
+                          </th>
+                          <th
+                            scope="col"
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                           >
-                            ${today.getFormattedClassDate()}
-                          </td>
-                          <td
-                            class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
+                            Date
+                          </th>
+                          <th
+                            scope="col"
+                            colspan="2"
+                            class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                           >
-                            ${today.getFormStartTime()}
-                          </td>
-                          <td
-                            class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
-                          >
-                            ${today.getFormEndTime()}
-                          </td>
+                            Time
+                          </th>
                         </tr>
-                      </c:forEach>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                        <c:forEach var="today" items="${todayList}">
+                          <tr>
+                            <td
+                              class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
+                            >
+                              ${today.getClass_desc()}
+                              <dl class="font-normal lg:hidden">
+                                <dd class="mt-1 truncate text-gray-700">
+                                  ${today.getCourse().getCourse_code()}
+                                </dd>
+                                <dd class="mt-1 truncate text-gray-500 sm:hidden">
+                                  ${today.getFormattedClassDate()}
+                                </dd>
+                              </dl>
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                            >
+                              ${today.getCourse().getCourse_code()}
+                            </td>
+                            <td
+                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
+                            >
+                              ${today.getFormattedClassDate()}
+                            </td>
+                            <td
+                              class="px-3 py-4 text-nowrap text-right text-sm text-gray-500"
+                            >
+                              ${today.getFormStartTime()}
+                            </td>
+                            <td
+                              class="py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0"
+                            >
+                              ${today.getFormEndTime()}
+                            </td>
+                          </tr>
+                        </c:forEach>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -649,6 +674,24 @@ uri="jakarta.tags.core" %>
         <button>close</button>
       </form>
     </dialog>
+
+    <dialog id="qrModal" class="modal">
+      <div class="modal-box">
+        <h3 class="text-2xl font-bold text-center" id="qrTitle"></h3>
+        <p class="mt-2 text-lg font-semibold text-center" id="qrDate"></p>
+        <p class="font-semibold text-center" id="qrTime"></p>
+        <p class="text-center" id="qrVenue"></p>
+        <div class="mt-4 flex justify-center items-center">
+          <img class="w-3/5" id="qrImage" alt="QR Code" />
+        </div>
+        <div class="modal-action justify-center">
+          <form method="dialog">
+            <button class="btn btn-sm btn-primary" id="qrDone">Done</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
   </body>
