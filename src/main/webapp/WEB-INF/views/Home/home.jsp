@@ -430,9 +430,9 @@ uri="jakarta.tags.core" %>
                 <div class="card card-compact bg-white shadow-lg">
                   <div class="card-body">
                     <div class="text-center">
-                      <h3 class="text-lg font-semibold">Total Course</h3>
+                      <h3 class="text-lg font-semibold">Total Registered Course</h3>
                       <h4 class="text-xl font-bold text-primary">
-                        10
+                        ${totalCourse}
                       </h4>
                     </div>
                   </div>

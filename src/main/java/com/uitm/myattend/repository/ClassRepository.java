@@ -79,7 +79,7 @@ public class ClassRepository {
         }
     }
 
-    public boolean insert(ClassModel classObj) {
+    public boolean insert(ClassModel classObj, String sessionId) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
 
@@ -91,6 +91,7 @@ public class ClassRepository {
                     "start_time",
                     "end_time",
                     "venue",
+                    "session_id",
                     "created_at",
                     "updated_at"
             };
@@ -103,6 +104,7 @@ public class ClassRepository {
                     FieldUtility.timestamp2Oracle(classObj.getStart_time()),
                     FieldUtility.timestamp2Oracle(classObj.getEnd_time()),
                     classObj.getVenue(),
+                    sessionId,
                     currTms,
                     currTms
             };
@@ -114,6 +116,7 @@ public class ClassRepository {
                     "date",
                     "timestamp",
                     "timestamp",
+                    "varchar",
                     "varchar",
                     "timestamp",
                     "timestamp"
@@ -199,38 +202,40 @@ public class ClassRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveActive(String currDate, String currTms) {
-        return retrieveActive(currDate, currTms, null, null);
+    public List<Map<String, String>> retrieveActive(String currDate, String currTms, String sessionId) {
+        return retrieveActive(currDate, currTms, null, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveActiveStudent(String currDate, String currTms, Integer uid) {
-        return retrieveActive(currDate, currTms, null, uid);
+    public List<Map<String, String>> retrieveActiveStudent(String currDate, String currTms, Integer uid, String sessionId) {
+        return retrieveActive(currDate, currTms, null, uid, sessionId);
     }
 
-    public List<Map<String, String>> retrieveActiveLecturer(String currDate, String currTms, Integer uid) {
-        return retrieveActive(currDate, currTms, uid, null);
+    public List<Map<String, String>> retrieveActiveLecturer(String currDate, String currTms, Integer uid, String sessionId) {
+        return retrieveActive(currDate, currTms, uid, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveActive(String currDate, String currTms, Integer lect, Integer stud) {
+    public List<Map<String, String>> retrieveActive(String currDate, String currTms, Integer lect, Integer stud, String sessionId) {
         try {
             String sql = "SELECT a.*, b.* FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
                     "WHERE TO_CHAR(a.START_TIME, 'yyyyMMddHH24MISSff3') <= ? AND ? <= TO_CHAR(a.END_TIME, 'yyyyMMddHH24MISSff3') " +
-                    "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL";
+                    "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL AND a.session_id = ?";
 
             if(lect != null) {
                 sql += " AND b.user_id = " + lect;
             }else if(stud != null) {
-                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +" AND session_id = '"+ sessionId +"')";
             }
 
             String [] condVal = {
                     currTms,
                     currTms,
-                    currDate
+                    currDate,
+                    sessionId
             };
 
             String [] condType = {
+                    "varchar",
                     "varchar",
                     "varchar",
                     "varchar"
@@ -247,35 +252,37 @@ public class ClassRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveToday(String currDate) {
-        return retrieveToday(currDate, null, null);
+    public List<Map<String, String>> retrieveToday(String currDate, String sessionId) {
+        return retrieveToday(currDate, null, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveTodayStudent(String currDate, int uid) {
-        return retrieveToday(currDate, null, uid);
+    public List<Map<String, String>> retrieveTodayStudent(String currDate, int uid, String sessionId) {
+        return retrieveToday(currDate, null, uid, sessionId);
     }
 
-    public List<Map<String, String>> retrieveTodayLecturer(String currDate, int uid) {
-        return retrieveToday(currDate, uid, null);
+    public List<Map<String, String>> retrieveTodayLecturer(String currDate, int uid, String sessionId) {
+        return retrieveToday(currDate, uid, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveToday(String currDate, Integer lect, Integer stud) {
+    public List<Map<String, String>> retrieveToday(String currDate, Integer lect, Integer stud, String sessionId) {
         try {
             String sql = "SELECT a.*, b.* FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
-                    "WHERE TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL";
+                    "WHERE TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL AND a.session_id = ?";
 
             if(lect != null) {
                 sql += " AND b.user_id = " + lect;
             }else if(stud != null) {
-                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +") AND session_id = '"+ sessionId +"')";
             }
 
             String [] condVal = {
-                    currDate
+                    currDate,
+                    sessionId
             };
 
             String [] condType = {
+                    "varchar",
                     "varchar"
             };
 
@@ -290,28 +297,28 @@ public class ClassRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveAll(String currDate) {
-        return retrieveAll(currDate, null, null);
+    public List<Map<String, String>> retrieveAll(String currDate, String sessionId) {
+        return retrieveAll(currDate, null, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveAllStudent(String currDate, int uid) {
-        return retrieveAll(currDate, null, uid);
+    public List<Map<String, String>> retrieveAllStudent(String currDate, int uid, String sessionId) {
+        return retrieveAll(currDate, null, uid, sessionId);
     }
 
-    public List<Map<String, String>> retrieveAllLecturer(String currDate, int uid) {
-        return retrieveAll(currDate, uid, null);
+    public List<Map<String, String>> retrieveAllLecturer(String currDate, int uid, String sessionId) {
+        return retrieveAll(currDate, uid, null, sessionId);
     }
 
-    public List<Map<String, String>> retrieveAll(String currDate, Integer lect, Integer stud) {
+    public List<Map<String, String>> retrieveAll(String currDate, Integer lect, Integer stud, String sessionId) {
         try {
             String sql = "SELECT a.*, b.* FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
-                    "WHERE a.deleted_at IS NULL";
+                    "WHERE a.deleted_at IS NULL AND a.session_id = '"+ sessionId +"'";
 
             if(lect != null) {
                 sql += " AND b.user_id = " + lect;
             }else if(stud != null) {
-                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +")";
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +") AND session_id = '"+ sessionId +"')";
             }
 
             int result = commDB.sqlQuery(sql);

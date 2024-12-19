@@ -17,13 +17,15 @@ public class ClassService {
     private final ClassRepository classRepository;
     private final CourseService courseService;
     private final AttendanceService attendanceService;
+    private final CommonModel commonModel;
     private final Environment env;
 
-    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService, AttendanceService attendanceService) {
+    public ClassService(ClassRepository classRepository, Environment env, CourseService courseService, AttendanceService attendanceService, CommonModel commonModel) {
         this.classRepository = classRepository;
         this.env = env;
         this.courseService = courseService;
         this.attendanceService = attendanceService;
+        this.commonModel = commonModel;
     }
 
     //retrieve class list by course
@@ -87,7 +89,7 @@ public class ClassService {
             classModel.setEnd_time(endTime);
             classModel.setVenue((String) body.get("venue"));
 
-            if(!classRepository.insert(classModel)) {
+            if(!classRepository.insert(classModel, commonModel.getSessionModel().getId())) {
                 throw new Exception("Failed to register a new class");
             }
             attendanceService.registerAttendance(Objects.requireNonNull(body.get("course_id")).toString(), classModel.getId());
@@ -172,11 +174,11 @@ public class ClassService {
 
             List<Map<String, String>> classList = new ArrayList<>();
             if(commonModel.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
-                classList = classRepository.retrieveActive(currDate, currTms);
+                classList = classRepository.retrieveActive(currDate, currTms, commonModel.getSessionModel().getId());
             }else if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
-                classList = classRepository.retrieveActiveStudent(currDate, currTms, commonModel.getUser().getId());
+                classList = classRepository.retrieveActiveStudent(currDate, currTms, commonModel.getUser().getId(), commonModel.getSessionModel().getId());
             }else if(commonModel.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
-                classList = classRepository.retrieveActiveLecturer(currDate, currTms, commonModel.getUser().getId());
+                classList = classRepository.retrieveActiveLecturer(currDate, currTms, commonModel.getUser().getId(), commonModel.getSessionModel().getId());
             }
 
             List<ClassModel> activeList = new ArrayList<>();
@@ -200,11 +202,11 @@ public class ClassService {
 
             List<Map<String, String>> classList = new ArrayList<>();
             if(commonModel.getUser().getRole_id() == FieldUtility.ADMIN_ROLE) {
-                classList = classRepository.retrieveToday(currDate);
+                classList = classRepository.retrieveToday(currDate, commonModel.getSessionModel().getId());
             }else if(commonModel.getUser().getRole_id() == FieldUtility.STUDENT_ROLE) {
-                classList = classRepository.retrieveTodayStudent(currDate, commonModel.getUser().getId());
+                classList = classRepository.retrieveTodayStudent(currDate, commonModel.getUser().getId(), commonModel.getSessionModel().getId());
             }else if(commonModel.getUser().getRole_id() == FieldUtility.LECTURER_ROLE) {
-                classList = classRepository.retrieveTodayLecturer(currDate, commonModel.getUser().getId());
+                classList = classRepository.retrieveTodayLecturer(currDate, commonModel.getUser().getId(), commonModel.getSessionModel().getId());
             }
 
             List<ClassModel> activeList = new ArrayList<>();
@@ -223,7 +225,7 @@ public class ClassService {
         try {
             String currDate = FieldUtility.getCurrentDate();
 
-            List<Map<String, String>> classList = classRepository.retrieveAllStudent(currDate, uid);
+            List<Map<String, String>> classList = classRepository.retrieveAllStudent(currDate, uid, commonModel.getSessionModel().getId());
             List<ClassModel> activeList = new ArrayList<>();
             for(Map<String, String> data : classList) {
                 activeList.add((ClassModel) MapperUtility.mapModel(ClassModel.class, data));

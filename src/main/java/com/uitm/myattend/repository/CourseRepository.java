@@ -253,12 +253,13 @@ public class CourseRepository {
         }
     }
 
-    public boolean registerCourseStudent(int uid, String cid) {
+    public boolean registerCourseStudent(int uid, String cid, String sessionId) {
         try {
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
             String [] field = {
                     "stud_id",
                     "course_id",
+                    "session_id",
                     "created_at",
                     "updated_at"
             };
@@ -266,12 +267,14 @@ public class CourseRepository {
             String [] fieldVal = {
                     Integer.toString(uid),
                     cid,
+                    sessionId,
                     currTms,
                     currTms
             };
 
             String [] fieldType = {
                     "int",
+                    "varchar",
                     "varchar",
                     "timestamp",
                     "timestamp"
@@ -315,19 +318,21 @@ public class CourseRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveAvailableCourse(int uid) {
+    public List<Map<String, String>> retrieveAvailableCourse(int uid, String sessionId) {
         try {
             String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
                     "LEFT JOIN ma_users b ON a.user_id = b.id WHERE a.id NOT IN (" +
-                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ?" +
+                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ? AND c.session_id = ?" +
                     ") AND a.deleted_at IS NULL";
 
             String [] condVal = {
-                    Integer.toString(uid)
+                    Integer.toString(uid),
+                    sessionId
             };
 
             String [] condType = {
-                    "int"
+                    "int",
+                    "varchar"
             };
 
             int result = commDB.sqlQuery(sql, condVal, condType);
@@ -341,19 +346,21 @@ public class CourseRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveRegisteredStudentCourse(int uid) {
+    public List<Map<String, String>> retrieveRegisteredStudentCourse(int uid, String sessionId) {
         try {
             String sql = "SELECT b.*, a.id AS COURSE_ID, a.*  FROM ma_courses a " +
                     "LEFT JOIN ma_users b ON a.user_id = b.id WHERE a.id IN (" +
-                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ?" +
+                    "SELECT c.course_id FROM ma_courses_students c WHERE c.stud_id = ? AND c.session_id = ?" +
                     ") AND a.deleted_at IS NULL";
 
             String [] condVal = {
-                    Integer.toString(uid)
+                    Integer.toString(uid),
+                    sessionId
             };
 
             String [] condType = {
-                    "int"
+                    "int",
+                    "varchar"
             };
 
             int result = commDB.sqlQuery(sql, condVal, condType);
