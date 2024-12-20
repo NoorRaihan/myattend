@@ -38,7 +38,7 @@ uri="jakarta.tags.core" %>
                         <tr>
                           <th
                             scope="col"
-                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                           >
                             Title
                           </th>
@@ -56,36 +56,58 @@ uri="jakarta.tags.core" %>
                           </th>
                           <th
                             scope="col"
+                            class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                          >
+                            Status
+                          </th>
+                          <th
+                            scope="col"
                             colspan="2"
                             class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                           >
                           </th>
                         </tr>
                       </thead>
-                      <tbody class="divide-y divide-gray-200 bg-white">
-                          <tr>
-                            <td
-                              class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0"
-                            >
+                      <tbody class="bg-white">
+                          <tr class="border-t-gray-500">
+                            <td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                               Assignment 1
                             </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                            >
+                            <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               01-04-2022
                             </td>
-                            <td
-                              class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
-                            >
+                            <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               01-04-2022
                             </td>
-                            <td
-                              class="py-4 pr-4 text-nowrap text-right text-sm text-gray-500 pl-0"
-                            >
-                              <button type="button" class="btn btn-sm btn-primary">Details</button>
+                            <td class="px-3 py-4 text-sm text-gray-500">
+                              Pending
+                            </td>
+                            <td class="py-4 pr-0 text-nowrap text-right text-sm text-gray-500">
+                              <button type="button" class="btn btn-sm btn-ghost desc" data-id="1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-primary">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                              </button>
                             </td>
                           </tr>
-
+                          <tr class="hidden" id="ass-1">
+                            <td class="py-4 px-3 bg-neutral rounded-xl" colspan="5">
+                              <div class="flex mb-5">
+                                Assignment description bla bla bla
+                              </div>
+                              <div class="flex gap-2">
+                                <div class="btn btn-sm btn-secondary text-primary rounded-full">
+                                  Attachment 1
+                                </div>
+                                <div class="btn btn-sm btn-secondary text-primary rounded-full">
+                                  Attachment 2
+                                </div>
+                              </div>
+                              <div class="flex justify-end mt-2">
+                                <button type="button" class="btn btn-sm btn-primary submission" data-id="1">Add Submission</button>
+                              </div>
+                            </td>
+                          </tr>
                       </tbody>
                     </table>
                   </div>
@@ -128,11 +150,54 @@ uri="jakarta.tags.core" %>
             $("#succMsg").html(succ);
             $("#succ").show().delay(3000).fadeOut();
           }
+
+          $(document).on("click", ".desc", function () {
+            let id = $(this).data("id");
+            $(this).toggleClass("rotate-180");
+            $("#ass-" + id).toggle('fast');
+          });
+
+          $(document).on("click", ".submission", function () {
+            let id = $(this).data("id");
+            $('#ass_id').val(id);
+            $('#addSub')[0].showModal();
+          });
         </script>
       </div>
 
       <%@ include file="../Home/drawer.jsp" %>
     </div>
+
+    <dialog id="addSub" class="modal">
+      <div class="modal-box max-w-4xl">
+        <h3 class="font-bold text-lg mb-2">Add New Submission</h3>
+        <form id="subAdd" action="" method="post">
+          <div class="grid grid-cols-5 gap-3 items-end">
+            <label class="form-control col-span-5">
+              <div class="label">
+                <span class="label-text">Submisson</span>
+              </div>
+              <textarea name="sub_desc" id="sub_desc" class="textarea textarea-primary textarea-bordered" rows="4"></textarea>
+            </label>
+            <label class="form-control md:col-span-2 col-span-5">
+              <div class="label">
+                <span class="label-text">Attachments</span>
+              </div>
+              <input type="file" name="sub_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
+            </label>
+          </div>
+          <div class="modal-action">
+            <input type="hidden" name="ass_id" id="ass_id" />
+            <input type="hidden" name="sub_id" id="sub_id" />
+            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addSub.close()">Cancel</button>
+            <button type="submit" class="btn btn-sm btn-primary" id="saveSub" name="action" value="add">Save</button>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
 
     <c:remove var="error" scope="session" />
     <c:remove var="success" scope="session" />
