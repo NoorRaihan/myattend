@@ -200,6 +200,16 @@
             Class List</a
           >
         </li>
+        <li class="py-2">
+          <details>
+            <summary>Courses</summary>
+            <ul>
+              <li class="py-2">
+                <a href="/submission">CSC201</a>
+              </li>
+            </ul>
+          </details>
+        </li>
       </c:if>
     </div>
   </ul>
