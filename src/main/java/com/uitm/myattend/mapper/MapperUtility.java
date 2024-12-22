@@ -27,6 +27,7 @@ public class MapperUtility {
             case "ATTENDANCEMODEL" -> obj = attendanceModel(tempMap);
             case "ROLEMODEL" -> obj = roleMapper(tempMap);
             case "SEMESTERSESSIONMODEL" -> obj = semesterSessionModel(tempMap);
+            case "ASSIGNMENTMODEL" -> obj = assignmentModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -174,5 +175,38 @@ public class MapperUtility {
         semesterSessionModel.setUsed(FieldUtility.checkNull(data.get("SESSION_USED")).equals("Y"));
 
         return semesterSessionModel;
+    }
+
+    //convert from db to class model
+    private static AssignmentModel assignmentModel(TreeMap<String, String> data) {
+        AssignmentModel assignmentObj = new AssignmentModel();
+
+        assignmentObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
+        assignmentObj.setSession_id(FieldUtility.checkNull(data.get("SESSION_ID")));
+        assignmentObj.setCourse_id(FieldUtility.checkNull(data.get("COURSE_ID")));
+        assignmentObj.setAssignment_header(FieldUtility.checkNull(data.get("ASSIGNMENT_HEADER")));
+        assignmentObj.setAssignment_desc(FieldUtility.checkNull(data.get("ASSIGNMENT_DESC")));
+        assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")));
+        assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")));
+        assignmentObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
+        assignmentObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
+        assignmentObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));
+        assignmentObj.setStarted_at(FieldUtility.checkNullDate(data.get("STARTED_AT")));
+        assignmentObj.setEnded_at(FieldUtility.checkNullDate(data.get("ENDED_AT")));
+        assignmentObj.setCreated_at(FieldUtility.checkNullDate(data.get("CREATED_AT")));
+        assignmentObj.setUpdated_at(FieldUtility.checkNullDate(data.get("UPDATED_AT")));
+        assignmentObj.setDeleted_at(FieldUtility.checkNullDate(data.get("DELETED_AT")));
+
+        if(data.containsKey("SESSION_ID")) {
+            SemesterSessionModel sessionModel = semesterSessionModel(data);
+            assignmentObj.setSession(sessionModel);
+        }
+
+        if(data.containsKey("COURSE_ID")) {
+            CourseModel courseModel = courseModel(data);
+            assignmentObj.setCourse(courseModel);
+        }
+
+        return assignmentObj;
     }
 }
