@@ -10,7 +10,6 @@ uri="jakarta.tags.core" %>
     <title>Assignment Management - myAttend+</title>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hugerte@1.0.4/hugerte.min.js"></script>
   </head>

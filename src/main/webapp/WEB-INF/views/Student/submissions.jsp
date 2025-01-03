@@ -11,6 +11,7 @@ uri="jakarta.tags.core" %>
     <link href="${contextPath}/resources/output.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.5.0/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hugerte@1.0.4/hugerte.min.js"></script>
   </head>
   <body class="bg-neutral min-h-screen">
     <div class="fixed inset-x-0 w-full bg-primary min-h-52 z-0"></div>
@@ -103,7 +104,10 @@ uri="jakarta.tags.core" %>
                                   Attachment 2
                                 </div>
                               </div>
-                              <div class="flex justify-end mt-2">
+                              <div class="flex justify-end mt-2 gap-2">
+                                <!-- if ada submission, (buang hidden) -->
+                                <button type="button" class="btn btn-sm btn-accent editSub hidden" data-id="1">View / Edit Submission</button>
+                                <!-- else -->
                                 <button type="button" class="btn btn-sm btn-primary submission" data-id="1">Add Submission</button>
                               </div>
                             </td>
@@ -157,11 +161,56 @@ uri="jakarta.tags.core" %>
             $("#ass-" + id).toggle('fast');
           });
 
+          // Add Submission --------------------------------------------------------------------------------------
+
           $(document).on("click", ".submission", function () {
+            $("#subTitle").html("Add Submission");
+            $('#delSub').hide();
             let id = $(this).data("id");
             $('#ass_id').val(id);
             $('#addSub')[0].showModal();
+            hugerte.init({
+              selector: '#sub_desc',
+              ui_mode: 'split'
+            });
           });
+
+          $('#addSub').on('close', function() {
+            $('#subAdd')[0].reset();
+            hugerte.remove('#sub_desc');
+          });
+
+          // View / Edit Submission --------------------------------------------------------------------------------------
+          $(document).on("click", ".editSub", function () {
+            $("#subTitle").html("Edit Submission");
+            let id = $(this).data("id");
+            $('#delSub').show().data("id", id);
+            $('#sub_id').val(id);
+            $.ajax({
+              type: 'POST',
+              url: '',
+              data: {
+                id: id
+              },
+              success: function(data) {
+                $('#sub_desc').val(data.description);
+                $('#sub_id').val(data.id);
+              }
+            });
+            $('#addSub')[0].showModal();
+            hugerte.init({
+              selector: '#sub_desc',
+              ui_mode: 'split'
+            });
+          });
+
+          // Delete Submission --------------------------------------------------------------------------------------
+          $(document).on("click", "#delSub", function () {
+            let id = $(this).data("id");
+            $('#del_id').val(id);
+            $('#deleteSub')[0].showModal();
+          });
+
         </script>
       </div>
 
@@ -170,7 +219,7 @@ uri="jakarta.tags.core" %>
 
     <dialog id="addSub" class="modal">
       <div class="modal-box max-w-4xl">
-        <h3 class="font-bold text-lg mb-2">Add New Submission</h3>
+        <h3 class="font-bold text-lg mb-2" id="subTitle">Add New Submission</h3>
         <form id="subAdd" action="" method="post">
           <div class="grid grid-cols-5 gap-3 items-end">
             <label class="form-control col-span-5">
@@ -186,11 +235,33 @@ uri="jakarta.tags.core" %>
               <input type="file" name="sub_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
           </div>
-          <div class="modal-action">
+          <div class="flex justify-between mt-5">
             <input type="hidden" name="ass_id" id="ass_id" />
             <input type="hidden" name="sub_id" id="sub_id" />
-            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addSub.close()">Cancel</button>
-            <button type="submit" class="btn btn-sm btn-primary" id="saveSub" name="action" value="add">Save</button>
+            <div>
+              <button type="button" class="btn btn-sm btn-error text-white" id="delSub" data-id="1">Delete Submission</button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addSub.close()">Cancel</button>
+              <button type="submit" class="btn btn-sm btn-primary" id="saveSub" name="action" value="add">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <dialog id="deleteSub" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Delete Submission</h3>
+        <p class="py-4">Do you really want to delete this submission ?</p>
+        <form action="" method="post">
+          <input type="hidden" name="sub_id" id="del_id"/>
+          <div class="modal-action">
+            <button type="button" class="btn btn-sm btn-ghost text-error" onclick="deleteSub.close()">No</button>
+            <button type="submit" class="btn btn-sm btn-error text-white" name="action" value="del">Yes</button>
           </div>
         </form>
       </div>
