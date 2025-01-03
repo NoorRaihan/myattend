@@ -236,7 +236,6 @@ uri="jakarta.tags.core" %>
                                           >
                                       </c:otherwise>
                                     </c:choose>
-                                    
                                   </li>
                                   <li>
                                     <a
@@ -487,13 +486,20 @@ uri="jakarta.tags.core" %>
         <p class="py-4">Do you really want to deactivate this session ?</p>
         <form action="/session/disable" method="post">
           <input type="hidden" name="session_id" id="session_id3" value="" />
-          <div class="modal-action">
-            <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
-              No
-            </button>
-            <button type="submit" class="btn btn-sm btn-primary">
-              Yes
-            </button>
+          <div class="flex justify-between mt-5">
+            <div>
+              <button type="submit" class="btn btn-sm btn-info" name="register" value="true">
+                Enable Registeration
+              </button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="setSession.close()">
+                No
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                Yes
+              </button>
+            </div>
           </div>
         </form>
       </div>
