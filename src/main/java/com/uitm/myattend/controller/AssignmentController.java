@@ -1,18 +1,23 @@
 package com.uitm.myattend.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.AssignmentModel;
+import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.CourseService;
 import com.uitm.myattend.service.AssignmentService;
@@ -55,25 +60,191 @@ public class AssignmentController {
 
         List<AssignmentModel> assignmentList = assignmentService.retrieveAll();
         request.setAttribute("assignments", assignmentList);
-        request.setAttribute("totalAssignment", assignmentList.size());
+        request.setAttribute("totalAssignment", assignmentList.size()); 
 
         return "Lecturer/assignments";
     }
 
-    //retrieve assignment by mark_by which lect
+    //retrieve assignment by course -> return JSON format
 
+    // @GetMapping("/course")
+    // @ResponseBody
+    // public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body,HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    //     Map<String, Object> respMap = new HashMap<>();
+    //     try {
+    //         // //authenticate request
+    //         // if(!authService.authenticate(session)) {
+    //         //     respMap.put("respCode", "00002");
+    //         //     respMap.put("respStatus", "error");
+    //         //     respMap.put("respMessage", "Unauthorized request");
+    //         //     return respMap;
+    //         // }
 
+    //         //retrieve all assignments based on course_id with course detail
+    //         List<AssignmentModel> assignmentList = assignmentService.retrieveByCourse(body);
+    //         // AssignmentModel assignmentModel = assignmentService.retrieveDetail(body);
+    //         CourseModel courseModel = courseService.retrieveDetail(body);
+
+    //         //error handling
+    //         if(assignmentList == null || courseModel == null) {
+    //             respMap.put("respCode", "00001");
+    //             respMap.put("respStatus", "error");
+    //             respMap.put("respMessage", "Class List does not found!");
+    //         }else{
+    //             respMap.put("respCode", "00000");
+    //             respMap.put("respStatus", "success");
+    //             respMap.put("respMessage", "successfully retrieved");
+    //         }
+
+    //         //response hashmap to return as json
+    //         Map<String, Object> tempMap = new HashMap<>();
+    //         tempMap.put("course", courseModel);
+    //         tempMap.put("classes", assignmentList);
+    //         respMap.put("data", tempMap);
+
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         respMap.put("respCode", "000198");
+    //         respMap.put("respStatus", "error");
+    //         respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+    //     }
+    //     return respMap;
+
+    //     // return "Lecturer/assignments";
+    // }
+
+    // @GetMapping("/course")
+    // public String retrieveByCourse(
+    //         @RequestParam("course") String courseId,  // Reads 'course' parameter directly
+    //         HttpServletRequest request,
+    //         HttpServletResponse response,
+    //         HttpSession session) {
+
+    //     Map<String, Object> respMap = new HashMap<>();
+    //     // Authentication
+    //     if (!authService.authenticate(session)) {
+    //         return "redirect:" + request.getContextPath() + "/login";
+    //     }
+
+    //     try {
+    //         // Pass the course ID to the service
+    //         AssignmentModel assignmentModel = assignmentService.retrieveByCourse(courseId);
+    //         System.out.println("assignmentModel from service : "+assignmentModel);
+
+    //         // Set data for the JSP
+    //         request.setAttribute("assignment", assignmentModel);
+    //         request.setAttribute("course", courseId);  // Optionally add course ID to request attributes
+
+    //         // Return the view name
+    //         return "Test/Test";
+
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         // Handle exceptions and show an error page if needed
+    //         return "error";
+    //     }
+    // }
+
+    @GetMapping("/course")
+    public String retrieveByCourse(
+            @RequestParam("course") String courseId,  // Reads 'course' parameter directly
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session) {
+
+        // Authentication
+        if (!authService.authenticate(session)) {
+            return "redirect:" + request.getContextPath() + "/login";
+        }
+
+        try {
+            // Pass the course ID to the service
+            List<AssignmentModel> assignmentList = assignmentService.retrieveByCourse(courseId);
+            System.out.println("assignmentService : "+assignmentList);
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("id", courseId);
+            CourseModel courseModel = courseService.retrieveDetail(body);
+
+            // Set data for the JSP
+            request.setAttribute("assignments", assignmentList);
+            request.setAttribute("course", courseModel);  // Optionally add course ID to request attributes
+
+            System.out.println("Assignments List size : "+assignmentList.size());
+
+            // Return the view name
+            return "Test/Test";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions and show an error page if needed
+            return "error";
+        }
+    }
 
     //retrieve assignment by session_id
 
+    @GetMapping("/session")
+    public String retrieveBySession(
+            @RequestParam("session") String sessionId,  // Reads 'course' parameter directly
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session) {
 
-    //retrieve assignment by course_id
+        // Authentication
+        if (!authService.authenticate(session)) {
+            return "redirect:" + request.getContextPath() + "/login";
+        }
 
+        try {
+            // Pass the course ID to the service
+            List<AssignmentModel> assignmentList = assignmentService.retrieveBySession(sessionId);
 
+            // Set data for the JSP
+            request.setAttribute("assignments", assignmentList);
+            request.setAttribute("session", sessionId);  // Optionally add course ID to request attributes
+
+            // Return the view name
+            return "Test/Test";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions and show an error page if needed
+            return "error";
+        }
+    }
 
     //retrieve assignment by assignment_id
 
+    @GetMapping("/detail")
+    public String retrieveByAssignment(
+            @RequestParam("assignment") String assignmentId,  // Reads 'course' parameter directly
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session) {
 
+        // Authentication
+        if (!authService.authenticate(session)) {
+            return "redirect:" + request.getContextPath() + "/login";
+        }
+
+        try {
+            // Pass the course ID to the service
+            List<AssignmentModel> assignmentList = assignmentService.retrieveDetail(assignmentId);
+
+            // Set data for the JSP
+            request.setAttribute("assignments", assignmentList);
+            request.setAttribute("assignment", assignmentId);  // Optionally add course ID to request attributes
+
+            // Return the view name
+            return "Test/AssignmentDetail";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions and show an error page if needed
+            return "error";
+        }
+    }
 
     //create assignment
 
@@ -84,6 +255,26 @@ public class AssignmentController {
 
 
     //delete assignment
+
+    @PostMapping("/delete")
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        try {
+            // if(!authService.authenticate(session)) {
+            //     response.sendRedirect(request.getContextPath() + "/login");
+            //     return;
+            // }
+
+            if(!assignmentService.delete(body)) {
+                throw new Exception("Failed to delete assignment data");
+            }else {
+                session.setAttribute("success", "Assignment data successfully deleted");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/course");
+    }
 
     //required field for student
     private String[][] assignmentRequiredFields() {

@@ -1,4 +1,5 @@
 package com.uitm.myattend.model;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -63,7 +64,7 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for session_id
-    public String getSession_id() {
+    public String getSessionId() {
         return session_id;
     }
 
