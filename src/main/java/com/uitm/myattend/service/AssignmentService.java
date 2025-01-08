@@ -3,6 +3,7 @@ import com.uitm.myattend.mapper.MapperUtility;
 import com.uitm.myattend.model.AssignmentModel;
 import com.uitm.myattend.model.AttendanceModel;
 import com.uitm.myattend.model.ClassModel;
+import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.SemesterSessionModel;
 import com.uitm.myattend.repository.AssignmentRepository;
@@ -22,13 +23,16 @@ public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final CourseService courseService;
     private final SemesterSessionService semesterSessionService;
+    private final CommonModel commonModel;
 
     public AssignmentService(AssignmentRepository assignmentRepository,  
     CourseService courseService,
-    SemesterSessionService semesterSessionService) {
+    SemesterSessionService semesterSessionService,
+    CommonModel commonModel) {
         this.assignmentRepository = assignmentRepository;
         this.courseService = courseService;
-        this.semesterSessionService = semesterSessionService;;
+        this.semesterSessionService = semesterSessionService;
+        this.commonModel = commonModel;
     }
 
     //retrieve all assignment
@@ -53,7 +57,7 @@ public class AssignmentService {
 
     public List<AssignmentModel> retrieveByCourse(String courseId) {
         try {
-            List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId);
+            List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId, commonModel.getSessionModel().getId());
             // System.out.println("assignmentRepository : "+assignmentList);
     
             List<AssignmentModel> assignmentModelList = new ArrayList<>();

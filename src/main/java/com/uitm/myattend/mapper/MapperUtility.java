@@ -181,7 +181,7 @@ public class MapperUtility {
     private static AssignmentModel assignmentModel(TreeMap<String, String> data) {
         AssignmentModel assignmentObj = new AssignmentModel();
 
-        System.out.println("data mapper ass :"+data);
+        // System.out.println("data mapper ass :"+data);
 
         assignmentObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
         assignmentObj.setSession_id(FieldUtility.checkNull(data.get("SESSION_ID")));
@@ -199,7 +199,7 @@ public class MapperUtility {
         assignmentObj.setUpdated_at(FieldUtility.checkNullDate(data.get("UPDATED_AT")));
         assignmentObj.setDeleted_at(FieldUtility.checkNullDate(data.get("DELETED_AT")));
 
-        System.out.println("data mapper ass object :"+data);
+        // System.out.println("data mapper ass object :"+data);
 
         if(data.containsKey("SESSION_ID")) {
             SemesterSessionModel sessionModel = semesterSessionModel(data);

@@ -36,7 +36,10 @@ public class AssignmentController {
     private final AuthService authService;
     private final AssignmentService assignmentService;
 
-    public AssignmentController(CourseService courseService, AuthService authService, AssignmentService assignmentService) {
+    public AssignmentController(CourseService courseService, 
+        AuthService authService, 
+        AssignmentService assignmentService
+        ) {
         this.courseService = courseService;
         this.authService = authService;
         this.assignmentService = assignmentService;
@@ -160,7 +163,7 @@ public class AssignmentController {
         try {
             // Pass the course ID to the service
             List<AssignmentModel> assignmentList = assignmentService.retrieveByCourse(courseId);
-            System.out.println("assignmentService : "+assignmentList);
+            // System.out.println("assignmentService : "+assignmentList);
 
             Map<String, Object> body = new HashMap<>();
             body.put("id", courseId);
@@ -170,7 +173,7 @@ public class AssignmentController {
             request.setAttribute("assignments", assignmentList);
             request.setAttribute("course", courseModel);  // Optionally add course ID to request attributes
 
-            System.out.println("Assignments List size : "+assignmentList.size());
+            // System.out.println("Assignments List size : "+assignmentList.size());
 
             // Return the view name
             return "Test/Test";

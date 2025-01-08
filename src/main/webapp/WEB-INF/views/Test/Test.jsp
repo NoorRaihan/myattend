@@ -29,6 +29,8 @@
                     <th>Updated At</th>
                     <th>Deleted At</th>
                     <th>Image path</th>
+                    
+                    <th>Course</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,12 +51,13 @@
                         <td>${assignment.getEnded_at()}</td>
                         <td>${assignment.getCreated_at()}</td>
                         <td>${assignment.getUpdated_at()}</td>
-                        <td>${assignment.getDeleted_at()}</td>
+                        <td>${assignment.getDeleted_at()}</td> 
                         <td>
                             <c:forEach var="filename" items="${fn:split(assignment.getServer_filename(), '|')}">
                                 <img src="${assignment.getFile_path()}/${filename}" alt="Assignment Image">
                             </c:forEach>
                         </td>
+                        <td>${assignment.getCourse().getCourse_name()}</td>
                     </tr>
                 </c:forEach>
             </tbody>

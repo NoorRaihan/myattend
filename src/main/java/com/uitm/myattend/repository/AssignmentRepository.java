@@ -30,41 +30,35 @@ public class AssignmentRepository {
         }
     }
 
-    public List<Map<String, String>> retrieveByCourse(String cid) {
+    public List<Map<String, String>> retrieveByCourse(String cid, String sessionId) {
         try {
-            String [] field = {
-                    "assignment_id",
-                    "session_id",
-                    "course_id",
-                    "assignment_header",
-                    "assignment_desc",
-                    "disabled_flag",
-                    "bypass_time_flag",
-                    "ori_filename",
-                    "server_filename",
-                    "file_path",
-                    "started_at",
-                    "ended_at",
-                    "created_at",
-                    "updated_at",
-                    "deleted_at"
+            String sql = "SELECT a.assignment_id, a.session_id, a.course_id, a.assignment_header, a.assignment_desc, a.disabled_flag, " +
+             "a.bypass_time_flag, a.ori_filename, a.server_filename, a.file_path, a.started_at, " +
+             "a.ended_at, a.created_at, a.updated_at, a.deleted_at, " +
+             "b.* " + 
+             "FROM ma_assignments a " +
+             "INNER JOIN ma_courses b ON a.course_id = b.id " +
+             "WHERE a.course_id = ? AND a.session_id = ?";
+
+            String [] condVal = {
+                    cid,
+                    sessionId
             };
 
-            String cond = "course_id = ?";
-
-            String [] condval = {
-                    cid
-            };
-
-            String [] condtype = {
+            String [] condType = {
+                    "varchar",
                     "varchar"
             };
 
-            return commDB.select("ma_assignments", field, cond, condval, condtype);
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve attendances on course : " + cid);
+            }
+            return commDB.getResult();
 
         }catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return Collections.emptyList();
         }
     }
 
