@@ -27,7 +27,7 @@ uri="jakarta.tags.core" %>
         </jsp:include>
         <div class="w-auto my-10">
           <form
-            action = ""
+            action = "/assignment/course"
             method = "get"
             class="flex ml-2 overflow-x-auto scrollbar-hide"
             aria-labelledby="profile-overview-title"
