@@ -36,8 +36,8 @@ public class AssignmentController {
     private final AuthService authService;
     private final AssignmentService assignmentService;
 
-    public AssignmentController(CourseService courseService, 
-        AuthService authService, 
+    public AssignmentController(CourseService courseService,
+        AuthService authService,
         AssignmentService assignmentService
         ) {
         this.courseService = courseService;
@@ -63,7 +63,7 @@ public class AssignmentController {
 
         List<AssignmentModel> assignmentList = assignmentService.retrieveAll();
         request.setAttribute("assignments", assignmentList);
-        request.setAttribute("totalAssignment", assignmentList.size()); 
+        request.setAttribute("totalAssignment", assignmentList.size());
 
         return "Lecturer/assignments";
     }
@@ -165,6 +165,10 @@ public class AssignmentController {
             List<AssignmentModel> assignmentList = assignmentService.retrieveByCourse(courseId);
             // System.out.println("assignmentService : "+assignmentList);
 
+            CommonModel commonModel = (CommonModel) session.getAttribute("common");
+            List<CourseModel> courseList = courseService.retrieveCourseByLecturer(commonModel.getUser().getId());
+            request.setAttribute("courses", courseList);
+
             Map<String, Object> body = new HashMap<>();
             body.put("id", courseId);
             CourseModel courseModel = courseService.retrieveDetail(body);
@@ -176,7 +180,7 @@ public class AssignmentController {
             // System.out.println("Assignments List size : "+assignmentList.size());
 
             // Return the view name
-            return "Test/Test";
+            return "Lecturer/assignments";
 
         } catch (Exception e) {
             e.printStackTrace();
