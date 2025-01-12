@@ -12,8 +12,8 @@ public class AssignmentModel {
     private String course_id;
     private String assignment_header;
     private String assignment_desc;
-    private boolean disabled_flag;
-    private boolean bypass_time_flag;
+    private int disabled_flag;
+    private int bypass_time_flag;
     private String ori_filename;
     private String server_filename;
     private String file_path;
@@ -91,20 +91,20 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for disabled_flag
-    public boolean isDisabled_flag() {
+    public int isDisabled_flag() {
         return disabled_flag;
     }
 
-    public void setDisabled_flag(boolean disabled_flag) {
+    public void setDisabled_flag(int disabled_flag) {
         this.disabled_flag = disabled_flag;
     }
 
     // Getter and Setter for bypass_time_flag
-    public boolean isBypass_time_flag() {
+    public int isBypass_time_flag() {
         return bypass_time_flag;
     }
 
-    public void setBypass_time_flag(boolean bypass_time_flag) {
+    public void setBypass_time_flag(int bypass_time_flag) {
         this.bypass_time_flag = bypass_time_flag;
     }
 
