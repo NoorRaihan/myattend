@@ -31,7 +31,7 @@ public class AssignmentService {
     private final CourseService courseService;
     private final SemesterSessionService semesterSessionService;
     private final CommonModel commonModel;
-    private final String uploadDirectory = "src/main/webapp/resources/uploads/assignments";
+    private final String uploadDirectory = "src/main/webapp/resources/uploads/assignments/";
 
     public AssignmentService(AssignmentRepository assignmentRepository,  
     CourseService courseService,
@@ -261,7 +261,7 @@ public class AssignmentService {
 
     public boolean delete(Map<String, Object> body) {
         try {
-            String id = (String) body.get("id");
+            String id = (String) body.get("ass_id");
 
             if(!assignmentRepository.delete(id)) {
                 throw new Exception("Failed to delete assignment info");

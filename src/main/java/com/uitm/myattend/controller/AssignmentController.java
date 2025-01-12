@@ -295,6 +295,7 @@ public class AssignmentController {
 
     @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        // String assignmentId = (String) body.get("ass_id");
         String courseId = (String) body.get("course_id");
         try {
             if(!authService.authenticate(session)) {
