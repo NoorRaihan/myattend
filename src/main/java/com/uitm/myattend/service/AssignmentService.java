@@ -51,8 +51,6 @@ public class AssignmentService {
             List<AssignmentModel> assignmentModelList = new ArrayList<>();
             for(Map<String, String> assignment : assignmentList) {
                 assignmentModelList.add((AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assignment));
-                // AssignmentModel obj = (AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assignment);
-                // assignmentModelList.add(obj);
             }
             return assignmentModelList;
         }catch (Exception e) {
@@ -63,6 +61,7 @@ public class AssignmentService {
 
     //retrieve assignment by course
 
+    @Transactional
     public List<AssignmentModel> retrieveByCourse(String courseId) {
         try {
             List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId, commonModel.getSessionModel().getId());
@@ -81,32 +80,23 @@ public class AssignmentService {
     }
 
     @Transactional
-    // public AssignmentModel retrieveByCourse(String courseId) {
-    //     try {
+    public List<AssignmentModel> retrieveByCourseJSON(Map<String, Object> body) {
+        try {
 
-    //         List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId);
-    //         System.out.println("assignmentRepository : "+assignmentList);
+            String courseId = (String) body.get("course_id");
+            String sessionId = (String) body.get("session_id");
+            List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId, sessionId);
 
-    //         if(assignmentList.size() != 1) {
-    //             throw new Exception("Data error on class list size : " + assignmentList.size());
-    //         }
-
-    //         AssignmentModel assignmentModel = (AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assignmentList.get(0));
-    //         Map<String, Object> body = new HashMap<>();
-    //         body.put("id", assignmentModel.getCourse_id());
-    //         CourseModel courseModel = courseService.retrieveDetail(body);
-    //         assignmentModel.setCourse(courseModel);
-    //         SemesterSessionModel semesterSessionModel = semesterSessionService.retrieveDetail(body);
-    //         assignmentModel.setSession(semesterSessionModel);
-    //         return assignmentModel;
-
-    //     }catch (Exception e) {
-    //         e.printStackTrace();
-    //         return null;
-    //     }
-    // }
-
-    //retrieve assignment by course
+            List<AssignmentModel> assignmentModelList = new ArrayList<>();
+            for(Map<String, String> assMap : assignmentList) {
+                assignmentModelList.add((AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assMap));
+            }
+            return assignmentModelList;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public List<AssignmentModel> retrieveBySession(String sessionId) {
         try {

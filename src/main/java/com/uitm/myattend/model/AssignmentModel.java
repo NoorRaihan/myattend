@@ -1,7 +1,11 @@
 package com.uitm.myattend.model;
 
+import java.text.ParseException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import com.uitm.myattend.utility.FieldUtility;
 
 @Component
 @SessionScope
@@ -136,8 +140,8 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for started_at
-    public String getStarted_at() {
-        return started_at;
+    public String getStarted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setStarted_at(String started_at) {
@@ -145,8 +149,8 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for ended_at
-    public String getEnded_at() {
-        return ended_at;
+    public String getEnded_at() throws ParseException {
+        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setEnded_at(String ended_at) {
@@ -154,8 +158,8 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for created_at
-    public String getCreated_at() {
-        return created_at;
+    public String getCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setCreated_at(String created_at) {
@@ -163,8 +167,8 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for updated_at
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setUpdated_at(String updated_at) {
@@ -172,8 +176,8 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for deleted_at
-    public String getDeleted_at() {
-        return deleted_at;
+    public String getDeleted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setDeleted_at(String deleted_at) {

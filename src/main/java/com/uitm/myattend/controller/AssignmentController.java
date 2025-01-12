@@ -72,83 +72,57 @@ public class AssignmentController {
 
     //retrieve assignment by course -> return JSON format
 
-    // @GetMapping("/course")
-    // @ResponseBody
-    // public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body,HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-    //     Map<String, Object> respMap = new HashMap<>();
-    //     try {
-    //         // //authenticate request
-    //         // if(!authService.authenticate(session)) {
-    //         //     respMap.put("respCode", "00002");
-    //         //     respMap.put("respStatus", "error");
-    //         //     respMap.put("respMessage", "Unauthorized request");
-    //         //     return respMap;
-    //         // }
+    @GetMapping("/api/course")
+    @ResponseBody
+    public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body,HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            // //authenticate request
+            // if(!authService.authenticate(session)) {
+            //     respMap.put("respCode", "00002");
+            //     respMap.put("respStatus", "error");
+            //     respMap.put("respMessage", "Unauthorized request");
+            //     return respMap;
+            // }
 
-    //         //retrieve all assignments based on course_id with course detail
-    //         List<AssignmentModel> assignmentList = assignmentService.retrieveByCourse(body);
-    //         // AssignmentModel assignmentModel = assignmentService.retrieveDetail(body);
-    //         CourseModel courseModel = courseService.retrieveDetail(body);
+            //retrieve all assignments JSON
+            List<AssignmentModel> assignmentList = assignmentService.retrieveByCourseJSON(body);
+            if (body.containsKey("course_id") && body.get("course_id") != null) {
+                body.put("id", body.get("course_id").toString());
+            } else {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment List does not found!");
+            }            
+            // CourseModel courseModel = courseService.retrieveDetail(body);
 
-    //         //error handling
-    //         if(assignmentList == null || courseModel == null) {
-    //             respMap.put("respCode", "00001");
-    //             respMap.put("respStatus", "error");
-    //             respMap.put("respMessage", "Class List does not found!");
-    //         }else{
-    //             respMap.put("respCode", "00000");
-    //             respMap.put("respStatus", "success");
-    //             respMap.put("respMessage", "successfully retrieved");
-    //         }
+            //error handling
+            if(assignmentList == null ||  assignmentList.isEmpty()) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment List does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
 
-    //         //response hashmap to return as json
-    //         Map<String, Object> tempMap = new HashMap<>();
-    //         tempMap.put("course", courseModel);
-    //         tempMap.put("classes", assignmentList);
-    //         respMap.put("data", tempMap);
+                //response hashmap to return as json
+            Map<String, Object> tempMap = new HashMap<>();
+            // tempMap.put("course", courseModel);
+            tempMap.put("assignments", assignmentList);
+            respMap.put("data", tempMap);
+            }
 
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         respMap.put("respCode", "000198");
-    //         respMap.put("respStatus", "error");
-    //         respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
-    //     }
-    //     return respMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
 
-    //     // return "Lecturer/assignments";
-    // }
-
-    // @GetMapping("/course")
-    // public String retrieveByCourse(
-    //         @RequestParam("course") String courseId,  // Reads 'course' parameter directly
-    //         HttpServletRequest request,
-    //         HttpServletResponse response,
-    //         HttpSession session) {
-
-    //     Map<String, Object> respMap = new HashMap<>();
-    //     // Authentication
-    //     if (!authService.authenticate(session)) {
-    //         return "redirect:" + request.getContextPath() + "/login";
-    //     }
-
-    //     try {
-    //         // Pass the course ID to the service
-    //         AssignmentModel assignmentModel = assignmentService.retrieveByCourse(courseId);
-    //         System.out.println("assignmentModel from service : "+assignmentModel);
-
-    //         // Set data for the JSP
-    //         request.setAttribute("assignment", assignmentModel);
-    //         request.setAttribute("course", courseId);  // Optionally add course ID to request attributes
-
-    //         // Return the view name
-    //         return "Test/Test";
-
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         // Handle exceptions and show an error page if needed
-    //         return "error";
-    //     }
-    // }
+        // return "Lecturer/assignments";
+    }
 
     @GetMapping("/course")
     public String retrieveByCourse(
@@ -255,10 +229,6 @@ public class AssignmentController {
         }
     }
 
-    //create assignment
-//     <div>
-//     <input name="ass_course_id" type="hidden" value="${course.getId()}"
-//   </div>
     @PostMapping("/create/{course_id}")
     public void store(
         @RequestParam Map<String, Object> body,
