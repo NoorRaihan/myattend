@@ -175,6 +175,8 @@ INSERT INTO ma_roles(id, role_name) VALUES(3, 'STUDENT');
 INSERT INTO ma_stats(id, stats_desc) VALUES('AB', 'ABSENT');
 INSERT INTO ma_stats(id, stats_desc) VALUES('C', 'ATTENDED');
 COMMIT;
---INSERT INTO ma_stats(id, stats_desc) VALUES('AP', 'ABSENT WITH PERMISSION');
 
---insert into ma_users (id,email,username,full_name,password,gender,birth_date,profile_pic,role_id,created_at,updated_at) values(1,'ss','ss','ss','ss','ss','ss','ss',1,'2023','2023')
+insert into ma_users (id,email,username,full_name,password,gender,birth_date,profile_pic,role_id) 
+values(1,'admin@gmail.com','1000000','ADMINISTRATOR','$argon2id$v=19$m=2000,t=10,p=1$vhDYiK4T2RfO538qZWQQ9w$g15Pt/PMGsJ1QXYKl3GZS7p6EqJvVrc0fR3R5dcoxD4','M',to_date('2029-01-01', 'YYYY-MM-DD'),'images/profile/default.png',1)
+
+COMMIT;
