@@ -52,6 +52,13 @@ public class FieldUtility {
         return getFormatted(timestamp, "yyyyMMddHHmmssSSS", "yyyy-MM-dd HH:mm:ss.SSS");
     }
 
+    // Convert Java datetime local to Oracle timestamp format
+    public static String dateTimeLocal2Oracle(String timestamp) throws ParseException {
+        // Match the input format ("2025-01-12T07:47") and convert to Oracle format
+        return getFormatted(timestamp, "yyyy-MM-dd'T'HH:mm", "yyyy-MM-dd HH:mm:ss.SSS");
+    }
+
+
     //convert date java to oracle date format
     public static String date2Oracle(String date) throws ParseException {
         return getFormatted(date, "yyyyMMdd", "yyyy-MM-dd");

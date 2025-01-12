@@ -268,7 +268,7 @@ uri="jakarta.tags.core" %>
     <dialog id="addAss" class="modal">
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg mb-2">Add New Assignment</h3>
-        <form id="assAdd" action="" method="post">
+        <form id="assAdd" action="/assignment/create/${course.getId()}" method="post" enctype="multipart/form-data">
           <div class="grid grid-cols-5 gap-3 items-end">
             <label class="form-control col-span-5">
               <div class="label">
@@ -313,7 +313,7 @@ uri="jakarta.tags.core" %>
             </label>
           </div>
           <div class="modal-action">
-            <input type="hidden" name="ass_id" id="ass_id" />
+            <input type="text" name="ass_id" id="ass_id" />
             <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addAss.close()">Cancel</button>
             <button type="submit" class="btn btn-sm btn-primary" id="saveAss" name="action" value="add">Save</button>
           </div>
@@ -328,8 +328,10 @@ uri="jakarta.tags.core" %>
       <div class="modal-box">
         <h3 class="font-bold text-lg">Delete Assignment</h3>
         <p class="py-4">Do you really want to delete this assignment ?</p>
-        <form action="" method="post">
-          <input type="hidden" name="ass_id" id="del_id"/>
+        
+        <form action="/assignment/delete" method="post">
+          <input type="hidden" name="ass_id" id="del_id" value="${assignment.getAssignment_id()}"/>
+          <input type="hidden" name="course_id" id="del_id" value="${course.getId()}"/>
           <div class="modal-action">
             <button type="button" class="btn btn-sm btn-ghost text-error" onclick="deleteAss.close()">No</button>
             <button type="submit" class="btn btn-sm btn-error text-white">Yes</button>

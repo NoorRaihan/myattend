@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.uitm.myattend.model.CommonModel;
@@ -254,8 +256,36 @@ public class AssignmentController {
     }
 
     //create assignment
+//     <div>
+//     <input name="ass_course_id" type="hidden" value="${course.getId()}"
+//   </div>
+    @PostMapping("/create/{course_id}")
+    public void store(
+        @RequestParam Map<String, Object> body,
+        HttpServletResponse response,
+        HttpServletRequest request,
+        HttpSession session,
+        @PathVariable("course_id") String courseId,
+        @RequestParam("ass_attach") MultipartFile file
+    ) throws IOException {
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
-
+            FieldUtility.requiredValidator(body, assignmentRequiredFields());
+            if(assignmentService.insert(body, courseId, file)) {
+                session.setAttribute("message", "New assignment successfully added");
+            }else {
+                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        // response.sendRedirect("/assignment");
+        response.sendRedirect("/assignment/course?course=" + courseId);
+    }
 
     //update assignment - including all cases ( disable,bypass,etc .. )
 
@@ -265,11 +295,12 @@ public class AssignmentController {
 
     @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        String courseId = (String) body.get("course_id");
         try {
-            // if(!authService.authenticate(session)) {
-            //     response.sendRedirect(request.getContextPath() + "/login");
-            //     return;
-            // }
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
             if(!assignmentService.delete(body)) {
                 throw new Exception("Failed to delete assignment data");
@@ -280,15 +311,17 @@ public class AssignmentController {
             session.setAttribute("error", e.getMessage());
             e.printStackTrace();
         }
-        response.sendRedirect("/course");
+        response.sendRedirect("/assignment/course?course=" + courseId);
     }
 
     //required field for student
     private String[][] assignmentRequiredFields() {
         return new String[][] {
-                {"program", "Program is required"},
-                {"intake", "Intake is required"},
-                {"semester", "Semester is required"}
+                {"ass_title", "Assignment Title is required"},
+                {"ass_desc", "Assignment Description is required"},
+                // {"ass_attach", "Attachment is required"}, // maybe need multiple
+                {"ass_start", "Assignment Start Date and Time is required"}, 
+                {"ass_end", "Assignment End Date and Time is required"}, 
         };
     }
 }
