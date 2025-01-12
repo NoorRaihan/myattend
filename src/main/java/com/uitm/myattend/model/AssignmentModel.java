@@ -141,7 +141,8 @@ public class AssignmentModel {
 
     // Getter and Setter for started_at
     public String getStarted_at() throws ParseException {
-        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return started_at;
+        // return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setStarted_at(String started_at) {
@@ -150,7 +151,8 @@ public class AssignmentModel {
 
     // Getter and Setter for ended_at
     public String getEnded_at() throws ParseException {
-        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return ended_at;
+        // return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setEnded_at(String ended_at) {
@@ -159,7 +161,8 @@ public class AssignmentModel {
 
     // Getter and Setter for created_at
     public String getCreated_at() throws ParseException {
-        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return created_at;
+        // return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setCreated_at(String created_at) {
@@ -168,7 +171,8 @@ public class AssignmentModel {
 
     // Getter and Setter for updated_at
     public String getUpdated_at() throws ParseException {
-        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return updated_at;
+        // return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setUpdated_at(String updated_at) {
@@ -177,7 +181,8 @@ public class AssignmentModel {
 
     // Getter and Setter for deleted_at
     public String getDeleted_at() throws ParseException {
-        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return deleted_at;
+        // return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setDeleted_at(String deleted_at) {
