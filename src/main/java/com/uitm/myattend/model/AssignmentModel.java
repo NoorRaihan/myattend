@@ -1,7 +1,11 @@
 package com.uitm.myattend.model;
 
+import java.text.ParseException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import com.uitm.myattend.utility.FieldUtility;
 
 @Component
 @SessionScope
@@ -12,8 +16,8 @@ public class AssignmentModel {
     private String course_id;
     private String assignment_header;
     private String assignment_desc;
-    private boolean disabled_flag;
-    private boolean bypass_time_flag;
+    private int disabled_flag;
+    private int bypass_time_flag;
     private String ori_filename;
     private String server_filename;
     private String file_path;
@@ -91,20 +95,20 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for disabled_flag
-    public boolean isDisabled_flag() {
+    public int isDisabled_flag() {
         return disabled_flag;
     }
 
-    public void setDisabled_flag(boolean disabled_flag) {
+    public void setDisabled_flag(int disabled_flag) {
         this.disabled_flag = disabled_flag;
     }
 
     // Getter and Setter for bypass_time_flag
-    public boolean isBypass_time_flag() {
+    public int isBypass_time_flag() {
         return bypass_time_flag;
     }
 
-    public void setBypass_time_flag(boolean bypass_time_flag) {
+    public void setBypass_time_flag(int bypass_time_flag) {
         this.bypass_time_flag = bypass_time_flag;
     }
 
@@ -136,8 +140,9 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for started_at
-    public String getStarted_at() {
+    public String getStarted_at() throws ParseException {
         return started_at;
+        // return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setStarted_at(String started_at) {
@@ -145,8 +150,9 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for ended_at
-    public String getEnded_at() {
+    public String getEnded_at() throws ParseException {
         return ended_at;
+        // return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setEnded_at(String ended_at) {
@@ -154,8 +160,9 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for created_at
-    public String getCreated_at() {
+    public String getCreated_at() throws ParseException {
         return created_at;
+        // return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setCreated_at(String created_at) {
@@ -163,8 +170,9 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for updated_at
-    public String getUpdated_at() {
+    public String getUpdated_at() throws ParseException {
         return updated_at;
+        // return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setUpdated_at(String updated_at) {
@@ -172,8 +180,9 @@ public class AssignmentModel {
     }
 
     // Getter and Setter for deleted_at
-    public String getDeleted_at() {
+    public String getDeleted_at() throws ParseException {
         return deleted_at;
+        // return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setDeleted_at(String deleted_at) {

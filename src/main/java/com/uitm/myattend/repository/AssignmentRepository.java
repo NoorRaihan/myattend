@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
+import com.uitm.myattend.model.AssignmentModel;
+import com.uitm.myattend.model.CourseModel;
+import com.uitm.myattend.utility.FieldUtility;
+
 @Repository
 public class AssignmentRepository {
     
@@ -138,11 +142,75 @@ public class AssignmentRepository {
         }
     }
 
-    public boolean delete(String id) {
+    public boolean insert(AssignmentModel assignmentModel) {
+        try {
+            String [] field = {
+                "assignment_id",
+                "session_id",
+                "course_id",
+                "assignment_header",
+                "assignment_desc",
+                "disabled_flag",
+                "bypass_time_flag",
+                "ori_filename",
+                "server_filename",
+                "file_path",
+                "started_at",
+                "ended_at",
+                "created_at",
+                "updated_at"
+        };
+
+            String [] fieldval = {
+                    Integer.toString(assignmentModel.getAssignment_id()),
+                    assignmentModel.getSessionId(),
+                    assignmentModel.getCourse_id(),
+                    assignmentModel.getAssignment_header(),
+                    assignmentModel.getAssignment_desc(),
+                    Integer.toString(assignmentModel.isDisabled_flag()),
+                    Integer.toString(assignmentModel.isBypass_time_flag()),
+                    assignmentModel.getOri_filename(),
+                    assignmentModel.getServer_filename(),
+                    assignmentModel.getFile_path(),
+                    FieldUtility.timestamp2Oracle(assignmentModel.getStarted_at()),
+                    FieldUtility.timestamp2Oracle(assignmentModel.getEnded_at()),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
+                    FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
+            };
+
+            String [] fieldtype = {
+                    "int",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "int",
+                    "int",
+                    "varchar",
+                    "varchar",
+                    "varchar",
+                    "timestamp",
+                    "timestamp",
+                    "timestamp",
+                    "timestamp",
+            };
+
+            int result = commDB.insert("ma_assignments", field, fieldval, fieldtype);
+            if(result <= 0) {
+                throw new Exception("Failed to insert into ma_assignments");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(String assignmentId) {
         try {
             String cond = "assignment_id = ?";
-            String [] val = {id};
-            String [] type = {"varchar"};
+            String [] val = {assignmentId};
+            String [] type = {"int"};
 
             int result = commDB.delete("ma_assignments", cond, val, type);
 

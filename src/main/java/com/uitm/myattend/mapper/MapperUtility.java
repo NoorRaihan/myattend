@@ -188,8 +188,10 @@ public class MapperUtility {
         assignmentObj.setCourse_id(FieldUtility.checkNull(data.get("COURSE_ID")));
         assignmentObj.setAssignment_header(FieldUtility.checkNull(data.get("ASSIGNMENT_HEADER")));
         assignmentObj.setAssignment_desc(FieldUtility.checkNull(data.get("ASSIGNMENT_DESC")));
-        assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")));
-        assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")));
+        // assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")));
+        // assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")));
+        assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")) ? 1 : 0);
+        assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")) ? 1 : 0);
         assignmentObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
         assignmentObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
         assignmentObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));
