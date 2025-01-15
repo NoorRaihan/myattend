@@ -19,6 +19,15 @@ public class ClassModel {
     private String end_time;
     private String venue;
     private String deleted_at;
+    private SemesterSessionModel sessionModel;
+
+    public void setSessionModel(SemesterSessionModel sessionModel) {
+        this.sessionModel = sessionModel;
+    }
+
+    public SemesterSessionModel getSessionModel() {
+        return sessionModel;
+    }
 
     public String getId() {
         return id;
