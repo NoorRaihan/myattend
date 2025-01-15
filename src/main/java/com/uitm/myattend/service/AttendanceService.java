@@ -58,6 +58,7 @@ public class AttendanceService {
             attendanceModel.setClass_id(classId);
             attendanceModel.setStud_id(student.getUser_id());
             attendanceModel.setStatus("AB");
+            attendanceModel.setStudent(student);
 
             if(!attendanceRepository.insert(attendanceModel, commonModel.getSessionModel().getId())) {
                 throw new Exception("Failed to process attendance");

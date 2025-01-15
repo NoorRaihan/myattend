@@ -33,7 +33,7 @@ public class ClassService {
         try {
 
             String cid = (String) body.get("id");
-            List<Map<String, String>> classList = classRepository.retrieveByCourse(cid);
+            List<Map<String, String>> classList = classRepository.retrieveByCourse(commonModel.getSessionModel().getId(), cid);
 
             List<ClassModel> classModelList = new ArrayList<>();
             for(Map<String, String> classMap : classList) {

@@ -17,31 +17,30 @@ public class ClassRepository {
         this.commDB = commDB;
     }
 
-    public List<Map<String, String>> retrieveByCourse(String cid) {
+    public List<Map<String, String>> retrieveByCourse(String sessionId, String cid) {
         try {
-            String [] field = {
-                    "id",
-                    "course_id",
-                    "class_desc",
-                    "class_date",
-                    "start_time",
-                    "end_time",
-                    "venue",
-                    "deleted_at"
+
+            String sql = "SELECT a.*, b.*, s.session_name FROM ma_classes a " +
+                    "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "INNER JOIN ma_sessions_semester s ON a.session_id = s.id " + 
+                    "WHERE a.course_id = ? AND a.deleted_at IS NULL AND a.session_id = ?";
+
+
+            String [] condVal = {
+                cid,
+                sessionId
             };
 
-            String cond = "course_id = ?";
-
-            String [] condval = {
-                    cid
-            };
-
-            String [] condtype = {
+            String [] condType = {
+                    "varchar",
                     "varchar"
             };
-
-            return commDB.select("ma_classes", field, cond, condval, condtype);
-
+    
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve active class record");
+            }
+            return commDB.getResult();
         }catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -216,8 +215,9 @@ public class ClassRepository {
 
     public List<Map<String, String>> retrieveActive(String currDate, String currTms, Integer lect, Integer stud, String sessionId) {
         try {
-            String sql = "SELECT a.*, b.* FROM ma_classes a " +
+            String sql = "SELECT a.*, b.*, s.session_name FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "INNER JOIN ma_sessions_semester s ON a.session_id = s.id " + 
                     "WHERE TO_CHAR(a.START_TIME, 'yyyyMMddHH24MISSff3') <= ? AND ? <= TO_CHAR(a.END_TIME, 'yyyyMMddHH24MISSff3') " +
                     "AND TO_CHAR(a.CLASS_DATE, 'yyyyMMdd') = ? AND a.deleted_at IS NULL AND a.session_id = ?";
 
@@ -311,8 +311,9 @@ public class ClassRepository {
 
     public List<Map<String, String>> retrieveAll(String currDate, Integer lect, Integer stud, String sessionId) {
         try {
-            String sql = "SELECT a.*, b.* FROM ma_classes a " +
+            String sql = "SELECT a.*, b.*, s.session_name FROM ma_classes a " +
                     "INNER JOIN ma_courses b ON a.COURSE_ID = b.id " +
+                    "INNER JOIN ma_sessions_semester s ON a.session_id = s.id " + 
                     "WHERE a.deleted_at IS NULL AND a.session_id = '"+ sessionId +"'";
 
             if(lect != null) {
