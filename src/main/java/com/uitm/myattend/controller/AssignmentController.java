@@ -18,11 +18,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
+import com.uitm.myattend.model.SemesterSessionModel;
 import com.uitm.myattend.model.AssignmentModel;
 import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.service.AuthService;
 import com.uitm.myattend.service.CourseService;
 import com.uitm.myattend.service.AssignmentService;
+import com.uitm.myattend.service.SemesterSessionService;
 import com.uitm.myattend.utility.FieldUtility;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,14 +39,19 @@ public class AssignmentController {
     private final CourseService courseService;
     private final AuthService authService;
     private final AssignmentService assignmentService;
+    private final SemesterSessionService semesterSessionService;
+    private final CommonModel commonModel;
 
     public AssignmentController(CourseService courseService,
         AuthService authService,
-        AssignmentService assignmentService
-        ) {
+        AssignmentService assignmentService,
+        SemesterSessionService semesterSessionService,
+        CommonModel commonModel) {
         this.courseService = courseService;
         this.authService = authService;
         this.assignmentService = assignmentService;
+        this.semesterSessionService = semesterSessionService;
+        this.commonModel = commonModel;
     }
 
     @GetMapping("")
@@ -68,60 +75,6 @@ public class AssignmentController {
         request.setAttribute("totalAssignment", assignmentList.size());
 
         return "Lecturer/assignments";
-    }
-
-    //retrieve assignment by course -> return JSON format
-
-    @GetMapping("/api/course")
-    @ResponseBody
-    public Map<String, Object> retrieveByCourse(@RequestParam Map<String, Object> body,HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-        Map<String, Object> respMap = new HashMap<>();
-        try {
-            // //authenticate request
-            // if(!authService.authenticate(session)) {
-            //     respMap.put("respCode", "00002");
-            //     respMap.put("respStatus", "error");
-            //     respMap.put("respMessage", "Unauthorized request");
-            //     return respMap;
-            // }
-
-            //retrieve all assignments JSON
-            List<AssignmentModel> assignmentList = assignmentService.retrieveByCourseJSON(body);
-            if (body.containsKey("course_id") && body.get("course_id") != null) {
-                body.put("id", body.get("course_id").toString());
-            } else {
-                respMap.put("respCode", "00001");
-                respMap.put("respStatus", "error");
-                respMap.put("respMessage", "Assignment List does not found!");
-            }            
-            // CourseModel courseModel = courseService.retrieveDetail(body);
-
-            //error handling
-            if(assignmentList == null ||  assignmentList.isEmpty()) {
-                respMap.put("respCode", "00001");
-                respMap.put("respStatus", "error");
-                respMap.put("respMessage", "Assignment List does not found!");
-            }else{
-                respMap.put("respCode", "00000");
-                respMap.put("respStatus", "success");
-                respMap.put("respMessage", "successfully retrieved");
-
-                //response hashmap to return as json
-            Map<String, Object> tempMap = new HashMap<>();
-            // tempMap.put("course", courseModel);
-            tempMap.put("assignments", assignmentList);
-            respMap.put("data", tempMap);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            respMap.put("respCode", "000198");
-            respMap.put("respStatus", "error");
-            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
-        }
-        return respMap;
-
-        // return "Lecturer/assignments";
     }
 
     @GetMapping("/course")
@@ -307,6 +260,122 @@ public class AssignmentController {
             e.printStackTrace();
         }
         response.sendRedirect("/assignment/course?course=" + courseId);
+    }
+
+    // assignment api - return json
+
+    //retrieve assignment by course -> return JSON format
+
+    @GetMapping("/api/course")
+    @ResponseBody
+    public Map<String, Object> retrieveByCourseJSON(@RequestParam Map<String, Object> body,HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            // //authenticate request
+            // if(!authService.authenticate(session)) {
+            //     respMap.put("respCode", "00002");
+            //     respMap.put("respStatus", "error");
+            //     respMap.put("respMessage", "Unauthorized request");
+            //     return respMap;
+            // }
+
+            //retrieve all assignments JSON
+            List<AssignmentModel> assignmentList = assignmentService.retrieveByCourseJSON(body);
+            if (body.containsKey("course_id") && body.get("course_id") != null) {
+                body.put("id", body.get("course_id").toString());
+            } else {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment List does not found!");
+            }            
+            // CourseModel courseModel = courseService.retrieveDetail(body);
+
+            //error handling
+            if(assignmentList == null ||  assignmentList.isEmpty()) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+
+                //response hashmap to return as json
+                Map<String, Object> tempMap = new HashMap<>();
+                tempMap.put("assignments", assignmentList);
+                respMap.put("data", tempMap);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
+    }
+
+    //retrieve assignment by course -> return JSON format
+
+    @GetMapping("/api/assignment/{assignment_id}")
+    @ResponseBody
+    public Map<String, Object> retrieveByAssignmentJSON(@RequestParam Map<String, Object> body,
+    HttpServletRequest request, 
+    HttpServletResponse response, 
+    HttpSession session,
+    @PathVariable("assignment_id") String assignmentId) {
+        Map<String, Object> respMap = new HashMap<>();
+        try {
+            // //authenticate request
+            // if(!authService.authenticate(session)) {
+            //     respMap.put("respCode", "00002");
+            //     respMap.put("respStatus", "error");
+            //     respMap.put("respMessage", "Unauthorized request");
+            //     return respMap;
+            // }
+
+            //retrieve all assignments JSON
+            List<AssignmentModel> assignmentList = assignmentService.retrieveDetail(assignmentId);
+            if (body.containsKey("course_id") && body.get("course_id") != null) {
+                body.put("id", body.get("course_id").toString());
+            } else {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment does not found!");
+            }            
+
+            //error handling
+            if(assignmentList == null ||  assignmentList.isEmpty()) {
+                respMap.put("respCode", "00001");
+                respMap.put("respStatus", "error");
+                respMap.put("respMessage", "Assignment does not found!");
+            }else{
+                respMap.put("respCode", "00000");
+                respMap.put("respStatus", "success");
+                respMap.put("respMessage", "successfully retrieved");
+
+                AssignmentModel assignment = assignmentList.get(0);
+                
+                body.put("id", assignment.getCourse_id());
+                body.put("session_id", assignment.getSessionId());
+                CourseModel courseModel = courseService.retrieveDetail(body);
+                SemesterSessionModel sessionModel = semesterSessionService.retrieveDetail(body); 
+                assignment.setCourse(courseModel);
+                assignment.setSession(sessionModel);
+
+                //response hashmap to return as json
+                Map<String, Object> tempMap = new HashMap<>();
+                tempMap.put("assignment", assignment);
+                respMap.put("data", tempMap);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            respMap.put("respCode", "000198");
+            respMap.put("respStatus", "error");
+            respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
+        }
+        return respMap;
     }
 
     //required field for student
