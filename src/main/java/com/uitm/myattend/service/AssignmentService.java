@@ -19,6 +19,7 @@ import java.util.Map;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -243,7 +244,84 @@ public class AssignmentService {
     }
 
 
-    //update assignment - including all cases ( disable,bypass,etc .. )
+    //update the assignment data
+    public boolean update(Map<String, Object> body, String assignmentId, MultipartFile file) {
+        try {
+            // get assignment by Id
+            List<Map<String, String>> assignmentData = assignmentRepository.retrieveDetail(assignmentId);
+            if (assignmentData == null || assignmentData.isEmpty()) {
+                throw new Exception("Assignment not found with ID: " + assignmentId);
+            }
+            AssignmentModel assignmentModel = (AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assignmentData.get(0));
+            String userId = Integer.toString(commonModel.getUser().getId());
+
+            // Handle form data
+            int isBypassTimeFlag = body.get("ass_late") != null && "1".equals(body.get("ass_late")) ? 1 : 0;
+            int disabledFlag = body.get("disabled_flag") != null && "1".equals(body.get("disabled_flag")) ? 1 : 0;
+
+            String startTimeStamp = FieldUtility.dateTimeLocal2Oracle((String) body.get("ass_start"));
+            String endTimeStamp = FieldUtility.dateTimeLocal2Oracle((String) body.get("ass_end"));
+            // Process the file if it exists
+            if (file != null && !file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                String fileExtension = "";
+
+                if (fileName != null && fileName.contains(".")) {
+                    fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
+                }
+
+                // Generate server file name
+                String currTms = String.valueOf(System.currentTimeMillis()); // Current timestamp
+                String serverFileName = currTms + "_" + userId + "." + fileExtension;
+
+                try {
+                    final Path directory = Paths.get(this.uploadDirectory);
+                    final Path filePth = Paths.get(this.uploadDirectory + serverFileName);
+
+                    // Create directory if it doesn't exist
+                    if (!Files.exists(directory)) {
+                        Files.createDirectories(directory);
+                    }
+
+                    // Save the file
+                    Files.write(filePth, file.getBytes());
+
+                    assignmentModel.setServer_filename(serverFileName);
+                    assignmentModel.setFile_path("/assignments");
+                    assignmentModel.setStarted_at(startTimeStamp);
+
+                    // Save the file name in the database (example)
+                    body.put("fileName", serverFileName); // Add the server file name to the body
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false; // Return false if file handling fails
+                }
+            }
+
+            if (body.containsKey("ass_title")) {
+                assignmentModel.setAssignment_header((String) body.get("ass_title"));
+            }
+            if (body.containsKey("ass_desc")) {
+                assignmentModel.setAssignment_desc((String) body.get("ass_desc"));
+            }
+            if (body.containsKey("ass_start")) {
+                assignmentModel.setStarted_at(startTimeStamp);
+            }
+            if (body.containsKey("ass_end")) {
+                assignmentModel.setEnded_at(endTimeStamp);
+            }
+            if (body.containsKey("ass_late")) {
+                assignmentModel.setBypass_time_flag(isBypassTimeFlag);
+            }
+            System.out.println(assignmentModel.getAssignment_header());
+
+            // Insert the assignment into the database
+            return assignmentRepository.update(assignmentModel);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 

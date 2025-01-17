@@ -259,7 +259,31 @@ public class AssignmentController {
 
     //update assignment - including all cases ( disable,bypass,etc .. )
 
+    @PostMapping("/update/{asssignment_id}")
+    public void update(@RequestParam Map<String, Object> body,
+    HttpServletResponse response,
+    HttpServletRequest request,
+    HttpSession session,
+    @PathVariable("asssignment_id") String assignmentId,
+    @RequestParam("ass_attach") MultipartFile file) throws IOException {
+        try {
+            //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
 
+            // FieldUtility.requiredValidator(body, classRequiredFields());
+            if(!assignmentService.update(body, assignmentId, file)) {
+                throw new Exception("Failed to save data");
+            }else {
+                session.setAttribute("success", "Data saved");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/assignment/course?course=" + (String) body.get("course_id"));
+    }
 
     //delete assignment
 

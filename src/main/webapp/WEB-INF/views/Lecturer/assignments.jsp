@@ -114,7 +114,7 @@ uri="jakarta.tags.core" %>
                           </svg>
                           <span class="hidden md:inline">Submissions</span>
                         </button>
-                        <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 editAss" data-id="${assignment.getAssignment_id()}">
+                        <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 editAss" data-id="${assignment.getAssignment_id()}" data-title="${assignment.getAssignment_header()}" data-desc="${assignment.getAssignment_desc()}" data-date-start="${assignment.getStarted_at()}" data-date-end="${assignment.getEnded_at()}" data-allow-late="${assignment.isBypass_time_flag()}">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -213,22 +213,52 @@ uri="jakarta.tags.core" %>
             });
 
             $('.editAss').on('click', function() {
+              console.log('updating')
+              $('#formAction').val('update');
               let id = $(this).data('id');
+              let title = $(this).data('title');
+              let desc = $(this).data('desc');
+              let start_at = $(this).data('date-start');
+              let ended_at = $(this).data('date-end');
+              let allow_late = $(this).data('allow-late');
+              // Convert the date to "YYYY-MM-DDTHH:MM" for datetime-local input
+              let startAtFormatted = start_at.replace(' ', 'T').slice(0, 16); // "2025-01-17T14:30"
+              let endAtFormatted = ended_at.replace(' ', 'T').slice(0, 16);   // "2025-01-18T16:00"
+              $('#assAdd').attr('action', '/assignment/update/'+id);
+              console.log($('#assAdd').attr('action')); // Check the new form action
+
               $('#ass_id').val(id);
-              $('#saveAss').val('edit');
-              $.ajax({
-                type: 'POST',
-                url: '',
-                data: {
-                  id: id
-                },
-                success: function(data) {
-                  $('#ass_title').val(data.title);
-                  $('#ass_desc').val(data.description);
-                  $('#ass_deadline').val(data.deadline);
-                  $('#ass_id').val(data.id);
-                }
-              });
+              $('#ass_title').val(title);
+              $('#ass_desc').val(desc);
+              $('#ass_start').val(startAtFormatted);
+              $('#ass_end').val(endAtFormatted);
+              $('#ass_late').val(allow_late);
+              $('#saveAss').val('Edit');
+              // Set the checkbox state
+              if (allow_late) {
+                $('#ass_late').prop('checked', true); // Check the checkbox
+              } else {
+                $('#ass_late').prop('checked', false); // Uncheck the checkbox
+              }
+
+              $('#is_update').val(1);
+              
+              
+              // $.ajax({
+              //   type: 'POST',
+              //   url: '',
+              //   data: {
+              //     id: id
+              //   },
+              //   success: function(data) {
+              //     $('#ass_title').val(data.title);
+              //     $('#ass_desc').val(data.desc);
+              //     $('#ass_start').val(data.start_at);
+              //     $('#ass_end').val(data.ended_at);
+              //     $('#ass_late').val(data.allow_late);
+              //     $('#ass_id').val(data.id);
+              //   }
+              // });
 
               modal.showModal();
               hugerte.init({
@@ -269,6 +299,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg mb-2">Add New Assignment</h3>
         <form id="assAdd" action="/assignment/create/${course.getId()}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="action" id="formAction" value="create" />
           <div class="grid grid-cols-5 gap-3 items-end">
             <label class="form-control col-span-5">
               <div class="label">
@@ -313,7 +344,9 @@ uri="jakarta.tags.core" %>
             </label>
           </div>
           <div class="modal-action">
-            <input type="text" name="ass_id" id="ass_id" />
+            <input type="hidden" name="ass_id" id="ass_id" />
+            <input type="hidden" name="course_id" id="course_id" value="${course.getId()}"/>
+            <input type="hidden" name="is_update" id="is_update" value="0">
             <button type="button" class="btn btn-sm btn-ghost text-primary" onclick="addAss.close()">Cancel</button>
             <button type="submit" class="btn btn-sm btn-primary" id="saveAss" name="action" value="add">Save</button>
           </div>
