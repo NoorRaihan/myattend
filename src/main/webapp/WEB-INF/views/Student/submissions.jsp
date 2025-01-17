@@ -70,18 +70,27 @@ uri="jakarta.tags.core" %>
                         </tr>
                       </thead>
                       <tbody class="bg-white">
+                        <c:forEach var="assignment" items="${assignments}">
                           <tr class="border-t-gray-500">
                             <td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                              Assignment 1
+                              ${assignment.getAssignment_header()}
                             </td>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                              01-04-2022
+                              <!-- 01-04-2022 -->
+                              ${assignment.getStarted_at()}
                             </td>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                              01-04-2022
+                              <!-- 01-04-2022 -->
+                              ${assignment.getEnded_at()}
                             </td>
                             <td class="px-3 py-4 text-sm text-gray-500">
                               Pending
+                              <!-- <c:if test="${not empty assignment.getSubmissions()}">
+                                  First Submission Status: ${assignment.getSubmissions()[0].getStatus()}
+                              </c:if>
+                              <c:if test="${empty assignment.getSubmissions()}">
+                                  No submissions available for this assignment.
+                              </c:if> -->
                             </td>
                             <td class="py-4 pr-0 text-nowrap text-right text-sm text-gray-500">
                               <button type="button" class="btn btn-sm btn-ghost desc" data-id="1">
@@ -112,6 +121,7 @@ uri="jakarta.tags.core" %>
                               </div>
                             </td>
                           </tr>
+                        </c:forEach>
                       </tbody>
                     </table>
                   </div>

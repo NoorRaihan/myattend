@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.uitm.myattend.utility.FieldUtility;
+import java.util.List;
 
 @Component
 @SessionScope
@@ -28,6 +29,7 @@ public class AssignmentModel {
     private String deleted_at;
     private SemesterSessionModel session;
     private CourseModel course;
+    private List<SubmissionModel> submissions;
     
     // model start
 
@@ -45,6 +47,14 @@ public class AssignmentModel {
 
     public void setCourse(CourseModel course) {
         this.course = course;
+    }
+
+    public List<SubmissionModel> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<SubmissionModel> submissions) {
+        this.submissions = submissions;
     }
 
     // model end
