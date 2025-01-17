@@ -6,6 +6,8 @@ import com.uitm.myattend.model.ClassModel;
 import com.uitm.myattend.model.CommonModel;
 import com.uitm.myattend.model.CourseModel;
 import com.uitm.myattend.model.SemesterSessionModel;
+import com.uitm.myattend.model.StudentModel;
+import com.uitm.myattend.model.SubmissionModel;
 import com.uitm.myattend.repository.AssignmentRepository;
 import com.uitm.myattend.utility.FieldUtility;
 
@@ -32,16 +34,25 @@ public class AssignmentService {
     private final CourseService courseService;
     private final SemesterSessionService semesterSessionService;
     private final CommonModel commonModel;
+    private final StudentModel studentModel;
+    private final StudentService studentService;
+    private final SubmissionService submissionService;
     private final String uploadDirectory = "src/main/webapp/resources/uploads/assignments/";
 
     public AssignmentService(AssignmentRepository assignmentRepository,  
     CourseService courseService,
     SemesterSessionService semesterSessionService,
-    CommonModel commonModel) {
+    CommonModel commonModel,
+    StudentModel studentModel,
+    StudentService studentService,
+    SubmissionService submissionService) {
         this.assignmentRepository = assignmentRepository;
         this.courseService = courseService;
         this.semesterSessionService = semesterSessionService;
         this.commonModel = commonModel;
+        this.studentModel = studentModel;
+        this.studentService = studentService;
+        this.submissionService = submissionService;
     }
 
     //retrieve all assignment
@@ -161,18 +172,50 @@ public class AssignmentService {
     //     }
     // }
 
-    //retrieve assignment by mark_by which lect
+    // retrieve assignment by course_id of the sttudent in ma_courses_student 
+    @Transactional
+    public List<AssignmentModel> retrieveByStudentCourse(String courseId) {
 
+        String sessionId = commonModel.getSessionModel().getId();
+        Integer userId = commonModel.getUser().getId();
+        StudentModel studentModel = studentService.retrieveDetail(userId);
+        // String studentId = Integer.toString(studentModel.getUser_id());
+        int studentId = studentModel.getUser_id();
+        // get student course
+        try {
+            List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourseStudent(courseId, sessionId, studentId);
 
+            // if(assignmentList.size() < 1) {
+            //     throw new Exception("Data error on assignment list size : " + assignmentList.size());
+            // }
+    
+            List<AssignmentModel> assignmentModelList = new ArrayList<>();
+            for (Map<String, String> assignment : assignmentList) {
+                // Map the assignment data to AssignmentModel
+                AssignmentModel assignmentModel = (AssignmentModel) MapperUtility.mapModel(AssignmentModel.class, assignment);
 
-    //retrieve assignment by session_id
+                // Fetch the submissions related to the current assignment
+                int assignmentId = assignmentModel.getAssignment_id();  // Get the assignment_id
+                List<SubmissionModel> submissionList = submissionService.retrieveDetail(assignmentId);  // Fetch submissions based on the assignment_id
 
+                // Filter submissions for the given studentId
+                List<SubmissionModel> filteredSubmissions = submissionList.stream()
+                .filter(submission -> Integer.parseInt(submission.getStudent_id()) == studentId)
+                    .toList();
 
+                // Set the filtered submissions in the AssignmentModel
+                assignmentModel.setSubmissions(filteredSubmissions);
 
-    //retrieve assignment by assignment_id
+                // Add the populated AssignmentModel to the list
+                assignmentModelList.add(assignmentModel);
+            }
 
-
-
+            return assignmentModelList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     //create assignment
     public boolean insert(Map<String, Object> body, String courseId, MultipartFile file) {

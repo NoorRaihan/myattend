@@ -65,6 +65,42 @@ public class AssignmentRepository {
         }
     }
 
+    public List<Map<String, String>> retrieveByCourseStudent(String cid, String sessionId, int studentId) {
+        try {
+            String sql = "SELECT a.assignment_id, a.session_id, a.course_id, a.assignment_header, a.assignment_desc, a.disabled_flag, " +
+             "a.bypass_time_flag, a.ori_filename, a.server_filename, a.file_path, a.started_at, " +
+             "a.ended_at, a.created_at, a.updated_at, a.deleted_at, " +
+             "b.* , c.* " + 
+             "FROM ma_assignments a " +
+             "INNER JOIN ma_courses b ON a.course_id = b.id " +
+             "LEFT JOIN ma_submissions c ON a.assignment_id = c.assignment_id AND c.student_id = ? " +
+             "WHERE a.course_id = ? AND a.session_id = ?";
+
+            String [] condVal = {
+                    Integer.toString(studentId),
+                    cid,
+                    sessionId,
+            };
+
+            String [] condType = {
+                    "int",
+                    "varchar",
+                    "varchar",
+                    
+            };
+
+            int result = commDB.sqlQuery(sql, condVal, condType);
+            if(result <= 0) {
+                throw new Exception("Failed to retrieve attendances on course : " + cid);
+            }
+            return commDB.getResult();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
     public List<Map<String, String>> retrieveBySession(String sid) {
         try {
             String [] field = {
