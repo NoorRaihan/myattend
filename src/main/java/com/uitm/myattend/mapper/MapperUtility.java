@@ -28,6 +28,7 @@ public class MapperUtility {
             case "ROLEMODEL" -> obj = roleMapper(tempMap);
             case "SEMESTERSESSIONMODEL" -> obj = semesterSessionModel(tempMap);
             case "ASSIGNMENTMODEL" -> obj = assignmentModel(tempMap);
+            case "SUBMISSIONMODEL" -> obj = submissionModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -213,6 +214,41 @@ public class MapperUtility {
             assignmentObj.setCourse(courseModel);
         }
 
+        // if(data.containsKey("SUBMISSION_ID")) {
+        //     SubmissionModel submissionModel = submissionModel(data);
+        //     assignmentObj.setSubmission(submissionModel);
+        // }
+
         return assignmentObj;
+    }
+
+    //convert from db to submission model
+    private static SubmissionModel submissionModel(TreeMap<String, String> data) {
+        SubmissionModel submissionObj = new SubmissionModel();
+
+        submissionObj.setSubmission_id(Integer.parseInt(data.get("SUBMISSION_ID") == null ? "-1" : data.get("SUBMISSION_ID")));
+        submissionObj.setStudent_id(FieldUtility.checkNull(data.get("STUDENT_ID")));
+        submissionObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
+        submissionObj.setStatus(FieldUtility.checkNull(data.get("STATUS")));
+        submissionObj.setSubmission_text(FieldUtility.checkNull(data.get("SUBMISSION_TEXT")));
+        submissionObj.setSubmission_mark(Integer.parseInt(data.get("SUBMISSION_MARK") == null ? "-1" : data.get("SUBMISSION_MARK")));
+        submissionObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
+        submissionObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
+        submissionObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));
+        submissionObj.setCreated_at(FieldUtility.checkNullDate(data.get("CREATED_AT")));
+        submissionObj.setUpdated_at(FieldUtility.checkNullDate(data.get("UPDATED_AT")));
+        submissionObj.setMark_by(Integer.parseInt(data.get("MARK_BY") == null ? "-1" : data.get("MARK_BY")));
+
+        if(data.containsKey("STUDENT_ID")) {
+            StudentModel studentModel = studentMapper(data);
+            submissionObj.setStudent(studentModel);
+        }
+
+        if(data.containsKey("ASSIGNMENT_ID")) {
+            AssignmentModel assignmentModel = assignmentModel(data);
+            submissionObj.setAssignment(assignmentModel);
+        }
+
+        return submissionObj;
     }
 }
