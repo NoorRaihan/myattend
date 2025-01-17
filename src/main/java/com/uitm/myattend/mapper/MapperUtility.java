@@ -142,6 +142,11 @@ public class MapperUtility {
             CourseModel courseObj = courseModel(data);
             classObj.setCourse(courseObj);
         }
+
+        if(data.containsKey("SESSION_ID")) {
+            SemesterSessionModel semesterSessionObj = semesterSessionModel(data);
+            classObj.setSessionModel(semesterSessionObj);
+        }
         return classObj;
     }
 

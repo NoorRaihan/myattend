@@ -113,7 +113,7 @@ function loadClsList(id) {
         } else {
           classList = "<table class='min-w-full divide-y divide-gray-300'>";
           classList +=
-            "<thead><tr><th scope='col' class='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0'>Class</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell'>Date</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell'>Time</th><th scope='col' class='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>Venue</th></tr></thead>";
+            "<thead><tr><th scope='col' class='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0'>Class</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell'>Date</th><th scope='col' class='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell'>Time</th><th scope='col' class='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>Venue</th><th scope='col' class='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>Session</th></tr></thead>";
           classList += "<tbody class='divide-y divide-gray-200 bg-white'>";
           for (var dataItem of response.data.classes) {
             classList +=
@@ -143,6 +143,9 @@ function loadClsList(id) {
               "</td>" +
               "<td class='px-3 py-4 text-nowrap text-sm text-gray-500'>" +
               dataItem.venue +
+              "</td>" +
+              "<td class='px-3 py-4 text-nowrap text-sm text-gray-500'>" +
+              dataItem.sessionModel.sessionName +
               "</td>" +
               "<td class='py-4 pr-4 text-nowrap text-left text-sm text-gray-500 pl-0'>" +
               "<div class='dropdown dropdown-left dropdown-hover'>" +
