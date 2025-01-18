@@ -1,3 +1,5 @@
+<%@ taglib prefix="c"
+uri="jakarta.tags.core" %>
 <div class="drawer-side z-40">
   <c:set
     var="role"
@@ -199,6 +201,18 @@
             </svg>
             Class List</a
           >
+        </li>
+        <li class="py-2">
+          <details>
+            <summary>Courses</summary>
+            <c:forEach var="course" items="${courses}">
+              <ul>
+                <li class="py-2">
+                  <a href="/submission/${course.getId()}">${course.getCourse_name()}</a>
+                </li>
+              </ul>
+            </c:forEach>
+          </details>
         </li>
       </c:if>
     </div>

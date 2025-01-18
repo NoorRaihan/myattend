@@ -3,6 +3,8 @@ package com.uitm.myattend.mapper;
 import com.uitm.myattend.model.*;
 import com.uitm.myattend.utility.FieldUtility;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,6 +29,8 @@ public class MapperUtility {
             case "ATTENDANCEMODEL" -> obj = attendanceModel(tempMap);
             case "ROLEMODEL" -> obj = roleMapper(tempMap);
             case "SEMESTERSESSIONMODEL" -> obj = semesterSessionModel(tempMap);
+            case "ASSIGNMENTMODEL" -> obj = assignmentModel(tempMap);
+            case "SUBMISSIONMODEL" -> obj = submissionModel(tempMap);
             default -> throw new Exception("Invalid class");
         }
 
@@ -140,6 +144,11 @@ public class MapperUtility {
             CourseModel courseObj = courseModel(data);
             classObj.setCourse(courseObj);
         }
+
+        if(data.containsKey("SESSION_ID")) {
+            SemesterSessionModel semesterSessionObj = semesterSessionModel(data);
+            classObj.setSessionModel(semesterSessionObj);
+        }
         return classObj;
     }
 
@@ -174,5 +183,96 @@ public class MapperUtility {
         semesterSessionModel.setUsed(FieldUtility.checkNull(data.get("SESSION_USED")).equals("Y"));
 
         return semesterSessionModel;
+    }
+
+    //convert from db to assignment model
+    private static AssignmentModel assignmentModel(TreeMap<String, String> data) {
+        AssignmentModel assignmentObj = new AssignmentModel();
+
+        // System.out.println("data mapper ass :"+data);
+
+        assignmentObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
+        assignmentObj.setSession_id(FieldUtility.checkNull(data.get("SESSION_ID")));
+        assignmentObj.setCourse_id(FieldUtility.checkNull(data.get("COURSE_ID")));
+        assignmentObj.setAssignment_header(FieldUtility.checkNull(data.get("ASSIGNMENT_HEADER")));
+        assignmentObj.setAssignment_desc(FieldUtility.checkNull(data.get("ASSIGNMENT_DESC")));
+        // assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")));
+        // assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")));
+        assignmentObj.setDisabled_flag("1".equals(data.get("DISABLED_FLAG")) ? 1 : 0);
+        assignmentObj.setBypass_time_flag("1".equals(data.get("BYPASS_TIME_FLAG")) ? 1 : 0);
+        assignmentObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
+        assignmentObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
+        assignmentObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));
+        assignmentObj.setStarted_at(FieldUtility.checkNullDate(data.get("STARTED_AT")));
+        assignmentObj.setEnded_at(FieldUtility.checkNullDate(data.get("ENDED_AT")));
+        assignmentObj.setCreated_at(FieldUtility.checkNullDate(data.get("CREATED_AT")));
+        assignmentObj.setUpdated_at(FieldUtility.checkNullDate(data.get("UPDATED_AT")));
+        assignmentObj.setDeleted_at(FieldUtility.checkNullDate(data.get("DELETED_AT")));
+
+        // System.out.println("data mapper ass object :"+data);
+
+        if(data.containsKey("SESSION_ID")) {
+            SemesterSessionModel sessionModel = semesterSessionModel(data);
+            assignmentObj.setSession(sessionModel);
+        }
+
+        if(data.containsKey("COURSE_ID")) {
+            CourseModel courseModel = courseModel(data);
+            assignmentObj.setCourse(courseModel);
+        }
+
+        // if(data.containsKey("SUBMISSION_ID")) {
+        //     SubmissionModel submissionModel = submissionModel(data);
+        //     assignmentObj.setSubmission(submissionModel);
+        // }
+
+        return assignmentObj;
+    }
+
+    //convert from db to submission model
+    private static SubmissionModel submissionModel(TreeMap<String, String> data) {
+        SubmissionModel submissionObj = new SubmissionModel();
+        int studId = Integer.parseInt(data.get("STUDENT_ID") == null ? "-1" : data.get("STUDENT_ID"));
+
+        submissionObj.setSubmission_id(Integer.parseInt(data.get("SUBMISSION_ID") == null ? "-1" : data.get("SUBMISSION_ID")));
+        // submissionObj.setStudent_id(FieldUtility.checkNull(data.get("STUDENT_ID")));
+        submissionObj.setStudent_id(studId);
+        submissionObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
+        submissionObj.setStatus(FieldUtility.checkNull(data.get("STATUS")));
+        submissionObj.setSubmission_text(FieldUtility.checkNull(data.get("SUBMISSION_TEXT")));
+        submissionObj.setAssignment_id(Integer.parseInt(data.get("SUBMISSION_MARK") == null ? "-1" : data.get("SUBMISSION_MARK")));
+        // submissionObj.setSubmission_mark(Double.parseDouble(data.get("SUBMISSION_MARK") == null ? "0.00" : data.get("SUBMISSION_MARK")));
+        submissionObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
+        submissionObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
+        submissionObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));
+        submissionObj.setCreated_at(FieldUtility.checkNullDate(data.get("CREATED_AT")));
+        submissionObj.setUpdated_at(FieldUtility.checkNullDate(data.get("UPDATED_AT")));
+        submissionObj.setMark_by(Integer.parseInt(data.get("MARK_BY") == null ? "-1" : data.get("MARK_BY")));
+
+        if(data.containsKey("ASSIGNMENT_ID")) {
+            AssignmentModel assignmentModel = assignmentModel(data);
+            submissionObj.setAssignment(assignmentModel);
+        }
+
+        // if(data.containsKey("MARK_BY")) {
+        //     LecturerModel lecturerModel = lecturerMapper(data);
+        //     submissionObj.setMarkBy(lecturerModel);
+        // }
+
+        // if(data.containsKey("STUDENT_ID")) {
+        //     System.out.println("woko");
+            
+            
+        //     data.put("STUD_ID",Integer.toString(studId));
+        //     data.put("USER_ID",Integer.toString(100011));
+        //     data.remove("student_id");
+        //     System.out.println(data);
+            
+        //     StudentModel studentModel = studentMapper(data);
+        //     System.out.println("woko end");
+        //     submissionObj.setStudent(studentModel);
+        // }
+
+        return submissionObj;
     }
 }
