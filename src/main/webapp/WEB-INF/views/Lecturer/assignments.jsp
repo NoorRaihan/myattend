@@ -213,7 +213,7 @@ uri="jakarta.tags.core" %>
             });
 
             $('.editAss').on('click', function() {
-              console.log('updating')
+              $('#ass-modal-title').html('Edit Assignment');
               $('#formAction').val('update');
               let id = $(this).data('id');
               let title = $(this).data('title');
@@ -297,7 +297,7 @@ uri="jakarta.tags.core" %>
 
     <dialog id="addAss" class="modal">
       <div class="modal-box max-w-4xl">
-        <h3 class="font-bold text-lg mb-2">Add New Assignment</h3>
+        <h3 id="ass-modal-title" class="font-bold text-lg mb-2">Add New Assignment</h3>
         <form id="assAdd" action="/assignment/create/${course.getId()}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="action" id="formAction" value="create" />
           <div class="grid grid-cols-5 gap-3 items-end">
@@ -340,7 +340,7 @@ uri="jakarta.tags.core" %>
               <div class="label">
                 <span class="label-text">Attachments</span>
               </div>
-              <input type="file" name="ass_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
+              <input accept=".png, .pdf, .jpeg, .jpg" type="file" name="ass_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
           </div>
           <div class="modal-action">

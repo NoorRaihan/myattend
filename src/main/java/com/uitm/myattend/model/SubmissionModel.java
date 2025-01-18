@@ -12,11 +12,11 @@ import com.uitm.myattend.utility.FieldUtility;
 public class SubmissionModel {
     
     private int submission_id;
-    private String student_id;
+    private int student_id;
     private int assignment_id;
     private String status;
     private String submission_text;
-    private int submission_mark;
+    private double submission_mark;
     private String ori_filename;
     private String server_filename;
     private String file_path;
@@ -65,11 +65,11 @@ public class SubmissionModel {
     }
 
     // Getter and Setter for student_id
-    public String getStudent_id() {
+    public int getStudent_id() {
         return student_id;
     }
 
-    public void setStudent_id(String student_id) {
+    public void setStudent_id(int student_id) {
         this.student_id = student_id;
     }
 
@@ -101,11 +101,11 @@ public class SubmissionModel {
     }
 
     // Getter and Setter for submission_mark
-    public int getSubmission_mark() {
+    public double getSubmission_mark() {
         return submission_mark;
     }
 
-    public void setSubmission_mark(int submission_mark) {
+    public void setSubmission_mark(double submission_mark) {
         this.submission_mark = submission_mark;
     }
 

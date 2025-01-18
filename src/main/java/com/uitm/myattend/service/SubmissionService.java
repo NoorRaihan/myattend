@@ -73,10 +73,34 @@ public class SubmissionService {
     public List<SubmissionModel> retrieveDetail(int assignmentId) {
         try {
             List<Map<String, String>> submissionList = submissionRepository.retrieveDetail(assignmentId);
+            // System.out.println("submissionList hoho");
+            // System.out.println(submissionList);
 
             // if(submissionList.size() != 1) {
             //     throw new Exception("Data error on submission list size : " + submissionList.size());
             // }
+    
+            List<SubmissionModel> submissionModelList = new ArrayList<>();
+            for (Map<String, String> submission : submissionList) {
+                submissionModelList.add((SubmissionModel) MapperUtility.mapModel(SubmissionModel.class, submission));
+            }
+            return submissionModelList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public List<SubmissionModel> retrieveBySubmission(int submissionId) {
+        try {
+            List<Map<String, String>> submissionList = submissionRepository.retrieveSubmissionDetail(submissionId);
+            System.out.println("submissionList hoho");
+            System.out.println(submissionList);
+
+            if(submissionList.size() != 1) {
+                throw new Exception("Data error on submission list size : " + submissionList.size());
+            }
     
             List<SubmissionModel> submissionModelList = new ArrayList<>();
             for (Map<String, String> submission : submissionList) {

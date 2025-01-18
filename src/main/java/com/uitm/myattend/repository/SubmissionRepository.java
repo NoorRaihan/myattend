@@ -53,12 +53,51 @@ public class SubmissionRepository {
             String cond = "assignment_id = ?";
 
             String [] condval = {
-                    Integer.toString(id)
+                Integer.toString(id)
             };
 
             String [] condtype = {
-                    "int"
+                "int"
             };
+
+            System.out.println(id);
+
+            return commDB.select("ma_submissions", field, cond, condval, condtype);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Map<String, String>> retrieveSubmissionDetail(int id) {
+        try {
+            String [] field = {
+                "submission_id",
+                "student_id",
+                "assignment_id",
+                "status",
+                "submission_text",
+                "submission_mark",
+                "ori_filename",
+                "server_filename",
+                "file_path",
+                "created_at",
+                "updated_at",
+                "mark_by"
+            };
+
+            String cond = "submission_id = ?";
+
+            String [] condval = {
+                Integer.toString(id)
+            };
+
+            String [] condtype = {
+                "int"
+            };
+
+            System.out.println(id);
 
             return commDB.select("ma_submissions", field, cond, condval, condtype);
 

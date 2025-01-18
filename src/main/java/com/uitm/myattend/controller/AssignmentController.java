@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -198,6 +199,14 @@ public class AssignmentController {
             }
 
             FieldUtility.requiredValidator(body, assignmentRequiredFields());
+
+            // Validate file type for ass_attach
+            if (!isValidFileType(file)) {
+                session.setAttribute("error", "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed.");
+                response.sendRedirect("/assignment/course?course=" + courseId);
+                return;
+            }
+
             if(assignmentService.insert(body, courseId, file)) {
                 session.setAttribute("message", "New assignment successfully added");
             }else {
@@ -227,6 +236,13 @@ public class AssignmentController {
             }
 
             // FieldUtility.requiredValidator(body, classRequiredFields());
+            // Validate file type for ass_attach
+            if (!isValidFileType(file)) {
+                session.setAttribute("error", "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed.");
+                response.sendRedirect("/assignment/course?course=" + (String) body.get("course_id"));
+                return;
+            }
+
             if(!assignmentService.update(body, assignmentId, file)) {
                 throw new Exception("Failed to save data");
             }else {
@@ -315,7 +331,7 @@ public class AssignmentController {
         return respMap;
     }
 
-    //retrieve assignment by course -> return JSON format
+    //retrieve assignment by assignment id -> return JSON format
 
     @GetMapping("/api/assignment/{assignment_id}")
     @ResponseBody
@@ -387,5 +403,35 @@ public class AssignmentController {
                 {"ass_start", "Assignment Start Date and Time is required"}, 
                 {"ass_end", "Assignment End Date and Time is required"}, 
         };
+    }
+
+    private boolean isValidFileType(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+    
+        // Get the file's original name and MIME type
+        String fileName = file.getOriginalFilename();
+        String contentType = file.getContentType();
+    
+        // Define allowed MIME types and extensions
+        String[] allowedExtensions = {".pdf", ".png", ".jpeg", ".jpg"};
+        String[] allowedMimeTypes = {"application/pdf", "image/png", "image/jpeg", "image/jpg"};
+    
+        // Check MIME type
+        if (contentType != null && Arrays.asList(allowedMimeTypes).contains(contentType)) {
+            return true;
+        }
+    
+        // Check file extension
+        if (fileName != null) {
+            for (String extension : allowedExtensions) {
+                if (fileName.toLowerCase().endsWith(extension)) {
+                    return true;
+                }
+            }
+        }
+    
+        return false;
     }
 }
