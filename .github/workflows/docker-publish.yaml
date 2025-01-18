@@ -62,5 +62,5 @@ jobs:
       - name: Trigger Webhook
         run: |
           curl -X GET -H "Content-Type: application/json" \
-          -d '{"version": ${{ github.ref_name }} }' \
+          -d '{"version": "${{ github.ref_name }}" }' \
           'http://${{ secrets.WEBHOOK_URL }}/classhive/uat'
