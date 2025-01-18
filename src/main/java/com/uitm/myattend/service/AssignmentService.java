@@ -200,7 +200,7 @@ public class AssignmentService {
 
                 // Filter submissions for the given studentId
                 List<SubmissionModel> filteredSubmissions = submissionList.stream()
-                .filter(submission -> Integer.parseInt(submission.getStudent_id()) == studentId)
+                .filter(submission -> submission.getStudent_id() == studentId)
                     .toList();
 
                 // Set the filtered submissions in the AssignmentModel

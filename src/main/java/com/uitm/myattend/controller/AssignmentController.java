@@ -315,7 +315,7 @@ public class AssignmentController {
         return respMap;
     }
 
-    //retrieve assignment by course -> return JSON format
+    //retrieve assignment by assignment id -> return JSON format
 
     @GetMapping("/api/assignment/{assignment_id}")
     @ResponseBody
