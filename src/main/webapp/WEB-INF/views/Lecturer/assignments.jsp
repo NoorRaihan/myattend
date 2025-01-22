@@ -205,6 +205,7 @@ uri="jakarta.tags.core" %>
 
             $('#newAssBtn').on('click', function() {
               $('#saveAss').val('add');
+              $('#assAttachs').hide();
               modal.showModal();
               hugerte.init({
                 selector: '#ass_desc',
@@ -215,6 +216,7 @@ uri="jakarta.tags.core" %>
             $('.editAss').on('click', function() {
               $('#ass-modal-title').html('Edit Assignment');
               $('#formAction').val('update');
+              $('#assAttachs').show();
               let id = $(this).data('id');
               let title = $(this).data('title');
               let desc = $(this).data('desc');
@@ -342,6 +344,34 @@ uri="jakarta.tags.core" %>
               </div>
               <input accept=".png, .pdf, .jpeg, .jpg" type="file" name="ass_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
+            <div id="assAttachs" class="md:col-span-3 col-span-5 ">
+              <div class="flex flex-row gap-x-2">
+                <!-- if ada attachments -->
+
+                <div class="join rounded-full">
+                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                    Attachment 1
+                  </button>
+                </div>
+                <div class="join rounded-full">
+                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                    Attachment 2
+                  </button>
+                </div>
+
+                <!-- end if ada attachments -->
+              </div>
+            </div>
           </div>
           <div class="modal-action">
             <input type="hidden" name="ass_id" id="ass_id" />
