@@ -93,24 +93,38 @@ uri="jakarta.tags.core" %>
                               </c:if> -->
                             </td>
                             <td class="py-4 pr-0 text-nowrap text-right text-sm text-gray-500">
-                              <button type="button" class="btn btn-sm btn-ghost desc" data-id="1">
+                              <button type="button" class="btn btn-sm btn-ghost desc" data-id="${assignment.getAssignment_id()}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-primary">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                               </button>
                             </td>
                           </tr>
-                          <tr class="hidden" id="ass-1">
+                          <tr class="hidden" id="ass-${assignment.getAssignment_id()}">
                             <td class="py-4 px-3 bg-neutral rounded-xl" colspan="5">
                               <div class="flex mb-5">
-                                Assignment description bla bla bla
+                                ${assignment.getAssignment_desc()}
                               </div>
                               <div class="flex gap-2">
-                                <div class="btn btn-sm btn-secondary text-primary rounded-full">
-                                  Attachment 1
+                                <div class="join rounded-full">
+                                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                    </svg>
+                                  </button>
+                                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                                    Attachment 1
+                                  </button>
                                 </div>
-                                <div class="btn btn-sm btn-secondary text-primary rounded-full">
-                                  Attachment 2
+                                <div class="join rounded-full">
+                                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                    </svg>
+                                  </button>
+                                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                                    Attachment 2
+                                  </button>
                                 </div>
                               </div>
                               <div class="flex justify-end mt-2 gap-2">
@@ -176,6 +190,7 @@ uri="jakarta.tags.core" %>
           $(document).on("click", ".submission", function () {
             $("#subTitle").html("Add Submission");
             $('#delSub').hide();
+            $("#subAttachs").hide();
             let id = $(this).data("id");
             $('#ass_id').val(id);
             $('#addSub')[0].showModal();
@@ -193,6 +208,7 @@ uri="jakarta.tags.core" %>
           // View / Edit Submission --------------------------------------------------------------------------------------
           $(document).on("click", ".editSub", function () {
             $("#subTitle").html("Edit Submission");
+            $("#subAttachs").show();
             let id = $(this).data("id");
             $('#delSub').show().data("id", id);
             $('#sub_id').val(id);
@@ -244,6 +260,34 @@ uri="jakarta.tags.core" %>
               </div>
               <input type="file" name="sub_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
+            <div id="subAttachs" class="md:col-span-3 col-span-5 ">
+              <div class="flex flex-row gap-x-2">
+                <!-- if ada attachments -->
+
+                <div class="join rounded-full">
+                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                    Attachment 1
+                  </button>
+                </div>
+                <div class="join rounded-full">
+                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                    Attachment 2
+                  </button>
+                </div>
+
+                <!-- end if ada attachments -->
+              </div>
+            </div>
           </div>
           <div class="flex justify-between mt-5">
             <input type="hidden" name="ass_id" id="ass_id" />
