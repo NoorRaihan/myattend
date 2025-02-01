@@ -1,6 +1,9 @@
 package com.uitm.myattend.model;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -197,5 +200,23 @@ public class AssignmentModel {
 
     public void setDeleted_at(String deleted_at) {
         this.deleted_at = deleted_at;
+    }
+
+    public boolean isActiveAssignment() throws ParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime today = LocalDateTime.now();
+        try {
+            LocalDateTime startedAt = LocalDateTime.parse(this.getStarted_at(), formatter);
+            LocalDateTime endedAt = LocalDateTime.parse(this.getEnded_at(), formatter);
+
+            if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
+                (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
+                this.isBypass_time_flag() == 1) {
+                return true;
+            }
+            return false;
+        } catch (DateTimeParseException e) {
+            return true;
+        }
     }
 }

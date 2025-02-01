@@ -180,7 +180,7 @@ public class AssignmentService {
         Integer userId = commonModel.getUser().getId();
         StudentModel studentModel = studentService.retrieveDetail(userId);
         // String studentId = Integer.toString(studentModel.getUser_id());
-        int studentId = studentModel.getUser_id();
+        int studentId = studentModel.getStud_id();
         // get student course
         try {
             List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourseStudent(courseId, sessionId, studentId);
@@ -209,7 +209,6 @@ public class AssignmentService {
                 // Add the populated AssignmentModel to the list
                 assignmentModelList.add(assignmentModel);
             }
-
             return assignmentModelList;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,6 @@
 <%@ page isELIgnored="false" language="java" contentType="text/html;
 charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
-uri="jakarta.tags.core" %>
+uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -82,15 +82,31 @@ uri="jakarta.tags.core" %>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               <!-- 01-04-2022 -->
                               ${assignment.getEnded_at()}
+                              
                             </td>
                             <td class="px-3 py-4 text-sm text-gray-500">
-                              Pending
-                              <!-- <c:if test="${not empty assignment.getSubmissions()}">
-                                  First Submission Status: ${assignment.getSubmissions()[0].getStatus()}
-                              </c:if>
-                              <c:if test="${empty assignment.getSubmissions()}">
-                                  No submissions available for this assignment.
-                              </c:if> -->
+                              <c:set var="status" value="${empty assignment.submissions ? '' : assignment.submissions[0].status}" />
+
+                              <c:choose>
+                                  <c:when test="${status == 'PENDING'}">
+                                      <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">${status}</span>
+                                  </c:when>
+                                  <c:when test="${status == 'SUBMITTED'}">
+                                      <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">${status}</span>
+                                  </c:when>
+                                  <c:when test="${status == 'CHECKED'}">
+                                      <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-700/10 ring-inset">${status}</span>
+                                  </c:when>
+                                  <c:when test="${status == 'FAIL'}">
+                                      <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-700/10 ring-inset">${status}</span>
+                                  </c:when>
+                                  <c:when test="${status == 'PASS'}">
+                                      <span class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-purple-700/10 ring-inset">${status}</span>
+                                  </c:when>
+                                  <c:otherwise>
+                                      <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-700/10 ring-inset">NOT SUBMITTED YET</span>
+                                  </c:otherwise>
+                              </c:choose>
                             </td>
                             <td class="py-4 pr-0 text-nowrap text-right text-sm text-gray-500">
                               <button type="button" class="btn btn-sm btn-ghost desc" data-id="${assignment.getAssignment_id()}">
@@ -106,7 +122,36 @@ uri="jakarta.tags.core" %>
                                 ${assignment.getAssignment_desc()}
                               </div>
                               <div class="flex gap-2">
-                                <div class="join rounded-full">
+                                <c:set var="i" value="0" />
+                                <c:choose>
+                                  <c:when test="${not empty assignment.getSubmissions()}">
+                                    <c:forEach var="filename" items="${fn:split(assignment.getSubmissions()[0].getServer_filename(), '|')}">
+                                      <div class="join rounded-full">
+                                        <c:choose>
+                                          <c:when test="${assignment.isActiveAssignment() or !assignment.isActiveAssignment()}">
+                                            <form action="/submission/delete" method="POST">
+                                              <input type="hidden" name="sub_id" id="sub_id" value="${assignment.submissions[i].getSubmission_id()}"/>
+                                              <input type="hidden" name="course_id" id="course_id" value="${assignment.getCourse().getId()}"/>
+                                              <input type="hidden" name="submission_filename" id="submission_filename" value="${assignment.submissions[i].server_filename}"/>
+                                              <button type="submit" class="btn btn-sm btn-primary join-item text-white px-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                                  <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                                </svg>
+                                              </button>
+                                            </form>
+                                            <a target="_blank" href="${assignment.submissions[i].file_path}/${assignment.submissions[i].server_filename}">
+                                              <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                                                  ${assignment.submissions[i].server_filename}
+                                              </button>
+                                            </a>
+                                          </c:when>
+                                        </c:choose>
+                                      </div>
+                                      <c:set var="i" value="${i + 1}" />
+                                    </c:forEach>
+                                  </c:when>
+                                </c:choose>
+                                <!-- <div class="join rounded-full">
                                   <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                                       <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
@@ -115,8 +160,8 @@ uri="jakarta.tags.core" %>
                                   <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
                                     Attachment 1
                                   </button>
-                                </div>
-                                <div class="join rounded-full">
+                                </div> -->
+                                <!-- <div class="join rounded-full">
                                   <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                                       <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
@@ -125,13 +170,23 @@ uri="jakarta.tags.core" %>
                                   <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
                                     Attachment 2
                                   </button>
-                                </div>
+                                </div> -->
                               </div>
                               <div class="flex justify-end mt-2 gap-2">
                                 <!-- if ada submission, (buang hidden) -->
                                 <button type="button" class="btn btn-sm btn-accent editSub hidden" data-id="1">View / Edit Submission</button>
                                 <!-- else -->
-                                <button type="button" class="btn btn-sm btn-primary submission" data-id="1">Add Submission</button>
+                                <c:choose>
+                                  <c:when test="${empty assignment.getSubmissions()}">
+                                    <c:choose>
+                                      <c:when test="${!assignment.isActiveAssignment() or assignment.isActiveAssignment()}">
+                                        <button type="button" class="btn btn-sm btn-primary submission" data-id="${assignment.getAssignment_id()}" data-course-id="${assignment.getCourse().getId()}">
+                                          Add Submission
+                                        </button>
+                                      </c:when>
+                                    </c:choose>
+                                  </c:when>
+                                </c:choose>
                               </div>
                             </td>
                           </tr>
@@ -149,7 +204,7 @@ uri="jakarta.tags.core" %>
                 >
                   <div class="stat place-items-center basis-1/4 sm:basis-full">
                     <div class="stat-title">Total</div>
-                    <div class="stat-value text-primary">10</div>
+                    <div class="stat-value text-primary">${totalActiveAssignments}</div>
                     <div class="stat-desc">Active Assignments</div>
                   </div>
                 </div>
@@ -192,12 +247,14 @@ uri="jakarta.tags.core" %>
             $('#delSub').hide();
             $("#subAttachs").hide();
             let id = $(this).data("id");
+            let courseId = $(this).data("course-id");
             $('#ass_id').val(id);
             $('#addSub')[0].showModal();
             hugerte.init({
               selector: '#sub_desc',
               ui_mode: 'split'
             });
+            $('#subAdd').attr('action', '/submission/create/' + id + '/' + courseId);
           });
 
           $('#addSub').on('close', function() {
@@ -210,6 +267,7 @@ uri="jakarta.tags.core" %>
             $("#subTitle").html("Edit Submission");
             $("#subAttachs").show();
             let id = $(this).data("id");
+            let courseId = $(this).data("course-id");
             $('#delSub').show().data("id", id);
             $('#sub_id').val(id);
             $.ajax({
@@ -246,7 +304,7 @@ uri="jakarta.tags.core" %>
     <dialog id="addSub" class="modal">
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg mb-2" id="subTitle">Add New Submission</h3>
-        <form id="subAdd" action="" method="post">
+        <form id="subAdd" method="post" enctype="multipart/form-data">
           <div class="grid grid-cols-5 gap-3 items-end">
             <label class="form-control col-span-5">
               <div class="label">
@@ -258,12 +316,13 @@ uri="jakarta.tags.core" %>
               <div class="label">
                 <span class="label-text">Attachments</span>
               </div>
-              <input type="file" name="sub_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
+              <input type="file" accept=".png , .pdf, .jpeg, .jpg" name="sub_attach" class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs"/>
             </label>
             <div id="subAttachs" class="md:col-span-3 col-span-5 ">
               <div class="flex flex-row gap-x-2">
                 <!-- if ada attachments -->
 
+                
                 <div class="join rounded-full">
                   <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
