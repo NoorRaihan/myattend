@@ -273,7 +273,7 @@ public class ClassRepository {
             if(lect != null) {
                 sql += " AND b.user_id = " + lect;
             }else if(stud != null) {
-                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +") AND session_id = '"+ sessionId +"')";
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +" AND session_id = '"+ sessionId +"')";
             }
 
             String [] condVal = {
@@ -319,7 +319,7 @@ public class ClassRepository {
             if(lect != null) {
                 sql += " AND b.user_id = " + lect;
             }else if(stud != null) {
-                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +") AND session_id = '"+ sessionId +"')";
+                sql += " AND a.COURSE_ID IN (SELECT course_id FROM ma_courses_students WHERE stud_id = "+ stud +" AND session_id = '"+ sessionId +"')";
             }
 
             int result = commDB.sqlQuery(sql);
