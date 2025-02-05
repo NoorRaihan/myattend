@@ -324,17 +324,14 @@ uri="jakarta.tags.core" %>
                 type: 'GET',
                 url: '/assignment/api/submissions/'+assignment_id,
                 success: function(data) {
-
-                  
-                  
-                  console.log(data.data)
-                  
+                  // console.log(data.data.submissions);
                   // let 
                   if(data.data != undefined){
                     let submissions = data.data.submissions || [];
                     let submissionsHTML = '';
                     let count = 1;
                     for(let i=0;i<submissions.length;i++){
+                      
                       subcardUl.innerHTML = '';
                         submissionsHTML += `
                           <li class="flex justify-between gap-x-6 py-5">
@@ -361,31 +358,68 @@ uri="jakarta.tags.core" %>
                         let studentId = $(this).attr('id');
                         let submissionId = $(this).data('subs-id');
                         
-                        const studentName = submissions[i].student_id;
-                        const studSubsTime = submissions[i].created_at;
-                        const studAsgDesc = submissions[i].assignment.assignment_desc;
+                        // Find the correct submission using submissionId
+                        const submission = submissions.find(sub => sub.submission_id === submissionId);
+                        
+                        const endedAtStr = submission?.assignment?.ended_at;
+                        // If the submission is found, extract the data
+                        if (submission && endedAtStr) {
+                          const studentName = submission.student_id;
+                          const studSubsTime = submission.created_at;
+                          const studAsgDesc = submission.assignment.assignment_desc;
+                          const subsText = submission.submission_text;
 
-                        let filenames = submissions[i].server_filename.split('|');
-                        let attachmentsHTML = '';
-                        filenames.forEach(function(filename) {
-                          attachmentsHTML += `
-                            <div class="btn btn-sm btn-secondary text-primary rounded-full">
-                              <a href="\${submissions[i].file_path}\/\${filename}\" target="_blank">\${filename}\</a>
-                            </div>
-                          `;
-                        });
+                          const endedAt = new Date(endedAtStr.replace(" ", "T")); // Fix for Safari
+                          const today = new Date();
 
-                        const attachmentsContainer = document.getElementById('attachmentViewSubDialog');
-                        attachmentsContainer.innerHTML = '';
-                        attachmentsContainer.insertAdjacentHTML('beforeend', attachmentsHTML);
+                          if (submission.submission_mark != 0) {
+                            // document.getElementById('subs-mark').value = submission.submission_mark;
+                            document.getElementById('subs-mark-form').style.display = 'none';
+                            document.getElementById('subs-mark-stud').innerHTML = '';
+                            let subsMarkHTML = '';
+                            subsMarkHTML = `<div>
+                                              <label for="subs-mark">Mark : </label>
+                                              <span>\${submission.submission_mark}\</span>
+                                            </div>`;
+                            let subsMarkStud = document.getElementById('subs-mark-stud');
+                            subsMarkStud.insertAdjacentHTML('beforeend', subsMarkHTML);
+                          } if (endedAt > today) {
+                            document.getElementById('subs-mark-form').style.display = 'block';
+                            document.getElementById('subs-mark-stud').innerHTML = '';
+                            document.getElementById('subs-mark-form-val').value = submission.student_id;
+                            let subsMarkHTML = '';
+                          } else {
+                            document.getElementById('subs-mark-form').style.display = 'none';
+                            document.getElementById('subs-mark-stud').innerHTML = '';
+                            document.getElementById('subs-mark-form-val').value = submission.student_id;
+                            let subsMarkHTML = '';
+                          }
 
-                        // Populate the modal with data
-                        document.getElementById('studentName').textContent = studentName;
-                        document.getElementById('studSubsTime').textContent = studSubsTime;
-                        document.getElementById('studAsgDesc').textContent = studAsgDesc;
+                          let filenames = submission.server_filename.split('|');
+                          let attachmentsHTML = '';
+                          filenames.forEach(function(filename) {
+                            attachmentsHTML += `
+                              <div class="btn btn-sm btn-secondary text-primary rounded-full">
+                                <a href="\${submission.file_path}/\${filename}" target="_blank">\${filename}</a>
+                              </div>
+                            `;
+                          });
 
-                        // Open the modal
-                        document.getElementById('viewSub').showModal();
+                          const attachmentsContainer = document.getElementById('attachmentViewSubDialog');
+                          attachmentsContainer.innerHTML = '';
+                          attachmentsContainer.insertAdjacentHTML('beforeend', attachmentsHTML);
+
+                          // Populate the modal with data
+                          document.getElementById('studentName').textContent = studentName;
+                          document.getElementById('studSubsTime').textContent = studSubsTime;
+                          document.getElementById('studAsgDesc').textContent = studAsgDesc;
+                          document.getElementById('subsText').textContent = subsText;
+
+                          // Open the modal
+                          document.getElementById('viewSub').showModal();
+                        } else {
+                          console.log('Submission not found');
+                        }
                       });
                     }
                   }else{
@@ -507,23 +541,39 @@ uri="jakarta.tags.core" %>
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg">View Submisssion</h3>
         <p class="font-semibold italic text-sm text-gray-500 mb-2">
-          by <span id="studentName" class="font-bold">Student 1</span> at <span id="studSubsTime" class="font-bold">01:00 am</span>
+          by <span id="studentName" class="font-bold"></span> at <span id="studSubsTime" class="font-bold">01:00 am</span>
         </p>
         <div class="py-4 px-3 bg-neutral rounded-xl">
           <div id="studAsgDesc" class="flex mb-5">
-            Assignment description bla bla bla
           </div>
-          <div id="attachmentViewSubDialog" class="flex gap-2">
-            <div class="btn btn-sm btn-secondary text-primary rounded-full">
+          <div id="subsText" class="flex gap-2">
+          </div>
+          <div id="attachmentViewSubDialog" class="flex gap-2 py-2">
+            <!-- <div class="btn btn-sm btn-secondary text-primary rounded-full">
               Attachment 1
             </div>
             <div class="btn btn-sm btn-secondary text-primary rounded-full">
               Attachment 2
-            </div>
+            </div> -->
           </div>
+          <hr>
+          <form id="subs-mark-form" method="POST" action="/submission/update">
+            <input type="hidden" name="isMark" value="1">
+            <input type="hidden" id="subs-mark-form-val" name="stud_mark">
+            <div class="flex items-center justify-between gap-2 py-2 px-1">
+              <div>
+                <label for="subs-mark">Mark : </label>
+                <input name="subs_stud_mark" class="rounded-md" size="50" id="subs-mark" type="number" min="0" max="100" step="0.01">
+              </div>
+              <div>
+                <button class="btn btn-sm btn-primary" type="submit">Submit Mark</button>
+              </div>
+            </div>
+          </form>
+          <div id="subs-mark-stud"></div>
         </div>
         <div class="modal-action">
-          <button type="button" class="btn btn-sm btn-primary" onclick="viewSub.close()">Close</button>
+          <button type="button" class="btn btn-sm btn-ghost" onclick="viewSub.close()">Close</button>
         </div>
       </div>
       <form method="dialog" class="modal-backdrop">

@@ -240,6 +240,34 @@ public class SubmissionController {
         response.sendRedirect("/submission/" + courseId);
     }
 
+    // update assignment
+
+    @PostMapping("/update")
+    public void update(@RequestParam Map<String, Object> body,
+    HttpServletResponse response,
+    HttpServletRequest request,
+    HttpSession session) throws IOException {
+        try {
+            //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            // FieldUtility.requiredValidator(body, classRequiredFields());
+
+            if(!submissionService.updateSubsMark(body)) {
+                throw new Exception("Failed to update data");
+            }else {
+                session.setAttribute("success", "Data updated");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        // response.sendRedirect("/assignment/course?course=" + (String) body.get("course_id"));
+        response.sendRedirect("/");
+    }
+
     // delete submission
     @PostMapping("/delete")
     public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {

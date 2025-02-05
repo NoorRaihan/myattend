@@ -198,21 +198,35 @@ public class SubmissionService {
         }
     }
 
+    //update submission mark
+
+    public boolean updateSubsMark(Map<String, Object> body) {
+        try {
+            String studentId = (String) body.get("stud_mark");
+            String subsMark = (String) body.get("subs_stud_mark");
+
+            if(!submissionRepository.update(studentId,subsMark)) {
+                throw new Exception("Failed to update submission info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     //delete assignment
 
     public boolean delete(Map<String, Object> body) {
         try {
-            System.out.println("submission delete 3.1");
             String submissionId = (String) body.get("sub_id");
             String submissionFilename = (String) body.get("submission_filename");
 
             if(!submissionRepository.delete(submissionId, submissionFilename)) {
-                System.out.println("submission delete 3.2");
                 throw new Exception("Failed to delete submission info");
             }
             return true;
         }catch (Exception e) {
-            System.out.println("submission delete 3.3");
             e.printStackTrace();
             return false;
         }

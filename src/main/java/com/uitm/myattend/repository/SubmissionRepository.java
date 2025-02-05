@@ -160,9 +160,44 @@ public class SubmissionRepository {
         }
     }
 
+    public boolean update(String studentId, String subsMark) {
+        try {
+            String [] field = {
+                "submission_mark",
+            };
+
+            String [] fieldval = {
+                subsMark
+            };
+
+            String [] fieldtype = {
+                "int",
+            };
+
+            String cond = "student_id = ?";
+
+            String [] condval = {
+                studentId
+            };
+
+            String [] condtype = {
+                "int"
+            };
+
+            int result = commDB.update("ma_submissions", field, fieldval, fieldtype, cond, condval, condtype);
+            if(result <= 0) {
+                throw new Exception("Failed to insert into ma_submissions");
+            }
+            return true;
+        
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean delete(String submissionId, String submissionFilename) {
         try {
-            System.out.println("submission delete 3.2.1");
             String cond = "submission_id = ?";
             String [] val = {submissionId};
             String [] type = {"int"};
@@ -170,14 +205,10 @@ public class SubmissionRepository {
             int result = commDB.delete("ma_submissions", cond, val, type);
 
             if(result < 1) {
-                System.out.println("submission delete 3.2.2");
                 throw new Exception("Data does not existed to be deleted");
             }
-
-            System.out.println("submission delete 3.2.3");
             return true;
         }catch (Exception e) {
-            System.out.println("submission delete 3.2.4");
             e.printStackTrace();
             return false;
         }
