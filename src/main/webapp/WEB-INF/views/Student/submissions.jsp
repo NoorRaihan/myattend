@@ -118,8 +118,17 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                           </tr>
                           <tr class="hidden" id="ass-${assignment.getAssignment_id()}">
                             <td class="py-4 px-3 bg-neutral rounded-xl" colspan="5">
-                              <div class="flex mb-5">
+                              <div class="flex">
                                 ${assignment.getAssignment_desc()}
+                              </div>
+                              <div class="flex mb-5">
+                                <c:forEach var="filename" items="${fn:split(assignment.getServer_filename(), '|')}">
+                                  <a target="_blank" href="${assignment.getFile_path()}/${filename}" class="my-2 py-2">
+                                    <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                                      ${assignment.getAssignment_header()}
+                                    </button>
+                                  </a>
+                                </c:forEach>
                               </div>
                               <div class="flex gap-2">
                                 <c:set var="i" value="0" />

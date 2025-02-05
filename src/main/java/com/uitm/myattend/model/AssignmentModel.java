@@ -158,6 +158,10 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedStarted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setStarted_at(String started_at) {
         this.started_at = started_at;
     }
@@ -166,6 +170,10 @@ public class AssignmentModel {
     public String getEnded_at() throws ParseException {
         return ended_at;
         // return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
+    public String getFormattedEnded_at() throws ParseException {
+        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setEnded_at(String ended_at) {
@@ -178,6 +186,10 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
@@ -188,6 +200,10 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
@@ -196,6 +212,10 @@ public class AssignmentModel {
     public String getDeleted_at() throws ParseException {
         return deleted_at;
         // return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
+    public String getFormattedDeleted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setDeleted_at(String deleted_at) {

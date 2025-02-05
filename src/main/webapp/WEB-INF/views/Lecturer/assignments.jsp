@@ -104,17 +104,20 @@ uri="jakarta.tags.core" %>
                         ${assignment.getAssignment_header()}
                         <p class="text-xs font-normal italic text-gray-400 md:hidden">${assignment.getStarted_at()} - ${assignment.getEnded_at()}</p>
                       </td>
-                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">${assignment.getStarted_at()}</td>
-                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">${assignment.getEnded_at()}</td>
+                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">
+                        ${assignment.getFormattedStarted_at()}
+                        ${assignment.getSubmissions()}
+                      </td>
+                      <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">${assignment.getFormattedEnded_at()}</td>
                       <td class="py-4 px-3 text-right text-sm font-medium align-middle flex justify-end gap-2">
-                        <button class="btn btn-sm btn-ghost text-info px-1 md:px-2 subList" data-id="${assignment.getAssignment_id()}">
+                        <button class="btn btn-sm btn-ghost text-info px-1 md:px-2 subList" data-id="${assignment.getAssignment_id()}" data-assignments-submissions="${assignment.getSubmissions()}">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                             <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
                             <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
                           </svg>
-                          <span class="hidden md:inline">Submissions</span>
+                          <span class="hidden md:inline">Submissionss</span>
                         </button>
-                        <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 editAss" data-id="${assignment.getAssignment_id()}" data-title="${assignment.getAssignment_header()}" data-desc="${assignment.getAssignment_desc()}" data-date-start="${assignment.getStarted_at()}" data-date-end="${assignment.getEnded_at()}" data-allow-late="${assignment.isBypass_time_flag()}">
+                        <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 editAss" data-id="${assignment.getAssignment_id()}" data-title="${assignment.getAssignment_header()}" data-desc="${assignment.getAssignment_desc()}" data-date-start="${assignment.getStarted_at()}" data-date-end="${assignment.getEnded_at()}" data-allow-late="${assignment.isBypass_time_flag()}" data-attachments="${assignment.getServer_filename()}" data-filepath="${assignment.getFile_path()}">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -150,25 +153,11 @@ uri="jakarta.tags.core" %>
               <div class="card-body">
                 <div class="card-title justify-between">
                   <h1>Submissions</h1>
+                  <button class="btn btn-sm btn-ghost text-error px-1 md:px-2 closeSubs" data-id="${assignment.getAssignment_id()}">
+                    <span class="hidden md:inline">Close</span>
+                  </button>
                 </div>
-                <ul role="list" class="divide-y divide-gray-100">
-                  <li class="flex justify-between gap-x-6 py-5">
-                    <div class="flex min-w-0 gap-x-4">
-                      <div class="min-w-0 flex-auto">
-                        <p class="text-sm/6 font-semibold text-gray-900">Student 1 <span class="text-xs text-gray-400 font-normal italic">(2024123456)</span></p>
-                        <p class="truncate text-xs/5 text-gray-500">Submitted at 01:00 am</p>
-                      </div>
-                    </div>
-                    <div class="shrink-0 flex items-center">
-                      <button class="btn btn-sm btn-ghost text-primary px-1 md:px-2 viewSub" data-id="">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-                          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                          <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="hidden md:inline">View</span>
-                      </button>
-                    </div>
-                  </li>
+                <ul id="subcard-ul" role="list" class="divide-y divide-gray-100">
                 </ul>
               </div>
             </div>
@@ -223,11 +212,30 @@ uri="jakarta.tags.core" %>
               let start_at = $(this).data('date-start');
               let ended_at = $(this).data('date-end');
               let allow_late = $(this).data('allow-late');
+              let file_path = $(this).data('filepath');
+              let server_filename = $(this).data('attachments');
+
+              // Clear the attachments container before populating it
+                $('#attachments-container').html('');
+
+              // Split the filenames by pipe (|) and iterate through them
+              let filenames = server_filename.split('|');
+              
+              filenames.forEach(function(filename) {
+                let fileLink = $('<a target="_blank" class="my-2 py-2"></a>');
+                let button = $('<button type="button" class="btn btn-sm btn-secondary text-primary join-item"></button>');
+                button.text(filename);
+                fileLink.append(button);
+                fileLink.attr('href', file_path + '/' + filename);
+
+                // Append the file link to the attachments container
+                $('#attachments-container').html(fileLink);
+              });
+
               // Convert the date to "YYYY-MM-DDTHH:MM" for datetime-local input
               let startAtFormatted = start_at.replace(' ', 'T').slice(0, 16); // "2025-01-17T14:30"
               let endAtFormatted = ended_at.replace(' ', 'T').slice(0, 16);   // "2025-01-18T16:00"
               $('#assAdd').attr('action', '/assignment/update/'+id);
-              console.log($('#assAdd').attr('action')); // Check the new form action
 
               $('#ass_id').val(id);
               $('#ass_title').val(title);
@@ -269,6 +277,27 @@ uri="jakarta.tags.core" %>
               });
             });
 
+            // $('.subList').on('click', function() {
+            //   let assignment_id = $(this).data('id');
+              
+              
+            //   $.ajax({
+            //     type: 'POST',
+            //     url: '',
+            //     data: {
+            //       id: id
+            //     },
+            //     success: function(data) {
+            //       $('#ass_title').val(data.title);
+            //       $('#ass_desc').val(data.desc);
+            //       $('#ass_start').val(data.start_at);
+            //       $('#ass_end').val(data.ended_at);
+            //       $('#ass_late').val(data.allow_late);
+            //       $('#ass_id').val(data.id);
+            //     }
+            //   });
+            // });
+
             modal.addEventListener('close', (event) => {
               $('#assAdd')[0].reset();
               hugerte.remove('#ass_desc');
@@ -283,12 +312,99 @@ uri="jakarta.tags.core" %>
 
             // view submissions --------------------------------------------------------------------------------
             $('.subList').on('click', function() {
-              $('#subCard').toggle('fast');
+
+              let subcardUl = document.getElementById('subcard-ul');
+                      subcardUl.innerHTML = '';
+              
+              let assignment_id = $(this).data('id');
+              // const url = window.location.origin + '/submission/api/assignment/' + assignment_id;
+              // const url= 'https://localhost:8443/assignment/api/submissions/' + assignment_id;
+              
+              $.ajax({
+                type: 'GET',
+                url: '/assignment/api/submissions/'+assignment_id,
+                success: function(data) {
+
+                  
+                  
+                  console.log(data.data)
+                  
+                  // let 
+                  if(data.data != undefined){
+                    let submissions = data.data.submissions || [];
+                    let submissionsHTML = '';
+                    let count = 1;
+                    for(let i=0;i<submissions.length;i++){
+                      subcardUl.innerHTML = '';
+                        submissionsHTML += `
+                          <li class="flex justify-between gap-x-6 py-5">
+                            <div class="flex min-w-0 gap-x-4">
+                              <div class="min-w-0 flex-auto">
+                                <p class="text-sm/6 font-semibold text-gray-900">Student  \${count}\ <span class="text-xs text-gray-400 font-normal italic">(\${submissions[i].student_id}\)</span></p>
+                                <p class="truncate text-xs/5 text-gray-500">Submitted at \${submissions[i].created_at}\</p>
+                              </div>
+                            </div>
+                            <div class="shrink-0 flex items-center">
+                              <button id="\${submissions[i].student_id}\" class="btn btn-sm btn-ghost text-primary px-1 md:px-2 viewSub" data-subs-id="\${submissions[i].submission_id}\">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                  <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="hidden md:inline">View</span>
+                              </button>
+                            </div>
+                          </li>
+                        `;
+                      count++;
+                      subcardUl.insertAdjacentHTML('beforeend', submissionsHTML);
+                      $('.viewSub').on('click', function() {
+                        let studentId = $(this).attr('id');
+                        let submissionId = $(this).data('subs-id');
+                        
+                        const studentName = submissions[i].student_id;
+                        const studSubsTime = submissions[i].created_at;
+                        const studAsgDesc = submissions[i].assignment.assignment_desc;
+
+                        let filenames = submissions[i].server_filename.split('|');
+                        let attachmentsHTML = '';
+                        filenames.forEach(function(filename) {
+                          attachmentsHTML += `
+                            <div class="btn btn-sm btn-secondary text-primary rounded-full">
+                              <a href="\${submissions[i].file_path}\/\${filename}\" target="_blank">\${filename}\</a>
+                            </div>
+                          `;
+                        });
+
+                        const attachmentsContainer = document.getElementById('attachmentViewSubDialog');
+                        attachmentsContainer.innerHTML = '';
+                        attachmentsContainer.insertAdjacentHTML('beforeend', attachmentsHTML);
+
+                        // Populate the modal with data
+                        document.getElementById('studentName').textContent = studentName;
+                        document.getElementById('studSubsTime').textContent = studSubsTime;
+                        document.getElementById('studAsgDesc').textContent = studAsgDesc;
+
+                        // Open the modal
+                        document.getElementById('viewSub').showModal();
+                      });
+                    }
+                  }else{
+                    let submissionsHTML = '<p class="text-center">No record found</p>';
+                    subcardUl.insertAdjacentHTML('beforeend', submissionsHTML);
+                  }
+                  // $('#subCard').toggle('fast');
+                  $('#subCard').show();
+                  // $('#subCard').hide();
+                },
+                error: function(xhr, status, error) {
+                  console.error('Error details:', xhr.responseText);
+                }
+              });
             })
 
-            $('.viewSub').on('click', function() {
-              let id = $(this).data('id');
-              $('#viewSub')[0].showModal();
+            // close submissions
+            $('.closeSubs').on('click', function() {
+              $('#subCard').hide();
             });
           });
         </script>
@@ -348,26 +464,7 @@ uri="jakarta.tags.core" %>
               <div class="flex flex-row gap-x-2">
                 <!-- if ada attachments -->
 
-                <div class="join rounded-full">
-                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
-                    Attachment 1
-                  </button>
-                </div>
-                <div class="join rounded-full">
-                  <button type="button" class="btn btn-sm btn-primary join-item text-white px-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-                      <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
-                    Attachment 2
-                  </button>
-                </div>
+                <div id="attachments-container"></div>
 
                 <!-- end if ada attachments -->
               </div>
@@ -410,13 +507,13 @@ uri="jakarta.tags.core" %>
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg">View Submisssion</h3>
         <p class="font-semibold italic text-sm text-gray-500 mb-2">
-          by <span class="font-bold">Student 1</span> at <span class="font-bold">01:00 am</span>
+          by <span id="studentName" class="font-bold">Student 1</span> at <span id="studSubsTime" class="font-bold">01:00 am</span>
         </p>
         <div class="py-4 px-3 bg-neutral rounded-xl">
-          <div class="flex mb-5">
+          <div id="studAsgDesc" class="flex mb-5">
             Assignment description bla bla bla
           </div>
-          <div class="flex gap-2">
+          <div id="attachmentViewSubDialog" class="flex gap-2">
             <div class="btn btn-sm btn-secondary text-primary rounded-full">
               Attachment 1
             </div>

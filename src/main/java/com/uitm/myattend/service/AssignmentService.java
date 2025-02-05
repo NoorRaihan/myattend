@@ -77,7 +77,7 @@ public class AssignmentService {
     public List<AssignmentModel> retrieveByCourse(String courseId) {
         try {
             List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId, commonModel.getSessionModel().getId());
-            // System.out.println("assignmentRepository : "+assignmentList);
+            System.out.println("assignmentRepository : "+assignmentList);
     
             List<AssignmentModel> assignmentModelList = new ArrayList<>();
             for (Map<String, String> assignment : assignmentList) {
