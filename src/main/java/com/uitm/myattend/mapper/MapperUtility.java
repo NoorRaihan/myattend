@@ -240,8 +240,8 @@ public class MapperUtility {
         submissionObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
         submissionObj.setStatus(FieldUtility.checkNull(data.get("STATUS")));
         submissionObj.setSubmission_text(FieldUtility.checkNull(data.get("SUBMISSION_TEXT")));
-        submissionObj.setAssignment_id(Integer.parseInt(data.get("SUBMISSION_MARK") == null ? "-1" : data.get("SUBMISSION_MARK")));
-        // submissionObj.setSubmission_mark(Double.parseDouble(data.get("SUBMISSION_MARK") == null ? "0.00" : data.get("SUBMISSION_MARK")));
+        submissionObj.setAssignment_id(Integer.parseInt(data.get("ASSIGNMENT_ID") == null ? "-1" : data.get("ASSIGNMENT_ID")));
+        submissionObj.setSubmission_mark(Double.parseDouble(data.get("SUBMISSION_MARK") == null ? "0.00" : data.get("SUBMISSION_MARK")));
         submissionObj.setOri_filename(FieldUtility.checkNull(data.get("ORI_FILENAME")));
         submissionObj.setServer_filename(FieldUtility.checkNull(data.get("SERVER_FILENAME")));
         submissionObj.setFile_path(FieldUtility.checkNull(data.get("FILE_PATH")));

@@ -1,6 +1,9 @@
 package com.uitm.myattend.controller;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.uitm.myattend.mapper.MapperUtility;
@@ -62,7 +67,7 @@ public class SubmissionController {
     public String submissionMgt(HttpServletRequest request, 
     HttpServletResponse response, 
     HttpSession session,
-    @PathVariable("course_id") String courseId) {
+    @PathVariable("course_id") String courseId)  throws ParseException {
 
         // return all aassignments with submissions as fk
         if(!authService.authenticate(session)) {
@@ -75,8 +80,19 @@ public class SubmissionController {
 
         // retrieve by course id from ma_course student ge using by student id
         List<AssignmentModel> assignmentList = assignmentService.retrieveByStudentCourse(courseId);
+        // int activeAssignments = 0;
+        // for (AssignmentModel assignmentModel : assignmentList) {
+        //     if (assignmentModel.getSubmissions().isEmpty()) {
+        //         activeAssignments++;
+        //     }
+        //     System.out.println(assignmentModel.getSubmissions().isEmpty());
+        // }
+
+
+        int activeAssignments = submissionService.getTotalActiveAssignments(assignmentList);
         request.setAttribute("assignments", assignmentList);
         request.setAttribute("totalAssignment", assignmentList.size());
+        request.setAttribute("totalActiveAssignments", activeAssignments);
 
         return "Student/submissions";
     }
@@ -181,5 +197,139 @@ public class SubmissionController {
             respMap.put("respMessage", "Internal server error. Please contact admin for futher assistance");
         }
         return respMap;
+    }
+
+    @PostMapping("/create/{assignment_id}/{course_id}")
+    public void store(
+        @RequestParam Map<String, Object> body,
+        HttpServletResponse response,
+        HttpServletRequest request,
+        HttpSession session,
+        @PathVariable("assignment_id") int assignmentId,
+        @PathVariable("course_id") String courseId,
+        @RequestParam("sub_attach") MultipartFile file
+    ) throws IOException {
+
+        // 0. check is assignment exist
+        // 1. check is student id betul ?
+        // 2. check is Assignment active
+        
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            FieldUtility.requiredValidator(body, submissionRequiredFields());
+
+            // Validate file type for sub_attach
+            if (!isValidFileType(file)) {
+                session.setAttribute("error", "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed.");
+                response.sendRedirect("/submission/" + courseId);
+                return;
+            }
+
+            if(submissionService.insert(body, assignmentId, file)) {
+                session.setAttribute("message", "New submission successfully added");
+            }else {
+                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect("/submission/" + courseId);
+    }
+
+    // update assignment
+
+    @PostMapping("/update")
+    public void update(@RequestParam Map<String, Object> body,
+    HttpServletResponse response,
+    HttpServletRequest request,
+    HttpSession session) throws IOException {
+        try {
+            //will do validation
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            // FieldUtility.requiredValidator(body, classRequiredFields());
+
+            if(!submissionService.updateSubsMark(body)) {
+                throw new Exception("Failed to update data");
+            }else {
+                session.setAttribute("success", "Data updated");
+            }
+        }catch (Exception e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        // response.sendRedirect("/assignment/course?course=" + (String) body.get("course_id"));
+        response.sendRedirect("/");
+    }
+
+    // delete submission
+    @PostMapping("/delete")
+    public void delete(@RequestParam Map<String, Object> body, HttpServletResponse response, HttpServletRequest request, HttpSession session) throws IOException {
+        String courseId = (String) body.get("course_id");
+        // String submissionId = (String) body.get("sub_id");
+        // String submissionFilename = (String) body.get("submission_filename");
+        try {
+            if(!authService.authenticate(session)) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            System.out.println("submission delete 1");
+            if(!submissionService.delete(body)) {
+                System.out.println("submission delete 2");
+                throw new Exception("Failed to delete submission data");
+            }else {
+                System.out.println("submission delete 3");
+                session.setAttribute("success", "Submission data successfully deleted");
+            }
+        }catch (Exception e) {
+            System.out.println("submission delete 4");
+            session.setAttribute("error", e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect("/submission/" + courseId);
+    }
+
+    //required field for submission
+    private String[][] submissionRequiredFields() {
+        return new String[][] {
+            // {"ori_filename", "File is required"},
+        };
+    }
+
+    private boolean isValidFileType(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+    
+        // Get the file's original name and MIME type
+        String fileName = file.getOriginalFilename();
+        String contentType = file.getContentType();
+    
+        // Define allowed MIME types and extensions
+        String[] allowedExtensions = {".pdf", ".png", ".jpeg", ".jpg"};
+        String[] allowedMimeTypes = {"application/pdf", "image/png", "image/jpeg", "image/jpg"};
+    
+        // Check MIME type
+        if (contentType != null && Arrays.asList(allowedMimeTypes).contains(contentType)) {
+            return true;
+        }
+    
+        // Check file extension
+        if (fileName != null) {
+            for (String extension : allowedExtensions) {
+                if (fileName.toLowerCase().endsWith(extension)) {
+                    return true;
+                }
+            }
+        }
+    
+        return false;
     }
 }
