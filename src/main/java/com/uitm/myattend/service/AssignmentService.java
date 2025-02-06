@@ -77,7 +77,7 @@ public class AssignmentService {
     public List<AssignmentModel> retrieveByCourse(String courseId) {
         try {
             List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourse(courseId, commonModel.getSessionModel().getId());
-            // System.out.println("assignmentRepository : "+assignmentList);
+            System.out.println("assignmentRepository : "+assignmentList);
     
             List<AssignmentModel> assignmentModelList = new ArrayList<>();
             for (Map<String, String> assignment : assignmentList) {
@@ -180,7 +180,7 @@ public class AssignmentService {
         Integer userId = commonModel.getUser().getId();
         StudentModel studentModel = studentService.retrieveDetail(userId);
         // String studentId = Integer.toString(studentModel.getUser_id());
-        int studentId = studentModel.getUser_id();
+        int studentId = studentModel.getStud_id();
         // get student course
         try {
             List<Map<String, String>> assignmentList = assignmentRepository.retrieveByCourseStudent(courseId, sessionId, studentId);
@@ -209,7 +209,6 @@ public class AssignmentService {
                 // Add the populated AssignmentModel to the list
                 assignmentModelList.add(assignmentModel);
             }
-
             return assignmentModelList;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,9 @@
 package com.uitm.myattend.model;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -155,6 +158,10 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedStarted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setStarted_at(String started_at) {
         this.started_at = started_at;
     }
@@ -163,6 +170,10 @@ public class AssignmentModel {
     public String getEnded_at() throws ParseException {
         return ended_at;
         // return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
+    public String getFormattedEnded_at() throws ParseException {
+        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setEnded_at(String ended_at) {
@@ -175,6 +186,10 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
@@ -183,6 +198,10 @@ public class AssignmentModel {
     public String getUpdated_at() throws ParseException {
         return updated_at;
         // return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
+    public String getFormattedUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     public void setUpdated_at(String updated_at) {
@@ -195,7 +214,29 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedDeleted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     public void setDeleted_at(String deleted_at) {
         this.deleted_at = deleted_at;
+    }
+
+    public boolean isActiveAssignment() throws ParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime today = LocalDateTime.now();
+        try {
+            LocalDateTime startedAt = LocalDateTime.parse(this.getStarted_at(), formatter);
+            LocalDateTime endedAt = LocalDateTime.parse(this.getEnded_at(), formatter);
+
+            if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
+                (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
+                this.isBypass_time_flag() == 1) {
+                return true;
+            }
+            return false;
+        } catch (DateTimeParseException e) {
+            return true;
+        }
     }
 }

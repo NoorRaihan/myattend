@@ -22,7 +22,10 @@ import java.util.Map;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +40,7 @@ public class SubmissionService {
     private final CommonModel commonModel;
     private final StudentModel studentModel;
     private final StudentService studentService;
-    private final String uploadDirectory = "src/main/webapp/resources/uploads/assignments/";
+    private final String uploadDirectory = "src/main/webapp/resources/uploads/submissions/";
 
     public SubmissionService(SubmissionRepository submissionRepository,  
     CourseService courseService,
@@ -95,8 +98,6 @@ public class SubmissionService {
     public List<SubmissionModel> retrieveBySubmission(int submissionId) {
         try {
             List<Map<String, String>> submissionList = submissionRepository.retrieveSubmissionDetail(submissionId);
-            System.out.println("submissionList hoho");
-            System.out.println(submissionList);
 
             if(submissionList.size() != 1) {
                 throw new Exception("Data error on submission list size : " + submissionList.size());
@@ -110,6 +111,124 @@ public class SubmissionService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    // @Transactional
+    public int getTotalActiveAssignments(List<AssignmentModel> assignmentList) throws ParseException {
+        int activeAssignments = 0;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime today = LocalDateTime.now();
+        for (AssignmentModel assignmentModel : assignmentList) {
+            try {
+                LocalDateTime startedAt = LocalDateTime.parse(assignmentModel.getStarted_at(), formatter);
+                LocalDateTime endedAt = LocalDateTime.parse(assignmentModel.getEnded_at(), formatter);
+
+                if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
+                    (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
+                    assignmentModel.isBypass_time_flag() == 1) {
+                    activeAssignments++;
+                }
+            } catch (DateTimeParseException e) {
+                // Handle the case where the date parsing fails
+                System.err.println("Error parsing date: " + e.getMessage());
+                // Optionally, continue to the next iteration or handle the error in a different way
+            }
+        }
+        return activeAssignments;
+    }
+
+    //create submission
+    public boolean insert(Map<String, Object> body, int assignmentId, MultipartFile file) {
+        try {
+            SubmissionModel submissionModel = new SubmissionModel();
+
+            Integer userId = commonModel.getUser().getId();
+            StudentModel studentModel = studentService.retrieveDetail(userId);
+            int studentId = studentModel.getStud_id();
+            // Generate unique ID for the assignment
+            String uid = FieldUtility.generateUUID().substring(0, 8);
+            String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+
+            // Process file data
+            String fileName = file.getOriginalFilename();
+            String fileExtension = "";
+
+            if (fileName != null && fileName.contains(".")) {
+                fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
+            }
+
+            // Generate server file name
+            String serverFileName = currTms + "_" + userId + "." + fileExtension;
+
+            if (file.isEmpty()){
+                return false;
+            }
+
+            try {
+                final Path directory = Paths.get(this.uploadDirectory);
+                final Path filePth = Paths.get(this.uploadDirectory+serverFileName);
+
+                if(!Files.exists(directory)){
+                    Files.createDirectories(directory);
+                }
+
+                Files.write(filePth, file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // Set assignment details in the model
+            submissionModel.setSubmission_id(Integer.parseInt(uid));
+            submissionModel.setStudent_id(studentId);
+            submissionModel.setAssignment_id(assignmentId);
+            submissionModel.setStatus("SUBMITTED");
+            submissionModel.setSubmission_text((String) body.get("sub_desc"));
+            submissionModel.setOri_filename(fileName);
+            submissionModel.setServer_filename(serverFileName);
+            submissionModel.setFile_path("/submissions");
+
+            // Insert the assignment into the database
+            return submissionRepository.insert(submissionModel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Return false in case of error
+        }
+    }
+
+    //update submission mark
+
+    public boolean updateSubsMark(Map<String, Object> body) {
+        try {
+            String studentId = (String) body.get("stud_mark");
+            String subsMark = (String) body.get("subs_stud_mark");
+
+            if(!submissionRepository.update(studentId,subsMark)) {
+                throw new Exception("Failed to update submission info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //delete assignment
+
+    public boolean delete(Map<String, Object> body) {
+        try {
+            String submissionId = (String) body.get("sub_id");
+            String submissionFilename = (String) body.get("submission_filename");
+
+            if(!submissionRepository.delete(submissionId, submissionFilename)) {
+                throw new Exception("Failed to delete submission info");
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
