@@ -77,11 +77,11 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                             </td>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               <!-- 01-04-2022 -->
-                              ${assignment.getStarted_at()}
+                              ${assignment.getFormattedStarted_at()} ${assignment.getFormattedTimeStarted_at()}
                             </td>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               <!-- 01-04-2022 -->
-                              ${assignment.getEnded_at()}
+                              ${assignment.getFormattedEnded_at()} ${assignment.getFormattedTimeEnded_at()}
                               
                             </td>
                             <td class="px-3 py-4 text-sm text-gray-500">
@@ -134,6 +134,11 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                                 <c:set var="i" value="0" />
                                 <c:choose>
                                   <c:when test="${not empty assignment.getSubmissions()}">
+                                    <div class="my-2">${assignment.getSubmissions()[i].getSubmission_text()}</div>
+                                  </c:when>
+                                </c:choose>
+                                <c:choose>
+                                  <c:when test="${not empty assignment.getSubmissions() and not empty assignment.getServer_filename()}">
                                     <c:forEach var="filename" items="${fn:split(assignment.getSubmissions()[0].getServer_filename(), '|')}">
                                       <div class="join rounded-full">
                                         <c:choose>
@@ -148,11 +153,15 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                                                 </svg>
                                               </button>
                                             </form>
-                                            <a target="_blank" href="${assignment.submissions[i].file_path}/${assignment.submissions[i].server_filename}">
-                                              <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
-                                                  ${assignment.submissions[i].server_filename}
-                                              </button>
-                                            </a>
+                                            <c:choose>
+                                              <c:when test="${not empty assignment.submissions[i].getServer_filename()}">
+                                                <a target="_blank" href="${assignment.submissions[i].file_path}/${assignment.submissions[i].server_filename}">
+                                                  <button type="button" class="btn btn-sm btn-secondary text-primary join-item">
+                                                      ${assignment.submissions[i].server_filename}
+                                                  </button>
+                                                </a>
+                                              </c:when>
+                                            </c:choose>
                                           </c:when>
                                         </c:choose>
                                       </div>
