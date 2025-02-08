@@ -137,7 +137,7 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                                     <c:forEach var="filename" items="${fn:split(assignment.getSubmissions()[0].getServer_filename(), '|')}">
                                       <div class="join rounded-full">
                                         <c:choose>
-                                          <c:when test="${assignment.isActiveAssignment() or !assignment.isActiveAssignment()}">
+                                          <c:when test="${assignment.isActiveAssignment()}">
                                             <form action="/submission/delete" method="POST">
                                               <input type="hidden" name="sub_id" id="sub_id" value="${assignment.submissions[i].getSubmission_id()}"/>
                                               <input type="hidden" name="course_id" id="course_id" value="${assignment.getCourse().getId()}"/>
@@ -188,7 +188,7 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                                 <c:choose>
                                   <c:when test="${empty assignment.getSubmissions()}">
                                     <c:choose>
-                                      <c:when test="${!assignment.isActiveAssignment() or assignment.isActiveAssignment()}">
+                                      <c:when test="${assignment.isActiveAssignment()}">
                                         <button type="button" class="btn btn-sm btn-primary submission" data-id="${assignment.getAssignment_id()}" data-course-id="${assignment.getCourse().getId()}">
                                           Add Submission
                                         </button>

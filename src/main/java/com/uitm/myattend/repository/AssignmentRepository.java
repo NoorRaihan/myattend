@@ -207,8 +207,8 @@ public class AssignmentRepository {
                     assignmentModel.getOri_filename(),
                     assignmentModel.getServer_filename(),
                     assignmentModel.getFile_path(),
-                    FieldUtility.timestamp2Oracle(assignmentModel.getStarted_at()),
-                    FieldUtility.timestamp2Oracle(assignmentModel.getEnded_at()),
+                    assignmentModel.getStarted_at(),
+                    assignmentModel.getEnded_at(),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
                     FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp()),
             };
