@@ -279,6 +279,25 @@ uri="jakarta.tags.core" %>
               });
             });
 
+            const assStart = document.getElementById('ass_start');
+            const assEnd = document.getElementById('ass_end');
+
+            assStart.addEventListener('change', function () {
+                let start = assStart.value;
+                assEnd.min = start; // Prevent selecting a date before start
+                if (assEnd.value && assEnd.value < start) {
+                    assEnd.value = start;
+                }
+            });
+
+            assEnd.addEventListener('change', function () {
+                let end = assEnd.value;
+                assStart.max = end; // Prevent selecting a date after end
+                if (assStart.value && assStart.value > end) {
+                    alert('Start date cannot be after the end date.');
+                    assStart.value = end;
+                }
+            });
             // $('.subList').on('click', function() {
             //   let assignment_id = $(this).data('id');
               
@@ -475,13 +494,13 @@ uri="jakarta.tags.core" %>
               <div class="label">
                 <span class="label-text">Date & Time Start</span>
               </div>
-              <input type="datetime-local" id="ass_start" name="ass_start" class="input input-primary input-sm input-bordered" min="<%= minDateTime %>"/>
+              <input type="datetime-local" id="ass_start" name="ass_start" class="input input-primary input-sm input-bordered"/>
             </label>
             <label class="form-control md:col-span-2 col-span-5">
               <div class="label">
                 <span class="label-text">Date & Time End</span>
               </div>
-              <input type="datetime-local" id="ass_end" name="ass_end" class="input input-primary input-sm input-bordered" min="<%= minDateTime %>"/>
+              <input type="datetime-local" id="ass_end" name="ass_end" class="input input-primary input-sm input-bordered"/>
             </label>
             <label class="form-control md:col-span-1 col-span-5">
               <div class="label cursor-pointer">
