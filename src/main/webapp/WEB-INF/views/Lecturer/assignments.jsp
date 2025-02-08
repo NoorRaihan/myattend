@@ -194,6 +194,7 @@ uri="jakarta.tags.core" %>
             const modal = document.getElementById('addAss');
 
             $('#newAssBtn').on('click', function() {
+              $('#ass-modal-title').html('Add New Assignment');
               $('#saveAss').val('add');
               $('#assAttachs').hide();
               modal.showModal();
