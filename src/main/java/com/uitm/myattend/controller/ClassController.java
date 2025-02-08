@@ -76,6 +76,8 @@ public class ClassController {
         List<ClassModel> todayList = classService.retrieveAll(commonModel.getUser().getId()); //retrieve today class
         request.setAttribute("todayList", todayList);
         request.setAttribute("totalClass", todayList.size());
+        List<CourseModel> courseList2 = courseService.retrieveRegisteredCourseStudent(commonModel.getUser().getId());
+        request.setAttribute("courses", courseList2);
         return "Student/classList";
     }
 
