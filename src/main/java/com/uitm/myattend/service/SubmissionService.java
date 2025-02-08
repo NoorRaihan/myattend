@@ -133,8 +133,8 @@ public class SubmissionService {
 
                 // Check if assignment is active
                 if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
-                        (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
-                        assignmentModel.isBypass_time_flag() == 1) {
+                        (startedAt.isBefore(today) || startedAt.isEqual(today)))
+                        ) {
                     activeAssignments++;
                 }
             } catch (DateTimeParseException e) {
