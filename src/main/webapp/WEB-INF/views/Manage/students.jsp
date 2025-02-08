@@ -260,6 +260,7 @@ uri="jakarta.tags.core" %>
               <input
                 type="text"
                 id="stud_id"
+                name="stud_id"
                 class="input input-sm input-ghost cursor-not-allowed disabled:bg-white disabled:border-transparent disabled:text-slate-800"
                 disabled
               />
