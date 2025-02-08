@@ -125,6 +125,7 @@ public class StudentService {
             if(studentList.isEmpty()) {
                 flag = insert(body);
             }else {
+                body.put("stud_id", studentList.get(0).get("stud_id"));
                 flag = update(body); //update the student info instead if the data already in student table
             }
 
