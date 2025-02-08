@@ -513,7 +513,7 @@ uri="jakarta.tags.core" %>
         <h3 class="font-bold text-lg">Delete Session</h3>
         <p class="py-4">Do you really want to delete this session ?</p>
         <form action="/session/delete" method="post">
-          <input type="hidden" name="sessionid" id="sessionid" value="" />
+          <input type="hidden" name="session_id" id="session_id4" value="" />
           <div class="modal-action">
             <button type="button" class="btn btn-sm btn-ghost text-red-600" onclick="deleteSession.close()">
               No
