@@ -117,25 +117,39 @@ public class SubmissionService {
     // @Transactional
     public int getTotalActiveAssignments(List<AssignmentModel> assignmentList) throws ParseException {
         int activeAssignments = 0;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Formatters
+        DateTimeFormatter formatterWithMillis = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        DateTimeFormatter formatterWithoutMillis = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         LocalDateTime today = LocalDateTime.now();
+
         for (AssignmentModel assignmentModel : assignmentList) {
             try {
-                LocalDateTime startedAt = LocalDateTime.parse(assignmentModel.getStarted_at(), formatter);
-                LocalDateTime endedAt = LocalDateTime.parse(assignmentModel.getEnded_at(), formatter);
+                LocalDateTime startedAt = parseDate(assignmentModel.getStarted_at(), formatterWithMillis, formatterWithoutMillis);
+                LocalDateTime endedAt = parseDate(assignmentModel.getEnded_at(), formatterWithMillis, formatterWithoutMillis);
 
+                // Check if assignment is active
                 if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
-                    (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
-                    assignmentModel.isBypass_time_flag() == 1) {
+                        (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
+                        assignmentModel.isBypass_time_flag() == 1) {
                     activeAssignments++;
                 }
             } catch (DateTimeParseException e) {
-                // Handle the case where the date parsing fails
-                System.err.println("Error parsing date: " + e.getMessage());
-                // Optionally, continue to the next iteration or handle the error in a different way
+                System.err.println("Error parsing date: " + assignmentModel.getStarted_at() + " | " + e.getMessage());
             }
         }
         return activeAssignments;
+    }
+
+    private LocalDateTime parseDate(String dateString, DateTimeFormatter formatterWithMillis, DateTimeFormatter formatterWithoutMillis) {
+        try {
+            return LocalDateTime.parse(dateString, formatterWithMillis); // Try parsing with milliseconds
+        } catch (DateTimeParseException e) {
+            return LocalDateTime.parse(dateString, formatterWithoutMillis); // If it fails, try without milliseconds
+        }
     }
 
     //create submission

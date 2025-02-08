@@ -456,9 +456,9 @@ public class AssignmentController {
     private String[][] assignmentRequiredFields() {
         return new String[][] {
                 {"ass_title", "Assignment Title is required"},
-                {"ass_desc", "Assignment Description is required"},
+                // {"ass_desc", "Assignment Description is required"},
                 // {"ass_attach", "Attachment is required"}, // maybe need multiple
-                {"ass_start", "Assignment Start Date and Time is required"}, 
+                // {"ass_start", "Assignment Start Date and Time is required"}, 
                 {"ass_end", "Assignment End Date and Time is required"}, 
         };
     }
