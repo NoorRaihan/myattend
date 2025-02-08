@@ -165,7 +165,7 @@ public class SemesterSessionController {
                 return;
             }
 
-            FieldUtility.requiredValidator(body, sessionRequiredFields2());
+            FieldUtility.requiredValidator(body, sessionRequiredFields());
             if(!semesterSessionService.delete(body)) {
                 throw new Exception("Failed to delete session");
             }

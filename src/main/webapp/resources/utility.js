@@ -27,6 +27,12 @@ $(document).ready(function () {
     $("#session_id").val(id);
     $("#session_name").val(name);
   });
+
+  $(document).on("click", ".sessionDelete", function () {
+    let id = $(this).data("id");
+    $("#session_id4").val(id);
+    console.log(id)
+  });
 });
 
 // Define the roleDetails function that takes an id parameter
