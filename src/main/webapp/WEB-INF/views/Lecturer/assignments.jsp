@@ -1,6 +1,8 @@
 <%@ page isELIgnored="false" language="java" contentType="text/html;
 charset=UTF-8" pageEncoding="UTF-8" session="true" %> <%@ taglib prefix="c"
 uri="jakarta.tags.core" %>
+<%@ page import="java.time.LocalDateTime, java.time.format.DateTimeFormatter" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -102,7 +104,7 @@ uri="jakarta.tags.core" %>
                     <tr>
                       <td class="w-full max-w-0 py-4 px-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
                         ${assignment.getAssignment_header()}
-                        <p class="text-xs font-normal italic text-gray-400 md:hidden">${assignment.getStarted_at()} - ${assignment.getEnded_at()}</p>
+                        <p class="text-xs font-normal italic text-gray-400 md:hidden">${assignment.getFormattedStarted_at()} - ${assignment.getFormattedEnded_at()}</p>
                       </td>
                       <td class="px-3 py-4 text-sm text-gray-500 md:table-cell hidden">
                         ${assignment.getFormattedStarted_at()}
@@ -337,7 +339,7 @@ uri="jakarta.tags.core" %>
                             <div class="flex min-w-0 gap-x-4">
                               <div class="min-w-0 flex-auto">
                                 <p class="text-sm/6 font-semibold text-gray-900">Student  \${count}\ <span class="text-xs text-gray-400 font-normal italic">(\${submissions[i].student_id}\)</span></p>
-                                <p class="truncate text-xs/5 text-gray-500">Submitted at \${submissions[i].created_at}\</p>
+                                <p class="truncate text-xs/5 text-gray-500">Submitted at \${submissions[i].formattedDateCreated_at}\ on \${submissions[i].formattedTimeCreated_at}\</p>
                               </div>
                             </div>
                             <div class="shrink-0 flex items-center">
@@ -465,17 +467,21 @@ uri="jakarta.tags.core" %>
                 class="input input-primary input-sm input-bordered"
               />
             </label>
+            <%
+                LocalDateTime now = LocalDateTime.now();
+                String minDateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            %>
             <label class="form-control md:col-span-2 col-span-5">
               <div class="label">
                 <span class="label-text">Date & Time Start</span>
               </div>
-              <input type="datetime-local" id="ass_start" name="ass_start" class="input input-primary input-sm input-bordered"/>
+              <input type="datetime-local" id="ass_start" name="ass_start" class="input input-primary input-sm input-bordered" min="<%= minDateTime %>"/>
             </label>
             <label class="form-control md:col-span-2 col-span-5">
               <div class="label">
                 <span class="label-text">Date & Time End</span>
               </div>
-              <input type="datetime-local" id="ass_end" name="ass_end" class="input input-primary input-sm input-bordered"/>
+              <input type="datetime-local" id="ass_end" name="ass_end" class="input input-primary input-sm input-bordered" min="<%= minDateTime %>"/>
             </label>
             <label class="form-control md:col-span-1 col-span-5">
               <div class="label cursor-pointer">

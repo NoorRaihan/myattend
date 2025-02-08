@@ -232,6 +232,11 @@ public class AssignmentService {
             String startTimeStamp = FieldUtility.dateTimeLocal2Oracle((String) body.get("ass_start"));
             String endTimeStamp = FieldUtility.dateTimeLocal2Oracle((String) body.get("ass_end"));
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
+            // System.out.println("everty tested here");
+            // System.out.println(body.get("ass_start"));
+            // System.out.println(FieldUtility.dateTimeLocal2Oracle((String) body.get("ass_start")));
+            // System.out.println("Converted Timestamp: " + startTimeStamp);
+            // System.out.println("end everyty tested here");
 
             // Process file data
             String fileName = file.getOriginalFilename();
@@ -275,6 +280,8 @@ public class AssignmentService {
             assignmentModel.setFile_path("/assignments");
             assignmentModel.setStarted_at(startTimeStamp);
             assignmentModel.setEnded_at(endTimeStamp);
+
+            // System.out.println("Assigned to Model: " + assignmentModel.getStarted_at());
 
             // Insert the assignment into the database
             return assignmentRepository.insert(assignmentModel);
