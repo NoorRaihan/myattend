@@ -238,33 +238,38 @@ public class AssignmentService {
             // System.out.println("Converted Timestamp: " + startTimeStamp);
             // System.out.println("end everyty tested here");
 
-            // Process file data
-            String fileName = file.getOriginalFilename();
-            String fileExtension = "";
+            if (file != null && !file.isEmpty()) {
+                // Process file data
+                String fileName = file.getOriginalFilename();
+                String fileExtension = "";
 
-            if (fileName != null && fileName.contains(".")) {
-                fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
-            }
-
-            // Generate server file name
-            String serverFileName = currTms + "_" + userId + "." + fileExtension;
-
-            if (file.isEmpty()){
-                return false;
-            }
-
-            try {
-                final Path directory = Paths.get(this.uploadDirectory);
-                final Path filePth = Paths.get(this.uploadDirectory+serverFileName);
-
-                if(!Files.exists(directory)){
-                    Files.createDirectories(directory);
+                if (fileName != null && fileName.contains(".")) {
+                    fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
                 }
 
-                Files.write(filePth, file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+                // Generate server file name
+                String serverFileName = currTms + "_" + userId + "." + fileExtension;
+
+                if (file.isEmpty()){
+                    return false;
+                }
+
+                try {
+                    final Path directory = Paths.get(this.uploadDirectory);
+                    final Path filePth = Paths.get(this.uploadDirectory+serverFileName);
+
+                    if(!Files.exists(directory)){
+                        Files.createDirectories(directory);
+                    }
+
+                    Files.write(filePth, file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                assignmentModel.setOri_filename(fileName);
+                assignmentModel.setServer_filename(serverFileName);
             }
 
             // Set assignment details in the model
@@ -275,8 +280,7 @@ public class AssignmentService {
             assignmentModel.setAssignment_desc((String) body.get("ass_desc"));
             assignmentModel.setDisabled_flag(disabledFlag);
             assignmentModel.setBypass_time_flag(isBypassTimeFlag);
-            assignmentModel.setOri_filename(fileName);
-            assignmentModel.setServer_filename(serverFileName);
+            
             assignmentModel.setFile_path("/assignments");
             assignmentModel.setStarted_at(startTimeStamp);
             assignmentModel.setEnded_at(endTimeStamp);

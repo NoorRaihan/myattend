@@ -206,16 +206,16 @@ public class AssignmentController {
             FieldUtility.requiredValidator(body, assignmentRequiredFields());
 
             // Validate file type for ass_attach
-            if (!isValidFileType(file)) {
+            if (file != null && !file.isEmpty() && !isValidFileType(file)) {
                 session.setAttribute("error", "Please upload file with PDF, PNG, JPEG, or JPG type.");
                 response.sendRedirect("/assignment/course?course=" + courseId);
                 return;
             }
 
             if(assignmentService.insert(body, courseId, file)) {
-                session.setAttribute("message", "New assignment successfully added");
+                session.setAttribute("success", "New assignment successfully added");
             }else {
-                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
+                session.setAttribute("error", "Internal server error. Please contact admin for further assistance");
             }
         }catch (Exception e) {
             session.setAttribute("error", e.getMessage());
@@ -456,7 +456,7 @@ public class AssignmentController {
     private String[][] assignmentRequiredFields() {
         return new String[][] {
                 {"ass_title", "Assignment Title is required"},
-                // {"ass_desc", "Assignment Description is required"},
+                {"ass_desc", "Assignment Description is required"},
                 // {"ass_attach", "Attachment is required"}, // maybe need multiple
                 // {"ass_start", "Assignment Start Date and Time is required"}, 
                 {"ass_end", "Assignment End Date and Time is required"}, 

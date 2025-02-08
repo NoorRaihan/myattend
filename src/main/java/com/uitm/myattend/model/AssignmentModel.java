@@ -159,7 +159,11 @@ public class AssignmentModel {
     }
 
     public String getFormattedStarted_at() throws ParseException {
-        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormattedTimeStarted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.started_at, "yyyy-MM-dd h:m:s", "HH:mm");
     }
 
     public void setStarted_at(String started_at) {
@@ -173,7 +177,11 @@ public class AssignmentModel {
     }
 
     public String getFormattedEnded_at() throws ParseException {
-        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormattedTimeEnded_at() throws ParseException {
+        return FieldUtility.getFormatted(this.ended_at, "yyyy-MM-dd h:m:s", "HH:mm");
     }
 
     public void setEnded_at(String ended_at) {
@@ -187,7 +195,11 @@ public class AssignmentModel {
     }
 
     public String getFormattedCreated_at() throws ParseException {
-        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormattedTimeCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "HH:mm");
     }
 
     public void setCreated_at(String created_at) {
@@ -200,8 +212,12 @@ public class AssignmentModel {
         // return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
+    public String getFormattedTimeUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "HH:mm");
+    }
+
     public String getFormattedUpdated_at() throws ParseException {
-        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
     }
 
     public void setUpdated_at(String updated_at) {
@@ -215,7 +231,11 @@ public class AssignmentModel {
     }
 
     public String getFormattedDeleted_at() throws ParseException {
-        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "dd/MM/yyyy");
+    }
+
+    public String getFormattedTimeDeleted_at() throws ParseException {
+        return FieldUtility.getFormatted(this.deleted_at, "yyyy-MM-dd h:m:s", "HH:mm");
     }
 
     public void setDeleted_at(String deleted_at) {
@@ -223,20 +243,28 @@ public class AssignmentModel {
     }
 
     public boolean isActiveAssignment() throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime today = LocalDateTime.now();
         try {
-            LocalDateTime startedAt = LocalDateTime.parse(this.getStarted_at(), formatter);
-            LocalDateTime endedAt = LocalDateTime.parse(this.getEnded_at(), formatter);
-
-            if (((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
-                (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
-                this.isBypass_time_flag() == 1) {
-                return true;
+            LocalDateTime startedAt;
+            LocalDateTime endedAt;
+            try {
+                startedAt = LocalDateTime.parse(this.getStarted_at(), formatter1);
+                endedAt = LocalDateTime.parse(this.getEnded_at(), formatter1);
+            } catch (DateTimeParseException e1) {
+                // If it fails, try the second format
+                startedAt = LocalDateTime.parse(this.getStarted_at(), formatter2);
+                endedAt = LocalDateTime.parse(this.getEnded_at(), formatter2);
             }
-            return false;
+    
+
+            return ((endedAt.isAfter(today) || endedAt.isEqual(today)) &&
+                (startedAt.isBefore(today) || startedAt.isEqual(today))) ||
+                this.isBypass_time_flag() == 1;
         } catch (DateTimeParseException e) {
-            return true;
+            System.out.println("err msg here : "+e.getMessage());
+            return false;
         }
     }
 }

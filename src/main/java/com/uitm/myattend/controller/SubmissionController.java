@@ -223,16 +223,16 @@ public class SubmissionController {
             FieldUtility.requiredValidator(body, submissionRequiredFields());
 
             // Validate file type for sub_attach
-            if (!isValidFileType(file)) {
-                session.setAttribute("error", "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed.");
+            if (file != null && !file.isEmpty() && !isValidFileType(file)) {
+                session.setAttribute("error", "Please upload file with PDF, PNG, JPEG, or JPG type.");
                 response.sendRedirect("/submission/" + courseId);
                 return;
             }
 
             if(submissionService.insert(body, assignmentId, file)) {
-                session.setAttribute("message", "New submission successfully added");
+                session.setAttribute("success", "New submission successfully added");
             }else {
-                session.setAttribute("message", "Internal server error. Please contact admin for further assistance");
+                session.setAttribute("error", "Internal server error. Please contact admin for further assistance");
             }
         }catch (Exception e) {
             session.setAttribute("error", e.getMessage());
@@ -279,17 +279,12 @@ public class SubmissionController {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
-
-            System.out.println("submission delete 1");
             if(!submissionService.delete(body)) {
-                System.out.println("submission delete 2");
                 throw new Exception("Failed to delete submission data");
             }else {
-                System.out.println("submission delete 3");
                 session.setAttribute("success", "Submission data successfully deleted");
             }
         }catch (Exception e) {
-            System.out.println("submission delete 4");
             session.setAttribute("error", e.getMessage());
             e.printStackTrace();
         }
@@ -299,7 +294,7 @@ public class SubmissionController {
     //required field for submission
     private String[][] submissionRequiredFields() {
         return new String[][] {
-            // {"ori_filename", "File is required"},
+            {"sub_desc", "Submission Description is required"},
         };
     }
 

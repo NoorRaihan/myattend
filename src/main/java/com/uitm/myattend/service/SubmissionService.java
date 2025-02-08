@@ -164,43 +164,46 @@ public class SubmissionService {
             String uid = FieldUtility.generateUUID().substring(0, 8);
             String currTms = FieldUtility.timestamp2Oracle(FieldUtility.getCurrentTimestamp());
 
-            // Process file data
-            String fileName = file.getOriginalFilename();
-            String fileExtension = "";
+            if (file != null && !file.isEmpty()) {
 
-            if (fileName != null && fileName.contains(".")) {
-                fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
-            }
+                // Process file data
+                String fileName = file.getOriginalFilename();
+                String fileExtension = "";
 
-            // Generate server file name
-            String serverFileName = currTms + "_" + userId + "." + fileExtension;
-
-            if (file.isEmpty()){
-                return false;
-            }
-
-            try {
-                final Path directory = Paths.get(this.uploadDirectory);
-                final Path filePth = Paths.get(this.uploadDirectory+serverFileName);
-
-                if(!Files.exists(directory)){
-                    Files.createDirectories(directory);
+                if (fileName != null && fileName.contains(".")) {
+                    fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1); // Get file extension
                 }
 
-                Files.write(filePth, file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
+                // Generate server file name
+                String serverFileName = currTms + "_" + userId + "." + fileExtension;
 
+                if (file.isEmpty()){
+                    return false;
+                }
+
+                try {
+                    final Path directory = Paths.get(this.uploadDirectory);
+                    final Path filePth = Paths.get(this.uploadDirectory+serverFileName);
+
+                    if(!Files.exists(directory)){
+                        Files.createDirectories(directory);
+                    }
+
+                    Files.write(filePth, file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                submissionModel.setOri_filename(fileName);
+                submissionModel.setServer_filename(serverFileName);
+            }
             // Set assignment details in the model
             submissionModel.setSubmission_id(Integer.parseInt(uid));
             submissionModel.setStudent_id(studentId);
             submissionModel.setAssignment_id(assignmentId);
             submissionModel.setStatus("SUBMITTED");
             submissionModel.setSubmission_text((String) body.get("sub_desc"));
-            submissionModel.setOri_filename(fileName);
-            submissionModel.setServer_filename(serverFileName);
             submissionModel.setFile_path("/submissions");
 
             // Insert the assignment into the database
