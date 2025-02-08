@@ -155,6 +155,14 @@ public class SubmissionModel {
         this.created_at = created_at;
     }
 
+    public String getFormattedTimeCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "HH:mm");
+    }
+
+    public String getFormattedDateCreated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.created_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
+    }
+
     // Getter and Setter for updated_at
     public String getUpdated_at() throws ParseException {
         return updated_at;
@@ -163,6 +171,14 @@ public class SubmissionModel {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getFormattedTimeUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "HH:mm");
+    }
+
+    public String getFormattedDateUpdated_at() throws ParseException {
+        return FieldUtility.getFormatted(this.updated_at, "yyyy-MM-dd h:m:s", "yyyy-MM-dd");
     }
 
     // // Getter and Setter for deleted_at

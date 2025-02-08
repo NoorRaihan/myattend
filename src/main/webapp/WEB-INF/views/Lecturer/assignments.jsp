@@ -324,7 +324,6 @@ uri="jakarta.tags.core" %>
                 type: 'GET',
                 url: '/assignment/api/submissions/'+assignment_id,
                 success: function(data) {
-                  // console.log(data.data.submissions);
                   // let 
                   if(data.data != undefined){
                     let submissions = data.data.submissions || [];
@@ -365,7 +364,8 @@ uri="jakarta.tags.core" %>
                         // If the submission is found, extract the data
                         if (submission && endedAtStr) {
                           const studentName = submission.student_id;
-                          const studSubsTime = submission.created_at;
+                          const studSubsDate = submission.formattedTimeCreated_at;
+                          const studSubsTime = submission.formattedDateCreated_at;
                           const studAsgDesc = submission.assignment.assignment_desc;
                           const subsText = submission.submission_text;
 
@@ -384,7 +384,7 @@ uri="jakarta.tags.core" %>
                             let subsMarkStud = document.getElementById('subs-mark-stud');
                             subsMarkStud.insertAdjacentHTML('beforeend', subsMarkHTML);
                           } if (endedAt > today) {
-                            document.getElementById('subs-mark-form').style.display = 'block';
+                            document.getElementById('subs-mark-form').style.display = 'none';
                             document.getElementById('subs-mark-stud').innerHTML = '';
                             document.getElementById('subs-mark-form-val').value = submission.student_id;
                             let subsMarkHTML = '';
@@ -411,9 +411,10 @@ uri="jakarta.tags.core" %>
 
                           // Populate the modal with data
                           document.getElementById('studentName').textContent = studentName;
+                          document.getElementById('studSubsDate').textContent = studSubsDate;
                           document.getElementById('studSubsTime').textContent = studSubsTime;
                           document.getElementById('studAsgDesc').textContent = studAsgDesc;
-                          document.getElementById('subsText').textContent = subsText;
+                          document.getElementById('subsText').innerHTML = subsText;
 
                           // Open the modal
                           document.getElementById('viewSub').showModal();
@@ -541,7 +542,7 @@ uri="jakarta.tags.core" %>
       <div class="modal-box max-w-4xl">
         <h3 class="font-bold text-lg">View Submisssion</h3>
         <p class="font-semibold italic text-sm text-gray-500 mb-2">
-          by <span id="studentName" class="font-bold"></span> at <span id="studSubsTime" class="font-bold">01:00 am</span>
+          by <span id="studentName" class="font-bold"></span> at <span id="studSubsTime" class="font-bold"></span> on <span id="studSubsDate" class="font-bold"></span>
         </p>
         <div class="py-4 px-3 bg-neutral rounded-xl">
           <div id="studAsgDesc" class="flex mb-5">

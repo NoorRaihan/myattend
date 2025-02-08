@@ -191,6 +191,9 @@ public class StudController {
         List<CourseModel> courseList2 = courseService.retrieveRegisteredCourseStudent(commonModel.getUser().getId());
         request.setAttribute("registeredCourses", courseList2);
 
+        request.setAttribute("courses", courseList2);
+        request.setAttribute("totalCourse", courseList.size());
+
         return "Student/courseReg";
     }
 

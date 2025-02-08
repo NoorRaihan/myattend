@@ -207,7 +207,7 @@ public class AssignmentController {
 
             // Validate file type for ass_attach
             if (!isValidFileType(file)) {
-                session.setAttribute("error", "Invalid file type. Only PDF, PNG, JPEG, and JPG are allowed.");
+                session.setAttribute("error", "Please upload file with PDF, PNG, JPEG, or JPG type.");
                 response.sendRedirect("/assignment/course?course=" + courseId);
                 return;
             }
