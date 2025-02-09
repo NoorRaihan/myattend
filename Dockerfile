@@ -1,5 +1,8 @@
 FROM maven:3.8.5-openjdk-17
 
+RUN rm -rf /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
+
 RUN mkdir -p /opt/uitm/webapps/MYATTEND
 RUN mkdir -p /opt/uitm/logs/MYATTEND
 RUN mkdir -p /home/uitm
