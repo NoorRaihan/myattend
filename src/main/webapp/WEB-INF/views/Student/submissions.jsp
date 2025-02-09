@@ -118,7 +118,7 @@ uri="jakarta.tags.core" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/function
                           </tr>
                           <tr class="hidden" id="ass-${assignment.getAssignment_id()}">
                             <td class="py-4 px-3 bg-neutral rounded-xl" colspan="5">
-                              <div class="flex">
+                              <div>
                                 ${assignment.getAssignment_desc()}
                               </div>
                               <div class="flex mb-5">
